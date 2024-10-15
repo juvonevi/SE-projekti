@@ -1,3 +1,39 @@
 body {
     background-color: aliceblue;
 }
+
+div:nth-child(1) {
+    width: 35%;
+    float: left;
+}
+
+div:nth-child(3) {
+    width: 6%;
+    
+}
+
+.sideButton {
+    width: 25px;
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    position: relative;
+    bottom: 18px;
+}
+
+audio {
+    position: relative;
+    bottom: 6px;
+    margin-left: 5px;
+}
+
+.loop {
+    position: relative;
+    bottom: 21px;
+    margin-left: 5px;
+}
+
+form {
+    width: 15%;
+    float: right;
+}

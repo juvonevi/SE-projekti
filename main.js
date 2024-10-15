@@ -13,6 +13,19 @@ window.addEventListener("load", function() {
         return await response.text();
     }
 
+    //Kuuntelee nappia button1
+    document.getElementById("button1").addEventListener("click", button1Pressed);
+    function button1Pressed() {
+        console.log("Pressed button 1");
+    }
+
+    //Kuuntelee nappia haku
+    document.getElementById("haku").addEventListener("click", hakuPressed);
+    function hakuPressed() {
+        let syote = document.forms[0].elements[0].value;
+        console.log(syote);
+    }
+
     let data = getdata;
     document.addEventListener(
         "keydown",
@@ -31,7 +44,7 @@ window.addEventListener("load", function() {
         function playByKey(key, data) {
             let keys = [a,b,c];
             // taulukko myös nappula elementeistä
-            let buttons = [document.getElementById("nappula1"),document.getElementById("nappula1")];
+            let buttons = document.querySelectorAll(".sideButton");
 
             // myös data pitää jotekin erotella.
             // sitten yhdistää näppäimeen tässä silmukassa
