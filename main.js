@@ -29,7 +29,6 @@ window.addEventListener("load", function() {
     }
 
     let data = getdata;
-    /*
     document.addEventListener(
         "keydown",
         // Kuuntelija näppäimen painamiselle
@@ -66,6 +65,4 @@ window.addEventListener("load", function() {
         }
 
         });
-*/
-
 });
