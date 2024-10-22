@@ -23,10 +23,13 @@ window.addEventListener("load", function() {
     document.getElementById("haku").addEventListener("click", hakuPressed);
     function hakuPressed() {
         let syote = document.forms[0].elements[0].value;
-        console.log(syote);
+        searchsound(syote).then(result => {
+            console.log(syote);
+        })
     }
 
     let data = getdata;
+    /*
     document.addEventListener(
         "keydown",
         // Kuuntelija näppäimen painamiselle
@@ -63,6 +66,6 @@ window.addEventListener("load", function() {
         }
 
         });
-
+*/
 
 });
