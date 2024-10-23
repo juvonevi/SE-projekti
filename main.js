@@ -26,8 +26,8 @@ window.addEventListener("load", function() {
     document.getElementById("haku").addEventListener("click", hakuPressed);
     function hakuPressed() {
         let syote = document.forms[0].elements[0].value;
-        searchsound(syote).then(result => {
-            console.log(syote);
+        searchsound(syote).then(response => {
+            response.json().then((json) => { console.log(json.results) })
         })
     }
     // palautetaan haetut äänet 
