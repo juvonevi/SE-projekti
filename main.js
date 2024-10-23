@@ -15,7 +15,10 @@ window.addEventListener("load", function() {
 
     //Kuuntelee nappia button1
     document.getElementById("button1").addEventListener("click", button1Pressed);
-    function button1Pressed() {
+    function button1Pressed(event) {
+        if (event.defaultPrevented) {
+            return; // Do nothing if the event was already processed
+        }
         console.log("Pressed button 1");
     }
 
@@ -27,6 +30,34 @@ window.addEventListener("load", function() {
             console.log(syote);
         })
     }
+    // palautetaan haetut äänet 
+    // Lisätään ne tietoraketeeseen
+    // esim. map mutta käyttö voi olla hankalampaa
+    let aanet = new Map();
+
+    aanet.set("1"," aanilinkki 1");
+    aanet.set("2", "aanilinkki 2");
+    aanet.set("3", "aanilinkki 3");
+    aanet.set("4", "aanilinkki 4");
+    aanet.set("5", "aanilinkki 5");
+    aanet.set("6", "aanilinkki 6");
+   
+    console.log(aanet.has("3"));
+    // Tai yksinketaisemmin tallennetaan taulukkoon
+    let aani = ["ääni1aanilinkki 1","aanilinkki 2","aanilinkki 3"];
+    // Sitten tallennetaan localStrageen
+    localStorage.setItem("haetutAanet", aani);
+    
+    
+    console.log(localStorage.key("haetutAanet"));
+    
+        
+    let haetutAanet = localStorage.getItem("haetutAanet");
+    //haetutAanet[0]; // toimii
+    console.log(haetutAanet);
+   
+    //funktion pitäisi tarkistaa onko haettu ääni jp tietorakenteessa
+
 
     let data = getdata;
     document.addEventListener(
