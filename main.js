@@ -16,17 +16,17 @@ window.addEventListener("load", function() {
         return await response.text();
     }
 
-    //Kuuntelee nappia button1
-    //Näitä lisää niin monta kuin on nappuloita paitsi haku
-    document.getElementById("button1").addEventListener("click", button1Pressed);
-    function button1Pressed(event) {
-        if (event.defaultPrevented) {
-            return; // Do nothing if the event was already processed
+    //Kuuntelee nappeja
+    let buttons = document.getElementsByClassName("sideButton");
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener("click", button1Pressed);
+        function button1Pressed(event) {
+            if (event.defaultPrevented) {
+                return; // Do nothing if the event was already processed
+            }
+            console.log("Pressed button " + (i+1));
         }
-        console.log("Pressed button 1");
     }
-
-
 
     //Kuuntelee nappia haku
     document.getElementById("haku").addEventListener("click", hakuPressed);
