@@ -8,13 +8,6 @@
  */
 window.addEventListener("load", function() {
 
-    // Hakee datan lähteestä
-    let getdata = async function() {
-        const response = await fetch('lähde', {"credentials": "include"});
-        // key : ''
-        //data = await response.json();
-        return await response.text();
-    }
 
     //Kuuntelee nappeja
     let buttons = document.getElementsByClassName("sideButton");
@@ -58,13 +51,13 @@ window.addEventListener("load", function() {
    
     console.log(aanet.has("3"));
     // Tai yksinketaisemmin tallennetaan taulukkoon
-    let aania = ["ääni1aanilinkki 1","aanilinkki 2","aanilinkki 3"];
+    let aania = ["./media/sci-fi.mp3","aanilinkki 2","aanilinkki 3"];
     // Sitten tallennetaan localStrageen
     localStorage.setItem("haetutAanet", aania);
             
     let haetutAanet = localStorage.getItem("haetutAanet");
     //haetutAanet[0]; // toimii
-    console.log(haetutAanet);
+    console.log(haetutAanet, " Äänet local storagesta");
    
     //Tehtävä: funktion joka tarkastaa onko haettu ääni jo tietorakenteessa aanet tai aania taulukossa
     //funktio palauttaa löytyneen äänen tai null
@@ -86,43 +79,41 @@ window.addEventListener("load", function() {
             return;
           }
          console.log(key);
+
+         // Tarvitsee tietää canvas että piirretään oikeaan paikkaan,
+         // nappi1 canvas1 jne
          //const canvas = document.getElementById("canvas1");
 
          //https://en.wikipedia.org/wiki/File:MT63_sample.ogg
          
-         setupAudioAnalyser("./media/sci-fi.mp3");
-
-         //play("./media/sci-fi.mp3")
-         //playByKey(key,aanet);
+        //play("./media/sci-fi.mp3")
+        playByKey(key);
 
           
-          // funktiossa voisi olla taulukko näppäimistä
-          // ja niihin yhdistää ääni silmukassa
-        function playByKey() {
+        /**
+         * Funktio soittaa äänen näppäimen mukaan
+         * @param {*} key 
+         */
+        function playByKey(key) {
             
-            //console.log(aanet.has("1"));
-           // console.log(aanet.has(key));
-            // nappulataulukko nappula elementeistä täydennettävä
-            let buttons = [document.getElementById("button1"),document.getElementById("button1")];
-            
-            // myös data pitää jotekin erotella.
-            // yhdistää näppäimeen tässä silmukassa
-            
-            for(let i=0 ; i<5; i++) {
-               
-                if(aanet.get(i) == "1") {
-                    // soita ääni, esim.
-                    document.getElementById("Audio").play();
-                    // tai
-                    const audio = new Audio('./media/MT63_sample.ogg');
-                    // Play the audio
-                    audio.play();
-                    break;
-                }
+            // console.log(aanet.has("1")); // Kyselee mapista
+            // Taulukko näppäimistön nappuloista
+            const keys = [1,2,3,4,5,6,7,8,9,0,'q','w','e','r','t','y','u','i','o','p','a','s','d','f','g','h','j','k','l','z','x','c','v','b','n','m'];  
+            //,a,s,d,f,g,h,j,k,l,z,x,c,v,b,n,m
+            for(let i = 0; i < aania.length; i++) {
+                
+                if(key == keys[i]) {
+                    // soita ääni, näppäimen mukaan
+                    if(aania[i].indexOf(".mp3")) { // Tarkastetaan ettei ole pelkkää tekstiä
+                        console.log("soita ääni ",aania[i]);
+                        setupAudioAnalyser(aania[i]);
+                    }
+                 }
+                break;
             }
+            
         }
 
         });
-
 
 });

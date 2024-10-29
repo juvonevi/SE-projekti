@@ -17,37 +17,94 @@ function play(audioFile) {
  * Asetetaan ja käytetään aaänen analysaattoria
  * @param {*} audioFile 
  */
-function setupAudioAnalyser(audioFile) {
-  let dataArray;
-  //const ANALYSE = stream => {   
+
+async function setupAudioAnalyser(audioFile) {
+  let dataArray = new Uint8Array(256);;
+  let fileArray = new ArrayBuffer;
+  const audio = new Audio(audioFile);
+  //const fs = require('fs');
+  const fileReader = new FileReader();
+//   fetch("file:///media/sci-fi.mp3")
+// .then(response => response.arrayBuffer())
+// .then(ab => {
+//   // do stuff with `ArrayBuffer` representation of file
+// })
+var AJAXFileReader=new XMLHttpRequest();
+AJAXFileReader.open("GET",audioFile,true);
+
+  //fileReader.readAsArrayBuffer(audioFile);
+  //fileReader.onloadend = async function() {
+  //fileArray = fileReader.result;
+  //const fileReader = new FileReader();
+  //fileReader.readAsDataURL(audioFile); //readFile('path/to/your/audiofile.mp3', (err, data) => {
+ 
+  //const response = await fetch(audioFile);
+  //const arrayBuffer = await response.arrayBuffer();
+  //const file = new ;
+  let file = audioFile;
+  //fileReader.readAsArrayBuffer(audioFile);
+  //fileReader.onloadend = async function() {
+  //fileArray = fileReader.result;
+  
+  //console.log(AJAXFileReader.readyState);
+  fileReader.onload = function(){
+    var $data = { 'title': 'Sample Photo Title', 'file': reader.result };
+    $.ajax({
+      type: 'POST',
+      url: audioFile,
+      data: $data,
+      success: function(response) {
+          
+      },
+      error: function(response) {
+          
+      },
+  });
+};
+  //const response = await fetch(audioFile);
+  // Decode it
+  const audioBuffer = 0; //await audioCtx.decodeAudioData(await response.arrayBuffer());
+
   const audioCtx = new AudioContext();
   const analyser = audioCtx.createAnalyser();
-  
+  //const audioBuffer = audioCtx.decodeAudioData(fileArray, function() {
+
+    const source = audioCtx.createBufferSource();
+    //source.buffer = audioBuffer;
+    source.connect(analyser);
+    //source.noteOn(0);
+  //});
+
   // Set up the audio source
     
-    const audio = new Audio(audioFile);
+    
     //audio.play();
 
     const mediaElement = document.getElementById("audio1"); //document.createElement("audio");
-    const source = audioCtx.createMediaElementSource(mediaElement);
+       
+    
+
     
     
     // Configure the analyser
-    analyser.fftSize = 2048;
+    analyser.fftSize = 256;
     const bufferLength = analyser.frequencyBinCount;
     
     // taulukko Uint8Array tyyppiä
     dataArray = new Uint8Array(bufferLength);
     
-    source.connect(analyser);
+  
     
     analyser.connect(audioCtx.destination);
     audio.play();
 
     // tässä pitäisi saada äänidata dataArray:hin
-    analyser.getByteFrequencyData(dataArray);
     
+    source.start(0);
+
+    analyser.getByteFrequencyData(dataArray);
     console.log(dataArray);
+    
   //}
   
     // Kutsutaan drawCanvas metodia dataArray parametrilla
