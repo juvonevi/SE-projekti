@@ -37,6 +37,10 @@ window.addEventListener("load", function() {
         searchsound(syote).then(result => {
             console.log(syote);
             // Palautetaan äänilinkki
+            result.json().then((json) => { 
+                console.log(json.results)
+            })
+
         })
     }
      
