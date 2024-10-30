@@ -2,38 +2,58 @@ body {
     background-color: aliceblue;
 }
 
-div:nth-child(1) {
-    width: 35%;
+#aanet {
+    width: 45%;
     float: left;
 }
 
-div:nth-child(3) {
-    width: 6%;
-    
+#aanirivi {
+    width: 45%;
+    float: left;
+}
+
+#preset {
+    width: 8%; 
+}
+
+
+.label {
+    width: 2em;              
+    margin-right: 0.5em;      
+    margin-left: 3em;         
+    margin-bottom: 1em;       
+    position: relative;
 }
 
 .sideButton {
-    width: 25px;
-    margin-right: 10px;
-    margin-left: 10px;
-    margin-bottom: 10px;
+    width: 2em;
+    margin-right: 0.5em;
+    margin-left: 0.5em;
+    margin-bottom: 1em;
     position: relative;
-    bottom: 18px;
+    bottom: 0.8em
 }
 
-audio {
+audio {    
     position: relative;
-    bottom: 6px;
-    margin-left: 5px;
+    margin-left: 0.5em;
 }
 
 .loop {
     position: relative;
-    bottom: 21px;
-    margin-left: 5px;
+    bottom: 0.8em;
+    margin-left: 0.5em;
 }
 
-form {
-    width: 15%;
-    float: right;
+form + #hakutulokset {
+    display: block;
+    width: 100%;    
+    margin-top: 1em;
 }
+
+.hakupalkki{
+    float: right; 
+    width: 25%;
+}
+
+

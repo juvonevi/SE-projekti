@@ -4,87 +4,124 @@
     <head><!-- Älä muuta head osaa-->
         <meta charset="utf-8"/>
         <script src="main.js"></script>
+        <script src="graph.js"></script>
         <link rel="StyleSheet" href="styles.css" type="text/css" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <header name = "Access-Control-Allow-Origin" value = "*"> 
         <title></title>
 
     </head>
 <body>
 <!--Koodi tästä eteenpäin-->
-<div>
-<h1>Ääni
+<div id="aanet">
+  
+ <h1>Ääni
     Volyymi
     Toisto
-</h1>
-<input type="button" id="button1" value="1" class="sideButton"/>
-<canvas id="canvas1" width="200" height="50" style="border:1px solid #000000;"></canvas>
-<audio controls></audio>
-<input type="checkbox" class="loop"/>
-<br>
+ </h1> 
 
+    <div class="aanirivi">
+        <label class="label">teksti1</label>
+        <br>
+        <input type="button" id="button1" value="1" class="sideButton"/>
+        <canvas id="canvas1" width="200" height="50" style="border:1px solid #000000;"></canvas>
+        <audio id = "audio1" controls></audio>
+        <input type="checkbox" class="loop"/>
+    </div>
 
-<input type="button" id="button2" value="2" class="sideButton"/>
-<canvas id="canvas2"  width="200" height="50" style="border:1px solid #000000;"></canvas>
-<audio controls></audio>
-<input type="checkbox" class="loop"/>
-<br>
+    <div class="aanirivi">
+        <label class="label">teksti2</label>
+        <br>
+        <input type="button" id="button2" value="2" class="sideButton"/>
+        <canvas id="canvas2"  width="200" height="50" style="border:1px solid #000000;"></canvas>
+        <audio id = "audio2" controls></audio>
+        <input type="checkbox" class="loop"/>
+    </div>
 
-<input type="button" id="button3" value="3" class="sideButton"/>
-<canvas id="canvas3" width="200" height="50" style="border:1px solid #000000;"></canvas>
-<audio controls></audio>
-<input type="checkbox" class="loop"/>
-<br>
+    <div class="aanirivi">
+        <label class="label">teksti3</label>
+        <br>
+        <input type="button" id="button3" value="3" class="sideButton"/>
+        <canvas id="canvas3" width="200" height="50" style="border:1px solid #000000;"></canvas>
+        <audio id = "audio3" controls></audio>
+        <input type="checkbox" class="loop"/>
+    </div>
 
-<input type="button" id="button4" value="4" class="sideButton"/>
-<canvas id="canvas4" width="200" height="50" style="border:1px solid #000000;"></canvas>
-<audio controls></audio>
-<input type="checkbox" class="loop"/>
-<br>
+    <div class="aanirivi">  
+        <label class="label">teksti4</label>
+        <br>
+        <input type="button" id="button4" value="4" class="sideButton"/>
+        <canvas id="canvas4" width="200" height="50" style="border:1px solid #000000;"></canvas>
+        <audio id = "audio4" controls></audio>
+        <input type="checkbox" class="loop"/>
+    </div>
 
-<input type="button" id="button5" value="5" class="sideButton"/>
-<canvas id="canvas5" width="200" height="50" style="border:1px solid #000000;"></canvas>
-<audio controls></audio>
-<input type="checkbox" class="loop"/>
-<br>
+    <div class="aanirivi"> 
+        <label class="label">teksti5</label>
+        <br>
+        <input type="button" id="button5" value="5" class="sideButton"/>
+        <canvas id="canvas5" width="200" height="50" style="border:1px solid #000000;"></canvas>
+        <audio id = "audio5" controls></audio>
+        <input type="checkbox" class="loop"/>
+    </div>
 
-<input type="button" id="button6" value="6" class="sideButton"/>
-<canvas id="canvas6" width="200" height="50" style="border:1px solid #000000;"></canvas>
-<audio controls></audio>
-<input type="checkbox" class="loop"/>
-<br>
+    <div class="aanirivi"> 
+        <label class="label">teksti6</label>
+        <br>
+        <input type="button" id="button6" value="6" class="sideButton"/>
+        <canvas id="canvas6" width="200" height="50" style="border:1px solid #000000;"></canvas>
+        <audio id = "audio6" controls></audio>
+        <input type="checkbox" class="loop"/>
+    </div>
 
-<input type="button" id="button7" value="7" class="sideButton"/> 
-<canvas id="canvas7" width="200" height="50" style="border:1px solid #000000;"></canvas>
-<audio controls></audio>
-<input type="checkbox" class="loop"/>
-<br>
+    <div class="aanirivi"> 
+        <label class="label">teksti7</label>
+        <br>
+        <input type="button" id="button7" value="7" class="sideButton"/> 
+        <canvas id="canvas7" width="200" height="50" style="border:1px solid #000000;"></canvas>
+        <audio id = "audio7" controls></audio>
+        <input type="checkbox" class="loop"/>
+    </div>
 
-<input type="button" id="button8" value="8" class="sideButton"/>
-<canvas id="canvas8" width="200" height="50" style="border:1px solid #000000;"></canvas>
-<audio controls></audio>
-<input type="checkbox" class="loop"/>
-<br>
+    <div class="aanirivi"> 
+        <label class="label">teksti8</label>
+        <br>
+        <input type="button" id="button8" value="8" class="sideButton"/>
+        <canvas id="canvas8" width="200" height="50" style="border:1px solid #000000;"></canvas>
+        <audio id = "audio8" controls></audio>
+        <input type="checkbox" class="loop"/>
+    </div>
 
-<input type="button" id="button9" value="9" class="sideButton"/>
-<canvas id="canvas9" width="200" height="50" style="border:1px solid #000000;"></canvas>
-<audio controls></audio>
-<input type="checkbox" class="loop"/>
-<br>
+    <div class="aanirivi"> 
+        <label class="label">teksti9</label>
+        <br>
+        <input type="button" id="button9" value="9" class="sideButton"/>
+        <canvas id="canvas9" width="200" height="50" style="border:1px solid #000000;"></canvas>
+        <audio id = "audio9" controls></audio>
+        <input type="checkbox" class="loop"/>
+    </div>
 
-<input type="button" id="button10" value="10" class="sideButton"/>
-<canvas id="canvas10" width="200" height="50" style="border:1px solid #000000;"></canvas>
-<audio controls></audio>
-<input type="checkbox" class="loop"/>
-<br>
+    <div class="aanirivi"> 
+        <label class="label">teksti0</label>
+        <br>
+        <input type="button" id="button0" value="0" class="sideButton"/>
+        <canvas id="canvas0" width="200" height="50" style="border:1px solid #000000;"></canvas>
+        <audio id = "audio0" controls></audio>
+        <input type="checkbox" class="loop"/>
+    </div>  
 </div>
 
+
+<div class="hakupalkki">
 <form>
 <h2>Haku</h2>
 <input type="search" id="search"/> 
 <input type="button" id="haku" value="hae ääniefekti"/>
 </form>
+    <div id="hakutulokset" style="border:1px solid #000000;"></div>
+</div>
 
-<div>
+<div id="preset">
 <h2>Preset it</h2>
 <input type="button" id="buttonA" value="A"/>
 <input type="button" id="buttonB" value="B"/>
