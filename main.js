@@ -179,7 +179,22 @@ window.addEventListener("load", function() {
          
         //play("./media/sci-fi.mp3")
         playByKey(key);
+        playByKeyTest(key);
 
+        function playByKeyTest(key) {
+            const keys = ["1","2","3","4","5","6","7","8","9","0"];
+            let audios = document.querySelectorAll(".aanirivi > audio");
+            for (let i = 0; i < keys.length; i++) {
+                if (key === keys[i]) {
+                    if (audios[i].paused) {
+                        audios[i].play();
+                    }
+                    else {
+                        audios[i].pause();
+                    }
+                }
+            }
+        }
           
         /**
          * Funktio soittaa äänen näppäimen mukaan
