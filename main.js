@@ -7,9 +7,31 @@
  * Tapahtuman kuuntelija sivun lataamiselle
  */
 window.addEventListener("load", function() {
-    //Mahdollistaa äänien droppauksen
-    prepareDrop();
 
+    /**
+     * Lisää checkboxeihin event listenerit
+     */
+    prepareCheckboxes();
+    function prepareCheckboxes() {
+        let checkboxes = document.getElementsByClassName("loop");
+        let audios = document.querySelectorAll(".aanirivi > audio");
+        for (let i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].addEventListener("input", cbInput);
+            function cbInput() {
+                if (checkboxes[i].checked) {
+                    audios[i].loop = true;
+                }
+                else {
+                    audios[i].loop = false;
+                }
+            }
+        }
+    }
+
+    /**
+     * Mahdollistaa äänien droppauksen äänilistaan
+     */
+    prepareDrop();
     function prepareDrop() {
         let paikat = document.getElementsByClassName("aanirivi");
         for (let paikka of paikat) {
@@ -63,16 +85,27 @@ window.addEventListener("load", function() {
     }
 
     //Kuuntelee nappeja
-    let buttons = document.getElementsByClassName("sideButton");
-    for (let i = 0; i < buttons.length; i++) {
-        buttons[i].addEventListener("click", button1Pressed);
-        function button1Pressed(event) {
-            if (event.defaultPrevented) {
-                return; // Do nothing if the event was already processed
+    addButtonListeners();
+    function addButtonListeners() {
+        let buttons = document.getElementsByClassName("sideButton");
+        let audios = document.querySelectorAll(".aanirivi > audio");
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].addEventListener("click", button1Pressed);
+            function button1Pressed(event) {
+                if (event.defaultPrevented) {
+                    return; // Do nothing if the event was already processed
+                }
+                console.log("Pressed button " + (i+1));
+                if (audios[i].paused) {
+                    audios[i].play();
+                }
+                else {
+                    audios[i].pause();
+                }
             }
-            console.log("Pressed button " + (i+1));
         }
     }
+    
 
     //Kuuntelee nappia haku
     document.getElementById("haku").addEventListener("click", hakuPressed);
@@ -92,7 +125,6 @@ window.addEventListener("load", function() {
                 console.log(json.results)
                 showSearchResults(json.results);
             })
-
         })
     }
      
