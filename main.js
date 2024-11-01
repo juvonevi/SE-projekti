@@ -7,7 +7,60 @@
  * Tapahtuman kuuntelija sivun lataamiselle
  */
 window.addEventListener("load", function() {
+    //Mahdollistaa äänien droppauksen
+    prepareDrop();
 
+    function prepareDrop() {
+        let paikat = document.getElementsByClassName("aanirivi");
+        for (let paikka of paikat) {
+            paikka.addEventListener("dragover", function(e) {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = "copy";
+            });
+    
+            paikka.addEventListener("drop", function(e) {
+                e.preventDefault();
+                let nimi = e.dataTransfer.getData("text/plain");
+                let aani = e.dataTransfer.getData("text/html");
+                let label = this.children[0];
+                let audio = this.children[4];
+                label.textContent = nimi;
+                audio.setAttribute("src", aani);   
+            });
+        }
+    }
+
+    /**
+     * Laittaa hakutulokset näkyviin sivulle
+     * @param {*} data 
+     */
+    function showSearchResults(data) {
+        let htdiv = document.getElementById("hakutulokset");
+        while(htdiv.firstChild){
+            htdiv.removeChild(htdiv.firstChild);
+        }
+        for (let aani of data) {
+            let div = document.createElement("div");
+            htdiv.appendChild(div);
+            let nimi = document.createElement("label");
+            nimi.textContent = aani.name;
+            div.appendChild(nimi);
+            let audio = document.createElement("audio");
+            audio.setAttribute("controls", "");
+            audio.setAttribute("src", aani.previews["preview-hq-mp3"]);
+            div.appendChild(audio);
+            div.style.width = "100%";
+            div.style.display = "inline-block";
+            nimi.style.float = "left";
+            audio.style.float = "right";
+            audio.style.clear = "right";
+            div.setAttribute("draggable", "true");
+            div.addEventListener("dragstart", function(e) {
+                e.dataTransfer.setData("text/plain", aani.name);
+                e.dataTransfer.setData("text/html", aani.previews["preview-hq-mp3"]);
+            });
+        }
+    }
 
     //Kuuntelee nappeja
     let buttons = document.getElementsByClassName("sideButton");
@@ -25,6 +78,11 @@ window.addEventListener("load", function() {
     document.getElementById("haku").addEventListener("click", hakuPressed);
     function hakuPressed() {
         let syote = document.forms[0].elements[0].value;
+        if (this.lastSearched && this.lastSearched === syote) {
+            return;
+        }
+        this.lastSearched = syote;
+        
         // Tässä tullaan ensin kutsumaan tarkastusfunktiota
         // sitten jos ei löydy käynnistetää ulkoinen haku searchsound
         searchsound(syote).then(result => {
@@ -32,6 +90,7 @@ window.addEventListener("load", function() {
             // Palautetaan äänilinkki
             result.json().then((json) => { 
                 console.log(json.results)
+                showSearchResults(json.results);
             })
 
         })
