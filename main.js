@@ -111,7 +111,9 @@ window.addEventListener("load", function() {
     document.getElementById("haku").addEventListener("click", hakuPressed);
     function hakuPressed() {
         let syote = document.forms[0].elements[0].value;
-        if (this.lastSearched && this.lastSearched === syote) {
+        if (this.lastSearched && 
+            this.lastSearched === syote &&
+            syote == "") {
             return;
         }
         this.lastSearched = syote;
@@ -119,12 +121,16 @@ window.addEventListener("load", function() {
         // Tässä tullaan ensin kutsumaan tarkastusfunktiota
         // sitten jos ei löydy käynnistetää ulkoinen haku searchsound
         searchsound(syote).then(result => {
-            console.log(syote);
             // Palautetaan äänilinkki
-            result.json().then((json) => { 
-                console.log(json.results)
-                showSearchResults(json.results);
-            })
+            if (result.ok) {
+                result.json().then((json) => { 
+                    console.log(json.results)
+                    showSearchResults(json.results);
+                })
+            }
+            else {
+                console.log(result.statusText)
+            }
         })
     }
      
