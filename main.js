@@ -106,10 +106,11 @@ window.addEventListener("load", function() {
         }
     }
     
-
     //Kuuntelee nappia haku
     document.getElementById("haku").addEventListener("click", hakuPressed);
-    function hakuPressed() {
+    document.getElementById("hakulomike").addEventListener("submit", hakuPressed);
+    function hakuPressed(e) {
+        e.preventDefault()
         let syote = document.forms[0].elements[0].value;
         if ((this.lastSearched && 
             this.lastSearched === syote) ||
