@@ -111,9 +111,9 @@ window.addEventListener("load", function() {
     document.getElementById("haku").addEventListener("click", hakuPressed);
     function hakuPressed() {
         let syote = document.forms[0].elements[0].value;
-        if (this.lastSearched && 
-            this.lastSearched === syote &&
-            syote == "") {
+        if ((this.lastSearched && 
+            this.lastSearched === syote) ||
+            !syote) { // <- Viimeinen on tyhjan haun lähettämisen esto
             return;
         }
         this.lastSearched = syote;
@@ -129,6 +129,7 @@ window.addEventListener("load", function() {
                 })
             }
             else {
+                // TODO: Jokin ilmoitusjärjestelmä?
                 console.log(result.statusText)
             }
         })
