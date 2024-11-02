@@ -14,9 +14,12 @@ window.addEventListener("load", function() {
     let allSounds = [sounds1, sounds2, sounds3, sounds4];
     allSounds.selected = 0;
     this.document.getElementById("buttonA").style["font-weight"] = "bold";
-
-
-
+    let dragImg = new Image();
+    dragImg.src = "GrabCursor.png";
+    
+    /**
+     * Näyttää käyttäjän äänet sivulla
+     */
     showMySounds();
     function showMySounds() {
         let sounds = allSounds[allSounds.selected];
@@ -109,6 +112,7 @@ window.addEventListener("load", function() {
             div.addEventListener("dragstart", function(e) {
                 e.dataTransfer.setData("text/plain", aani.name);
                 e.dataTransfer.setData("text/html", aani.previews["preview-hq-mp3"]);
+                e.dataTransfer.setDragImage(dragImg, 30, 26);
             });
         }
     }
