@@ -48,7 +48,12 @@ window.addEventListener("load", function() {
                 let audio = this.children[4];
                 label.textContent = nimi;
                 audio.setAttribute("src", aani);
-                setupAudioAnalyser(paikka);
+
+                // Odottaa että ääni on saapunut ja sitten piirtää graafin
+                audio.addEventListener("durationchange", (e) => {
+                    e.preventDefault();
+                    setupAudioAnalyser(paikka);
+                })
             });
         }
     }

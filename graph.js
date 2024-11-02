@@ -3,17 +3,17 @@
  * @param {*} audioFile 
  */
 
-async function setupAudioAnalyser(aaniPaikka) {
-  console.log(aaniPaikka.children);
+function setupAudioAnalyser(aaniPaikka) {
   const audio = aaniPaikka.children[4]; // <- Tuon pitäisi osoittaa aina audion paikkaa
   const canvas = aaniPaikka.children[3];
 
   const src = audio.src;  
+  console.log(audio)
   const audioCtx = new AudioContext(); 
   const offlineCtx = new OfflineAudioContext({
-    numberOfChannels: 2,
-    length: 44100 * 10,
-    sampleRate: 44100,
+    numberOfChannels: 2, // TODO: NumberOfChannelsin saaminen audiosta
+    length: 44100 * audio.duration, // TODO: SampleRaten tiedon saaminen
+    sampleRate: 44100, // TODO: SampleRaten tiedon saaminen
   });
 
 
@@ -34,7 +34,6 @@ async function setupAudioAnalyser(aaniPaikka) {
       const sound = new AudioBufferSourceNode(audioCtx, {
         buffer: renderedBuffer
       })
-      console.log(renderedBuffer)
       drawCanvas(renderedBuffer, canvas)
       sound.start();
     })
@@ -49,7 +48,6 @@ async function setupAudioAnalyser(aaniPaikka) {
  */
 function drawCanvas(soundBuffer, canvas) {
     const bufferLength = 300;
-    canvas = document.getElementById("canvas1");
     const ctx = canvas.getContext("2d");
     ctx.fillStyle = 'rgb(0, 0, 0)';
 
@@ -61,6 +59,6 @@ function drawCanvas(soundBuffer, canvas) {
     let x = 0;
     const s = Math.floor(data.length / canvas.width)
     for (let i = 0; i < canvas.width; i++) {
-      ctx.fillRect(i, 0, barWidth, barHeight * data[i * s]);
+      ctx.fillRect(i, canvas.height / 2, barWidth, barHeight * data[i * s]);
     }
   }
