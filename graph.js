@@ -7,14 +7,9 @@ async function setupAudioAnalyser(aaniPaikka) {
   console.log(aaniPaikka.children);
   const audio = aaniPaikka.children[4]; // <- Tuon pitäisi osoittaa aina audion paikkaa
   const canvas = aaniPaikka.children[3];
-  console.log(audio)
-  console.log(canvas)
 
-  const src = audio.src;
-  console.log(audio.src)
-  
+  const src = audio.src;  
   const audioCtx = new AudioContext(); 
-
   const offlineCtx = new OfflineAudioContext({
     numberOfChannels: 2,
     length: 44100 * 10,
@@ -36,7 +31,6 @@ async function setupAudioAnalyser(aaniPaikka) {
     .then(() => offlineCtx.startRendering())
     .then((renderedBuffer) => {
       console.log("Sound rendered");
-      play.disabled = false;
       const sound = new AudioBufferSourceNode(audioCtx, {
         buffer: renderedBuffer
       })
@@ -68,9 +62,5 @@ function drawCanvas(soundBuffer, canvas) {
     const s = Math.floor(data.length / canvas.width)
     for (let i = 0; i < canvas.width; i++) {
       ctx.fillRect(i, 0, barWidth, barHeight * data[i * s]);
-      console.log(barWidth)
-      console.log(barHeight * data[i * s])
-      console.log(data[i*s])
-      console.log(s)
     }
   }
