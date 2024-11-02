@@ -47,16 +47,13 @@ function setupAudioAnalyser(aaniPaikka) {
  * @param {*} canvas 
  */
 function drawCanvas(soundBuffer, canvas) {
-    const bufferLength = 300;
     const ctx = canvas.getContext("2d");
     ctx.fillStyle = 'rgb(0, 0, 0)';
 
     const data = soundBuffer.getChannelData(0);
-    console.log(data)
     
     const barWidth = (canvas.width / 100);
     let barHeight = 100;
-    let x = 0;
     const s = Math.floor(data.length / canvas.width)
     for (let i = 0; i < canvas.width; i++) {
       ctx.fillRect(i, canvas.height / 2, barWidth, barHeight * data[i * s]);
