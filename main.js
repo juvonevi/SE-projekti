@@ -7,6 +7,36 @@
  * Tapahtuman kuuntelija sivun lataamiselle
  */
 window.addEventListener("load", function() {
+    let sounds1 = [];
+    let sounds2 = [];
+    let sounds3 = [];
+    let sounds4 = [];
+    let allSounds = [sounds1, sounds2, sounds3, sounds4];
+    allSounds.selected = 0;
+    this.document.getElementById("buttonA").style["font-weight"] = "bold";
+
+
+
+    showMySounds();
+    function showMySounds() {
+        let sounds = allSounds[allSounds.selected];
+        let paikat = document.getElementsByClassName("aanirivi");
+        for (let i = 0; i < paikat.length; i++) {
+            if (typeof sounds[i] === "undefined") {
+                paikat[i].children[0].textContent = "Add sound";
+                paikat[i].children[3].style.display = "none";
+                paikat[i].children[4].style.display = "none";
+                paikat[i].children[5].style.display = "none";
+            }
+            else {
+                paikat[i].children[0].textContent = sounds[i].name;
+                paikat[i].children[3].style.display = "initial";
+                paikat[i].children[4].style.display = "initial";
+                paikat[i].children[4].setAttribute("src", sounds[i].sound);
+                paikat[i].children[5].style.display = "initial";         
+            }
+        }
+    }
 
     /**
      * Lisää checkboxeihin event listenerit
@@ -34,20 +64,19 @@ window.addEventListener("load", function() {
     prepareDrop();
     function prepareDrop() {
         let paikat = document.getElementsByClassName("aanirivi");
-        for (let paikka of paikat) {
-            paikka.addEventListener("dragover", function(e) {
+        for (let i = 0; i < paikat.length; i++) {
+            paikat[i].addEventListener("dragover", function(e) {
                 e.preventDefault();
                 e.dataTransfer.dropEffect = "copy";
             });
     
-            paikka.addEventListener("drop", function(e) {
+            paikat[i].addEventListener("drop", function(e) {
                 e.preventDefault();
+                let sounds = allSounds[allSounds.selected];
                 let nimi = e.dataTransfer.getData("text/plain");
                 let aani = e.dataTransfer.getData("text/html");
-                let label = this.children[0];
-                let audio = this.children[4];
-                label.textContent = nimi;
-                audio.setAttribute("src", aani);   
+                sounds[i] = {"name" : nimi, "sound" : aani};
+                showMySounds();
             });
         }
     }
@@ -87,11 +116,12 @@ window.addEventListener("load", function() {
     //Kuuntelee nappeja
     addButtonListeners();
     function addButtonListeners() {
+        //My sounds napit
         let buttons = document.getElementsByClassName("sideButton");
         let audios = document.querySelectorAll(".aanirivi > audio");
         for (let i = 0; i < buttons.length; i++) {
-            buttons[i].addEventListener("click", button1Pressed);
-            function button1Pressed(event) {
+            buttons[i].addEventListener("click", buttonPressed);
+            function buttonPressed(event) {
                 if (event.defaultPrevented) {
                     return; // Do nothing if the event was already processed
                 }
@@ -103,6 +133,47 @@ window.addEventListener("load", function() {
                     audios[i].pause();
                 }
             }
+        }
+        //Presettienvaihtonapit
+        let buttons2 = document.querySelectorAll("#preset > input");
+        for (let i = 1; i < buttons2.length-1; i++) {
+            buttons2[i].addEventListener("click", buttonPressed2);
+            function buttonPressed2() {
+                allSounds.selected = i-1;
+                for (let j = 1; j < buttons2.length-1; j++) {
+                    buttons2[j].style["font-weight"] = "normal";
+                }
+                buttons2[i].style["font-weight"] = "bold";
+                showMySounds();
+            }
+        }
+        buttons2[0].addEventListener("click", buttonPressedL);
+        function buttonPressedL() {
+            if (allSounds.selected === 0) {
+                allSounds.selected = 3;
+            }
+            else {
+                allSounds.selected = allSounds.selected-1;
+            }            
+            for (let j = 1; j < buttons2.length-1; j++) {
+                buttons2[j].style["font-weight"] = "normal";
+            }
+            buttons2[allSounds.selected+1].style["font-weight"] = "bold";
+            showMySounds();
+        }
+        buttons2[buttons2.length-1].addEventListener("click", buttonPressedR);
+        function buttonPressedR() {
+            if (allSounds.selected === 3) {
+                allSounds.selected = 0;
+            }
+            else {
+                allSounds.selected = allSounds.selected+1;
+            }            
+            for (let j = 1; j < buttons2.length-1; j++) {
+                buttons2[j].style["font-weight"] = "normal";
+            }
+            buttons2[allSounds.selected+1].style["font-weight"] = "bold";
+            showMySounds();
         }
     }
     
