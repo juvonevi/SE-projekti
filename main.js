@@ -47,7 +47,8 @@ window.addEventListener("load", function() {
                 let label = this.children[0];
                 let audio = this.children[4];
                 label.textContent = nimi;
-                audio.setAttribute("src", aani);   
+                audio.setAttribute("src", aani);
+                setupAudioAnalyser(paikka);
             });
         }
     }
@@ -218,10 +219,11 @@ window.addEventListener("load", function() {
                 
                 if(key == keys[i]) {
                     // soita ääni, näppäimen mukaan
+                    /*
                     if(aania[i].indexOf(".mp3")) { // Tarkastetaan ettei ole pelkkää tekstiä
                         console.log("soita ääni ",aania[i]);
                         setupAudioAnalyser(aania[i]);
-                    }
+                    }*/
                  }
                 break;
             }
