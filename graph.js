@@ -49,9 +49,7 @@ function drawCanvas(soundBuffer, canvas) {
     const ctx = canvas.getContext("2d");
     ctx.fillStyle = 'rgb(250, 250, 250)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
     ctx.fillStyle = 'rgb(0, 0, 0)';
-
     const data = soundBuffer.getChannelData(0);
     
     const barWidth = (canvas.width / 100);
@@ -61,12 +59,11 @@ function drawCanvas(soundBuffer, canvas) {
       // Raskaampi ja tarkempi lasku maksimi arvoilla
       const splitArr = data.slice(i * s, (i+1)*s);
       const h1 = Math.max(...splitArr);
-      const h2 = Math.min(...splitArr);
-      const height = h1 > Math.abs(h2) ? h1 : h2
-      ctx.fillRect(i, canvas.height / 2, barWidth, barHeight * 
-        height
-      );
+      const h2 = -Math.min(...splitArr);
       
+      const height = (h1 + h2) * barHeight;
+      ctx.fillRect(i, canvas.height / 2 - h1 * barHeight, barWidth, height);
+
       // Kevyempi mutta epätarkka
       //ctx.fillRect(i, canvas.height / 2, barWidth, barHeight * data[i * s]); 
     }
