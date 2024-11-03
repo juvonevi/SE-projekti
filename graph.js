@@ -8,7 +8,6 @@ function setupAudioAnalyser(aaniPaikka) {
   const canvas = aaniPaikka.children[3];
 
   const src = audio.src;  
-  console.log(audio)
   const audioCtx = new AudioContext(); 
   const offlineCtx = new OfflineAudioContext({
     numberOfChannels: 2, // TODO: NumberOfChannelsin saaminen audiosta
@@ -55,7 +54,17 @@ function drawCanvas(soundBuffer, canvas) {
     const barWidth = (canvas.width / 100);
     let barHeight = 100;
     const s = Math.floor(data.length / canvas.width)
-    for (let i = 0; i < canvas.width; i++) {
-      ctx.fillRect(i, canvas.height / 2, barWidth, barHeight * data[i * s]);
+    for (let i = 0; i+1 < canvas.width; i++) {
+      // Raskaampi ja tarkempi lasku maksimi arvoilla
+      const splitArr = data.slice(i * s, (i+1)*s);
+      const h1 = Math.max(...splitArr);
+      const h2 = Math.min(...splitArr);
+      const height = h1 > Math.abs(h2) ? h1 : h2
+      ctx.fillRect(i, canvas.height / 2, barWidth, barHeight * 
+        height
+      );
+      
+      // Kevyempi mutta epätarkka
+      //ctx.fillRect(i, canvas.height / 2, barWidth, barHeight * data[i * s]); 
     }
   }
