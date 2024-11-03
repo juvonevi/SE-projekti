@@ -80,6 +80,13 @@ window.addEventListener("load", function() {
                 let aani = e.dataTransfer.getData("text/html");
                 sounds[i] = {"name" : nimi, "sound" : aani};
                 showMySounds();
+                let audio = paikat[i].children[4];
+                
+                // Odottaa että ääni on saapunut ja sitten piirtää graafin
+                audio.addEventListener("durationchange", (e) => {
+                    e.preventDefault();
+                    setupAudioAnalyser(paikat[i]);
+                })
             });
         }
     }
@@ -293,10 +300,11 @@ window.addEventListener("load", function() {
                 
                 if(key == keys[i]) {
                     // soita ääni, näppäimen mukaan
+                    /*
                     if(aania[i].indexOf(".mp3")) { // Tarkastetaan ettei ole pelkkää tekstiä
                         console.log("soita ääni ",aania[i]);
                         setupAudioAnalyser(aania[i]);
-                    }
+                    }*/
                  }
                 break;
             }
