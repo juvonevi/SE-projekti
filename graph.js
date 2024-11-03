@@ -47,6 +47,9 @@ function setupAudioAnalyser(aaniPaikka) {
  */
 function drawCanvas(soundBuffer, canvas) {
     const ctx = canvas.getContext("2d");
+    ctx.fillStyle = 'rgb(250, 250, 250)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
     ctx.fillStyle = 'rgb(0, 0, 0)';
 
     const data = soundBuffer.getChannelData(0);
