@@ -67,6 +67,13 @@ window.addEventListener("load", function() {
         }
     }
 
+    
+    const fileSystem = document.getElementById("soundFile");
+    fileSystem.addEventListener("change", (e) => {
+        const file = fileSystem.files;
+        console.log(file);
+    });
+
     /**
      * Lisää checkboxeihin event listenerit
      */
