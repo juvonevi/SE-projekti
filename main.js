@@ -68,11 +68,29 @@ window.addEventListener("load", function() {
     }
 
     
-    const fileSystem = document.getElementById("soundFile");
-    fileSystem.addEventListener("change", (e) => {
-        const file = fileSystem.files;
-        console.log(file);
-    });
+    /**
+     * Sallii paikallisten musiikki tiedostojen käytön
+     */
+    fileLoader();
+    function fileLoader() {
+        const fileSystem = document.getElementById("soundFile");
+        const fr = new FileReader();
+        fileSystem.addEventListener("change", (e) => {
+            const files = fileSystem.files;
+            console.log(files[0]);
+            let paikat = document.getElementsByClassName("aanirivi");
+            paikat[0].children[0].textContent = files[0].name;
+            
+            fr.addEventListener("load", () => {
+                console.log(fr.result)
+                paikat[0].children[4].setAttribute("src", fr.result);
+            }, false)
+            fr.readAsDataURL(files[0]);
+
+            paikat[0].children[5].style.display = "initial";      
+        });
+    }
+
 
     /**
      * Lisää checkboxeihin event listenerit

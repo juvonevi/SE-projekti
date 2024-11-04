@@ -7,11 +7,12 @@ function setupAudioAnalyser(aaniPaikka) {
   const audio = aaniPaikka.children[4]; // <- Tuon pitäisi osoittaa aina audion paikkaa
   const canvas = aaniPaikka.children[3];
 
+  console.log(audio)
   const src = audio.src;  
   const audioCtx = new AudioContext(); 
   const offlineCtx = new OfflineAudioContext({
     numberOfChannels: 2, // TODO: NumberOfChannelsin saaminen audiosta
-    length: 44100 * audio.duration, // TODO: SampleRaten tiedon saaminen
+    length: 44100 * (audio.duration == Infinity ? 10 : audio.duration) , // TODO: SampleRaten tiedon saaminen
     sampleRate: 44100, // TODO: SampleRaten tiedon saaminen
   });
 
