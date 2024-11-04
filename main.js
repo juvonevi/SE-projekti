@@ -16,6 +16,36 @@ window.addEventListener("load", function() {
     this.document.getElementById("buttonA").style["font-weight"] = "bold";
     let dragImg = new Image();
     dragImg.src = "GrabCursor.png";
+
+    /**
+     * Hakee käyttäjän äänet local storagesta
+     */
+    getStoredSounds();
+    function getStoredSounds() {
+        for (let i = 0; i < 4; i++) {
+            let sounds = JSON.parse(localStorage.getItem("sounds"+(i+1)));
+            if (sounds) {
+                console.log(sounds);
+                for (let j = 0; j < sounds.length; j++) {
+                    if (sounds[j]) {
+                        allSounds[i][j] = sounds[j];
+                    } 
+                }
+            }
+        }    
+    }
+
+    audioEventListeners();
+    function audioEventListeners() {
+        // Odottaa että ääni on saapunut ja sitten piirtää graafin
+        let audios = document.querySelectorAll(".aanirivi > audio");
+        for (let audio of audios) {
+            audio.addEventListener("durationchange", (e) => {
+                e.preventDefault();
+                setupAudioAnalyser(audio.parentElement);
+            });
+        }      
+    }
     
     /**
      * Näyttää käyttäjän äänet sivulla
@@ -78,15 +108,12 @@ window.addEventListener("load", function() {
                 let sounds = allSounds[allSounds.selected];
                 let nimi = e.dataTransfer.getData("text/plain");
                 let aani = e.dataTransfer.getData("text/html");
-                sounds[i] = {"name" : nimi, "sound" : aani};
+                let obj = {"name" : nimi, "sound" : aani};
+                sounds[i] = obj;
                 showMySounds();
                 let audio = paikat[i].children[4];
-                
-                // Odottaa että ääni on saapunut ja sitten piirtää graafin
-                audio.addEventListener("durationchange", (e) => {
-                    e.preventDefault();
-                    setupAudioAnalyser(paikat[i]);
-                })
+                localStorage.setItem("sounds" + (allSounds.selected+1),  JSON.stringify(sounds));
+                console.log(localStorage.getItem("sounds", allSounds.selected+1));
             });
         }
     }
