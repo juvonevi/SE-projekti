@@ -7,11 +7,7 @@
  * Tapahtuman kuuntelija sivun lataamiselle
  */
 window.addEventListener("load", function() {
-    let sounds1 = [];
-    let sounds2 = [];
-    let sounds3 = [];
-    let sounds4 = [];
-    let allSounds = [sounds1, sounds2, sounds3, sounds4];
+    let allSounds = [[], [], [], []];
     allSounds.selected = 0;
     this.document.getElementById("buttonA").style["font-weight"] = "bold";
     let dragImg = new Image();
