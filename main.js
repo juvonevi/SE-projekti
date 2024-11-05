@@ -67,7 +67,7 @@ window.addEventListener("load", function() {
         }
     }
 
-    
+
     /**
      * Sallii paikallisten musiikki tiedostojen käytön
      */
@@ -80,6 +80,8 @@ window.addEventListener("load", function() {
             console.log(files[0]);
             let paikat = document.getElementsByClassName("aanirivi");
             paikat[0].children[0].textContent = files[0].name;
+            paikat[0].children[3].style.display = "initial";
+            paikat[0].children[4].style.display = "initial";
             
             fr.addEventListener("load", () => {
                 console.log(fr.result)
@@ -87,7 +89,8 @@ window.addEventListener("load", function() {
             }, false)
             fr.readAsDataURL(files[0]);
 
-            paikat[0].children[5].style.display = "initial";      
+            paikat[0].children[5].style.display = "initial"; 
+            //paikat[0].fileSystem.display = "none";     
         });
     }
 

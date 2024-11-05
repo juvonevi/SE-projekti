@@ -8,11 +8,19 @@ function setupAudioAnalyser(aaniPaikka) {
   const canvas = aaniPaikka.children[3];
 
   console.log(audio)
-  const src = audio.src;  
+  const src = audio.src;
+
+  let duration = audio.duration
+  if (duration === Infinity) { // Keino jolla saa äärettömästä audiosta pituuden
+    audio.currentTime = 10e12;
+    duration = audio.currentTime;
+    audio.currentTime = 0;
+}
+
   const audioCtx = new AudioContext(); 
   const offlineCtx = new OfflineAudioContext({
     numberOfChannels: 2, // TODO: NumberOfChannelsin saaminen audiosta
-    length: 44100 * (audio.duration == Infinity ? 10 : audio.duration) , // TODO: SampleRaten tiedon saaminen
+    length: 44100 * duration, // TODO: SampleRaten tiedon saaminen
     sampleRate: 44100, // TODO: SampleRaten tiedon saaminen
   });
 
@@ -35,6 +43,7 @@ function setupAudioAnalyser(aaniPaikka) {
         buffer: renderedBuffer
       })
       drawCanvas(renderedBuffer, canvas)
+      console.log(sound)
       sound.start();
     })
     .catch((error) => { console.error(error) })
