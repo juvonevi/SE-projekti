@@ -7,11 +7,12 @@
  * Tapahtuman kuuntelija sivun lataamiselle
  */
 window.addEventListener("load", function() {
-    let allSounds = [[], [], [], []];
+    let allSounds = [Array(10), Array(10), Array(10), Array(10)];
     allSounds.selected = 0;
     this.document.getElementById("buttonA").style["font-weight"] = "bold";
     let dragImg = new Image();
     dragImg.src = "GrabCursor.png";
+    document.getElementById("file-input").addEventListener("change",handleFile);
 
     /**
      * Hakee käyttäjän äänet local storagesta
@@ -24,7 +25,13 @@ window.addEventListener("load", function() {
                 console.log(sounds);
                 for (let j = 0; j < sounds.length; j++) {
                     if (sounds[j]) {
-                        allSounds[i][j] = sounds[j];
+                        if (sounds[j].sound.startsWith("blob")) {
+                            allSounds[i][j] = undefined;
+                            localStorage.setItem("sounds" + (i+1),  JSON.stringify(sounds));
+                        }
+                        else {
+                            allSounds[i][j] = sounds[j];
+                        }                 
                     } 
                 }
             }
@@ -104,14 +111,46 @@ window.addEventListener("load", function() {
                 let sounds = allSounds[allSounds.selected];
                 let nimi = e.dataTransfer.getData("text/plain");
                 let aani = e.dataTransfer.getData("text/html");
-                let obj = {"name" : nimi, "sound" : aani};
-                sounds[i] = obj;
+                sounds[i] = {"name" : nimi, "sound" : aani};
                 showMySounds();
                 let audio = paikat[i].children[4];
+                audio.src = aani;
                 localStorage.setItem("sounds" + (allSounds.selected+1),  JSON.stringify(sounds));
                 console.log(localStorage.getItem("sounds", allSounds.selected+1));
             });
         }
+    }
+
+    function handleFile() {
+        let file = document.getElementById("file-input").files[0];
+        let nimi = file.name;
+        let blob = window.URL || window.webkitURL;
+        if (!blob) {
+            console.log('Your browser does not support Blob URLs');
+            return;           
+        }
+        let fileURL = blob.createObjectURL(file);
+        console.log(file);
+        console.log('File name: '+file.name);
+        console.log('File BlobURL: '+ fileURL);
+        let aani = fileURL;
+        let paikat = document.getElementsByClassName("aanirivi");
+        let sounds = allSounds[allSounds.selected];
+        let lisatty = false;
+        for (let i = 0; i < sounds.length; i++) {
+            if (!sounds[i]) {
+                sounds[i] = {"name" : nimi, "sound" : aani};
+                showMySounds();
+                let audio = paikat[i].children[4];
+                audio.src = aani;
+                //localStorage.setItem("sounds" + (allSounds.selected+1),  JSON.stringify(sounds));
+                lisatty = true;
+                break;
+            }
+        }
+        if (!lisatty) {
+            console.log("Ei tilaa tällä sivulla");
+        }        
     }
 
     /**
