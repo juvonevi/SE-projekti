@@ -122,35 +122,38 @@ window.addEventListener("load", function() {
     }
 
     function handleFile() {
-        let file = document.getElementById("file-input").files[0];
-        let nimi = file.name;
-        let blob = window.URL || window.webkitURL;
-        if (!blob) {
-            console.log('Your browser does not support Blob URLs');
-            return;           
-        }
-        let fileURL = blob.createObjectURL(file);
-        console.log(file);
-        console.log('File name: '+file.name);
-        console.log('File BlobURL: '+ fileURL);
-        let aani = fileURL;
-        let paikat = document.getElementsByClassName("aanirivi");
-        let sounds = allSounds[allSounds.selected];
-        let lisatty = false;
-        for (let i = 0; i < sounds.length; i++) {
-            if (!sounds[i]) {
-                sounds[i] = {"name" : nimi, "sound" : aani};
-                showMySounds();
-                let audio = paikat[i].children[4];
-                audio.src = aani;
-                //localStorage.setItem("sounds" + (allSounds.selected+1),  JSON.stringify(sounds));
-                lisatty = true;
-                break;
+        const files = document.getElementById("file-input").files;
+        console.log(files)
+        for (const file of files) {
+            let nimi = file.name;
+            let blob = window.URL || window.webkitURL;
+            if (!blob) {
+                console.log('Your browser does not support Blob URLs');
+                return;           
             }
-        }
-        if (!lisatty) {
-            console.log("Ei tilaa tällä sivulla");
-        }        
+            let fileURL = blob.createObjectURL(file);
+            console.log(file);
+            console.log('File name: '+file.name);
+            console.log('File BlobURL: '+ fileURL);
+            let aani = fileURL;
+            let paikat = document.getElementsByClassName("aanirivi");
+            let sounds = allSounds[allSounds.selected];
+            let lisatty = false;
+            for (let i = 0; i < sounds.length; i++) {
+                if (!sounds[i]) {
+                    sounds[i] = {"name" : nimi, "sound" : aani};
+                    showMySounds();
+                    let audio = paikat[i].children[4];
+                    audio.src = aani;
+                    //localStorage.setItem("sounds" + (allSounds.selected+1),  JSON.stringify(sounds));
+                    lisatty = true;
+                    break;
+                }
+            }
+            if (!lisatty) {
+                console.log("Ei tilaa tällä sivulla");
+            }
+        }      
     }
 
     /**
