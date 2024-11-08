@@ -14,13 +14,14 @@ function setupAudioAnalyser(aaniPaikka) {
     length: 44100 * audio.duration, // TODO: SampleRaten tiedon saaminen
     sampleRate: 44100, // TODO: SampleRaten tiedon saaminen
   });
-
+  console.log(src, " Ääni");
 
   fetch(src)
     .then((response) => response.arrayBuffer())
     .then((downloadedBuffer) => audioCtx.decodeAudioData(downloadedBuffer))
     .then((decodedBuffer) => {
       console.log("Sound loaded successfully")
+      
       const source = new AudioBufferSourceNode(offlineCtx, {
         buffer: decodedBuffer
       });

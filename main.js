@@ -197,6 +197,7 @@ window.addEventListener("load", function() {
         let audios = document.querySelectorAll(".aanirivi > audio");
         for (let i = 0; i < buttons.length; i++) {
             buttons[i].addEventListener("click", buttonPressed);
+            buttons[i].addEventListener("dblclick", setupButton);
             function buttonPressed(event) {
                 if (event.defaultPrevented) {
                     return; // Do nothing if the event was already processed
@@ -265,9 +266,14 @@ window.addEventListener("load", function() {
             return;
         }
         this.lastSearched = syote;
-        
-        // Tässä tullaan ensin kutsumaan tarkastusfunktiota
-        // sitten jos ei löydy käynnistetää ulkoinen haku searchsound
+     
+        let haetutAanet = localStorage.getItem("haetutAanet");
+            if(syote === haetutAanet[0]) {
+                //setupAudioAnalyser(sounds);
+                return;
+       
+            }
+
         searchsound(syote).then(result => {
             // Palautetaan äänilinkki
             if (result.ok) {
@@ -283,6 +289,8 @@ window.addEventListener("load", function() {
         })
     }
      
+
+
     // Lisätään se tietoraketeeseen
     // esim. map mutta käyttö voi olla hankalampaa
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
@@ -309,38 +317,65 @@ window.addEventListener("load", function() {
     //funktio palauttaa löytyneen äänen tai null
     //funkiton malli: funktio (param: haettu ääni, param: taulukko / map äänistä) return ääni tai null
 
-
+    const keys = [1,2,3,4,5,6,7,8,9,0,'q','w','e','r','t','y','u','i','o','p','a','s','d','f','g','h','j','k','l','z','x','c','v','b','n','m'];  
+    let myKeys = [];
+    
+    
+    /**
+     * Setting up a dblpressed button
+     * Press quikly your key, like in one second
+     * @param {*} event 
+     */
+   function setupButton(event) {
+        const button = event.target.id;
+       
+        document.addEventListener(
+            "keydown", function (event) {
+                const pressedKey = event.key;
+                for (let i = 20; i < keys.length; i++ ) {
+                
+                // Tarkastetaan onko hyväksytty näppäin
+                if (pressedKey ===  keys[i]) {
+                     event.target.value = pressedKey;
+                     // Tallennetaan valinta
+                     myKeys.push(pressedKey);
+                    console.log("Passed key");
+                }
+            }
+        });
+    };
 
     document.addEventListener(
-        "keydown",
+        "keydown", keyPressed
         // Kuuntelija näppäimen painamiselle
-        function keyPressed(event) {
-          if (event.defaultPrevented) {
+        );
+
+
+    function keyPressed(event) {
+        if (event.defaultPrevented) {
             return; // Do nothing if the event was already processed
-          }
-          
-          // Näppäin jota on painettu
-          const key = event.key;
-          if (key == undefined) {
+        }
+        
+        // Näppäin jota on painettu
+        const key = event.key;
+        if (typeof key === undefined) {
             return;
-          }
+        }
+        console.log(key);
+        //Tallennetaan painettu näppäin
          console.log(key);
-
-         // Tarvitsee tietää canvas että piirretään oikeaan paikkaan,
-         // nappi1 canvas1 jne
-         //const canvas = document.getElementById("canvas1");
-
-         //https://en.wikipedia.org/wiki/File:MT63_sample.ogg
-         
         //play("./media/sci-fi.mp3")
-        playByKey(key);
-        playByKeyTest(key);
+        playByKey();
+        playByKeyTest();
+        
+    }
+    //console.log(myKeys);
+        function playByKeyTest(key, myKeys) {
+           // const keys = [1,2,3,4,5,6,7,8,9,0,'q','w','e','r','t','y','u','i','o','p','a','s','d','f','g','h','j','k','l','z','x','c','v','b','n','m'];  
 
-        function playByKeyTest(key) {
-            const keys = ["1","2","3","4","5","6","7","8","9","0"];
             let audios = document.querySelectorAll(".aanirivi > audio");
-            for (let i = 0; i < keys.length; i++) {
-                if (key === keys[i]) {
+            for (let i = 0; i < myKeys.length; i++) {
+                if (key ===myKeys[i]) {
                     if (audios[i].paused) {
                         audios[i].play();
                     }
@@ -376,6 +411,6 @@ window.addEventListener("load", function() {
             
         }
 
-        });
+       
 
 });
