@@ -39,12 +39,6 @@ audio {
     margin-left: 0.5em;
 }
 
-.loop {
-    position: relative;
-    bottom: 0.8em;
-    margin-left: 0.5em;
-}
-
 form + #hakutulokset {
     display: block;
     width: 100%;    
@@ -63,6 +57,27 @@ form + #hakutulokset {
 
 #delete {
     font-size: 4em;
+}
+
+.loop {
+    appearance: none;
+    margin: 0;
+    padding: 0;
+}
+
+label[for]{
+    width: min-content;
+}
+
+span {
+    position: relative;
+    bottom: 0.1em;
+    font-size: 3em;
+    color:grey;
+}
+
+.loop:checked ~ span {
+    color:black;
 }
 
 
