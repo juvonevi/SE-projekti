@@ -56,4 +56,9 @@ form + #hakutulokset {
     width: 35%;
 }
 
+.nappiValittuna {
+    color:white;
+    background-color: darkslategrey;
+}
+
 

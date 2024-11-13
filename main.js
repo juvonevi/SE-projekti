@@ -121,6 +121,9 @@ window.addEventListener("load", function() {
         }
     }
 
+    /**
+     * Käsittelee paikallisten tiedostojen lisäämisen
+     */
     function handleFile() {
         const files = document.getElementById("file-input").files;
         console.log(files)
@@ -132,9 +135,9 @@ window.addEventListener("load", function() {
                 return;           
             }
             let fileURL = blob.createObjectURL(file);
-            console.log(file);
-            console.log('File name: '+file.name);
-            console.log('File BlobURL: '+ fileURL);
+            //console.log(file);
+            //console.log('File name: ' + file.name);
+            //console.log('File BlobURL: ' + fileURL);
             let aani = fileURL;
             let paikat = document.getElementsByClassName("aanirivi");
             let sounds = allSounds[allSounds.selected];
@@ -145,13 +148,29 @@ window.addEventListener("load", function() {
                     showMySounds();
                     let audio = paikat[i].children[4];
                     audio.src = aani;
-                    //localStorage.setItem("sounds" + (allSounds.selected+1),  JSON.stringify(sounds));
                     lisatty = true;
                     break;
                 }
             }
             if (!lisatty) {
-                console.log("Ei tilaa tällä sivulla");
+                for (let j = 0; j < 4; j++) {
+                    let sounds = allSounds[j];
+                    if (j !== allSounds.selected) {
+                        for (let i = 0; i < sounds.length; i++) {
+                            if (!sounds[i]) {
+                                sounds[i] = {"name" : nimi, "sound" : aani};
+                                showMySounds();
+                                let audio = paikat[i].children[4];
+                                audio.src = aani;
+                                lisatty = true;
+                                break;
+                            }
+                        }
+                    }
+                }                   
+            }
+            if (!lisatty) {
+                console.log("Ei tilaa");
             }
         }      
     }
@@ -317,8 +336,9 @@ window.addEventListener("load", function() {
     //funktio palauttaa löytyneen äänen tai null
     //funkiton malli: funktio (param: haettu ääni, param: taulukko / map äänistä) return ääni tai null
 
-    const keys = [1,2,3,4,5,6,7,8,9,0,'q','w','e','r','t','y','u','i','o','p','a','s','d','f','g','h','j','k','l','z','x','c','v','b','n','m'];  
-    let myKeys = [];
+    const keys = ['1','2','3','4','5','6','7','8','9','0','q','w','e','r','t','y','u','i','o','p','a','s','d','f','g','h','j','k','l','z','x','c','v','b','n','m'];
+    const defaultKeys = ["1","2","3","4","5","6","7","8","9","0"];  
+    let myKeys = Array.from(defaultKeys);
     
     
     /**
@@ -327,29 +347,17 @@ window.addEventListener("load", function() {
      * @param {*} event 
      */
    function setupButton(event) {
-        const button = event.target.id;
+        const button = event.target;
+        let valittuna = document.getElementsByClassName("nappiValittuna");
+        if (valittuna.length > 0) {
+            valittuna[0].classList.remove("nappiValittuna");
+        }
+        button.classList.add("nappiValittuna");
        
-        document.addEventListener(
-            "keydown", function (event) {
-                const pressedKey = event.key;
-                for (let i = 20; i < keys.length; i++ ) {
-                
-                // Tarkastetaan onko hyväksytty näppäin
-                if (pressedKey ===  keys[i]) {
-                     event.target.value = pressedKey;
-                     // Tallennetaan valinta
-                     myKeys.push(pressedKey);
-                    console.log("Passed key");
-                }
-            }
-        });
-    };
+        //document.addEventListener("keydown",  changeKey(event));
+    }
 
-    document.addEventListener(
-        "keydown", keyPressed
-        // Kuuntelija näppäimen painamiselle
-        );
-
+    document.addEventListener("keydown", keyPressed);
 
     function keyPressed(event) {
         if (event.defaultPrevented) {
@@ -363,26 +371,66 @@ window.addEventListener("load", function() {
         }
         console.log(key);
         //Tallennetaan painettu näppäin
-         console.log(key);
         //play("./media/sci-fi.mp3")
-        playByKey();
-        playByKeyTest();
+        //playByKey();
+        let valittuna = document.getElementsByClassName("nappiValittuna");
+        if (valittuna.length > 0) {
+            changeKey(key, valittuna[0]);
+        }
+        else {
+            playByKeyTest(key);
+        }    
+        //Tarkistaa onko jokin nappi valittuna, ja yrittää muuttaa napin jos on
+        
         
     }
-    //console.log(myKeys);
-        function playByKeyTest(key, myKeys) {
-           // const keys = [1,2,3,4,5,6,7,8,9,0,'q','w','e','r','t','y','u','i','o','p','a','s','d','f','g','h','j','k','l','z','x','c','v','b','n','m'];  
 
+    /**
+     * Vaihtaa napin näppäimen
+     * @param {*} key 
+     * @param {*} button 
+     */
+    function changeKey(key, button) {
+        if (key === "Escape" || key === button.value) {
+            button.classList.remove("nappiValittuna");
+        }
+
+        let buttonNumber;
+        let buttons = document.getElementsByClassName("sideButton");
+        for (let i = 0; i < buttons.length; i++) {
+            if (button.id === buttons[i].id) {
+                buttonNumber = i;
+                break;
+            }
+        }
+
+        const pressedKey = key;
+        for (let i = 0; i < keys.length; i++ ) {
+        
+        // Tarkastetaan onko hyväksytty näppäin
+        if (pressedKey ===  keys[i] && !myKeys.includes(pressedKey)) {
+            button.value = pressedKey;
+             // Tallennetaan valinta
+            myKeys[buttonNumber] = pressedKey;
+            console.log("Passed key");
+            button.classList.remove("nappiValittuna");
+            //document.removeEventListener("keydown",  changeKey(event));
+        }
+        }
+    }
+
+    //console.log(myKeys);
+        function playByKeyTest(key) {
             let audios = document.querySelectorAll(".aanirivi > audio");
             for (let i = 0; i < myKeys.length; i++) {
-                if (key ===myKeys[i]) {
+                if (key === myKeys[i]) {
                     if (audios[i].paused) {
                         audios[i].play();
                     }
                     else {
                         audios[i].pause();
                     }
-                }
+                }        
             }
         }
           
@@ -407,10 +455,6 @@ window.addEventListener("load", function() {
                     }*/
                  }
                 break;
-            }
-            
+            }           
         }
-
-       
-
 });
