@@ -13,6 +13,8 @@ window.addEventListener("load", function() {
     let dragImg = new Image();
     dragImg.src = "GrabCursor.png";
     document.getElementById("file-input").addEventListener("change",handleFile);
+    const defaultKeys = ["1","2","3","4","5","6","7","8","9","0"];  
+    let myKeys = Array.from(defaultKeys);
 
     /**
      * Hakee käyttäjän äänet local storagesta
@@ -24,7 +26,7 @@ window.addEventListener("load", function() {
             if (sounds) {
                 console.log(sounds);
                 for (let j = 0; j < sounds.length; j++) {
-                    if (sounds[j]) {
+                    if (typeof sounds[j] !== "undefined" && sounds[j]) {
                         if (sounds[j].sound.startsWith("blob")) {
                             allSounds[i][j] = undefined;
                             localStorage.setItem("sounds" + (i+1),  JSON.stringify(sounds));
@@ -36,6 +38,21 @@ window.addEventListener("load", function() {
                 }
             }
         }    
+    }
+
+    /**
+     * Hakee käyttäjän vaihtamat napit local storagesta
+     */
+    getStoredKeys();
+    function getStoredKeys() {
+        let buttons = document.getElementsByClassName("sideButton");
+        let keys = JSON.parse(localStorage.getItem("keys"));
+        if (keys) {
+            for (let i = 0; i < keys.length; i++) {
+                myKeys[i] = keys[i];
+                buttons[i].value = keys[i];
+            }
+        }
     }
 
     audioEventListeners();
@@ -69,7 +86,14 @@ window.addEventListener("load", function() {
                 paikat[i].children[3].style.display = "initial";
                 paikat[i].children[4].style.display = "initial";
                 paikat[i].children[4].setAttribute("src", sounds[i].sound);
-                paikat[i].children[5].style.display = "initial";         
+                paikat[i].children[5].style.display = "initial";  
+                paikat[i].setAttribute("draggable", "true");
+                paikat[i].addEventListener("dragstart", function(e) {
+                    e.dataTransfer.setData("text/plain", sounds[i].name);
+                    e.dataTransfer.setData("text/html", sounds[i].sound);
+                    e.dataTransfer.setData("from", i);
+                    e.dataTransfer.setDragImage(dragImg, 30, 26);
+                });       
             }
         }
     }
@@ -109,9 +133,18 @@ window.addEventListener("load", function() {
             paikat[i].addEventListener("drop", function(e) {
                 e.preventDefault();
                 let sounds = allSounds[allSounds.selected];
+                let from = e.dataTransfer.getData("from");
                 let nimi = e.dataTransfer.getData("text/plain");
                 let aani = e.dataTransfer.getData("text/html");
-                sounds[i] = {"name" : nimi, "sound" : aani};
+                if (from) {
+                    if (typeof sounds[i] !== "undefined") {
+                        sounds[from] = {"name" : sounds[i].name, "sound" : sounds[i].sound};
+                    }
+                    else {
+                        sounds[from] = undefined;
+                    }
+                }
+                sounds[i] = {"name" : nimi, "sound" : aani};       
                 showMySounds();
                 let audio = paikat[i].children[4];
                 audio.src = aani;
@@ -337,8 +370,6 @@ window.addEventListener("load", function() {
     //funkiton malli: funktio (param: haettu ääni, param: taulukko / map äänistä) return ääni tai null
 
     const keys = ['1','2','3','4','5','6','7','8','9','0','q','w','e','r','t','y','u','i','o','p','a','s','d','f','g','h','j','k','l','z','x','c','v','b','n','m'];
-    const defaultKeys = ["1","2","3","4","5","6","7","8","9","0"];  
-    let myKeys = Array.from(defaultKeys);
     
     
     /**
@@ -385,6 +416,7 @@ window.addEventListener("load", function() {
         
     }
 
+    let changedKeys = Array(10);
     /**
      * Vaihtaa napin näppäimen
      * @param {*} key 
@@ -414,6 +446,7 @@ window.addEventListener("load", function() {
             myKeys[buttonNumber] = pressedKey;
             console.log("Passed key");
             button.classList.remove("nappiValittuna");
+            localStorage.setItem("keys",  JSON.stringify(myKeys));
             //document.removeEventListener("keydown",  changeKey(event));
         }
         }
