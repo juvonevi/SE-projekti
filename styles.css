@@ -61,4 +61,8 @@ form + #hakutulokset {
     background-color: darkslategrey;
 }
 
+#delete {
+    font-size: 4em;
+}
+
 

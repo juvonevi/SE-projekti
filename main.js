@@ -152,6 +152,22 @@ window.addEventListener("load", function() {
                 console.log(localStorage.getItem("sounds", allSounds.selected+1));
             });
         }
+        let trash = document.getElementById("delete");
+        trash.addEventListener("dragover", function(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = "move";
+        });
+        trash.addEventListener("drop", function(e) {
+            e.preventDefault();
+            let sounds = allSounds[allSounds.selected];
+            let from = e.dataTransfer.getData("from");
+            if (!from) {
+                return;
+            }
+            sounds[from] = undefined;
+            showMySounds();
+            localStorage.setItem("sounds" + (allSounds.selected+1),  JSON.stringify(sounds));
+        });
     }
 
     /**
