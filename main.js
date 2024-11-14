@@ -11,7 +11,8 @@ window.addEventListener("load", function() {
     const isDarkMode = () => window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     const applyDarkMode = (isDark) => {
      if (isDark) {
-        document.body.style.background = "black";
+        document.body.style.background = "#323232";
+        document.body.style.color = "#ffffff";
     }
 };
 
