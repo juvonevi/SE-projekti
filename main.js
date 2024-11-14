@@ -7,6 +7,16 @@
  * Tapahtuman kuuntelija sivun lataamiselle
  */
 window.addEventListener("load", function() {
+
+    const isDarkMode = () => window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const applyDarkMode = (isDark) => {
+     if (isDark) {
+        document.body.style.background = "black";
+    }
+};
+
+applyDarkMode(isDarkMode());
+
     let allSounds = [Array(10), Array(10), Array(10), Array(10)];
     allSounds.selected = 0;
     this.document.getElementById("buttonA").style["font-weight"] = "bold";
