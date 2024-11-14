@@ -140,6 +140,9 @@
 </div>
 
 <label id="delete">🗑</label>
+<label for="info">
+    <input type="button" id="info" value="?"/>
+</label>
 
 <div class="hakupalkki">
 <form id="hakulomike">
@@ -151,17 +154,17 @@
         <p>Search for sounds</p>
     </div>
 </div>
-
-<div id="preset">
-<input type="button" id="arrowLeft" value="&lt"/>
-<input type="button" id="buttonA" value="1"/>
-<input type="button" id="buttonB" value="2"/>
-<input type="button" id="buttonC" value="3"/>
-<input type="button" id="buttonD" value="4"/>
-<input type="button" id="arrowRight" value="&gt"/>
-<br>
+<div id="downButtons">
+    <div id="preset">
+        <input type="button" id="arrowLeft" value="&lt"/>
+        <input type="button" id="buttonA" value="1"/>
+        <input type="button" id="buttonB" value="2"/>
+        <input type="button" id="buttonC" value="3"/>
+        <input type="button" id="buttonD" value="4"/>
+        <input type="button" id="arrowRight" value="&gt"/>
+    <br>
+    </div>
+    <input type="file" id="file-input" accept="audio/*" multiple />
 </div>
-<input type="file" id="file-input" accept="audio/*" multiple />
-
 </body>
 </html>

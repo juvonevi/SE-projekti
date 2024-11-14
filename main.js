@@ -7,16 +7,40 @@
  * Tapahtuman kuuntelija sivun lataamiselle
  */
 window.addEventListener("load", function() {
+    if (navigator.userAgent.indexOf("Firefox") <= 0) {
+        changeAudioElementSize();
+    }
+    /**
+     * Muuttaa ulkoasua sopivammaksi Chromelle
+     */
+    function changeAudioElementSize() {
+        let audios = document.getElementsByTagName("audio");
+        for (let audio of audios) {
+            audio.style.zoom = "90%";
+            audio.style.position = "relative";
+            audio.style.top = "10px";
+        }
+        let spans = document.getElementsByTagName("span");
+        for (let span of spans) {
+            span.style.top = "0";
+        }
+    }
 
     const isDarkMode = () => window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     const applyDarkMode = (isDark) => {
-     if (isDark) {
-        document.body.style.background = "#323232";
-        document.body.style.color = "#ffffff";
-    }
-};
-
-applyDarkMode(isDarkMode());
+        if (isDark) {
+            document.body.style.background = "#26292e";
+            document.body.style.color = "#ffffff";
+            document.getElementById("hakutulokset").style.background = "#3d414a";
+            let aanirivit = document.querySelectorAll(".aanirivi");
+            for (let rivi of aanirivit) {
+                rivi.style.background = "#3d414a";
+            }
+            document.querySelector("label[for=info]").style.background = "#3d414a";
+            document.getElementById("info").style.color = "white";
+        }
+    };
+    applyDarkMode(isDarkMode());
 
     let allSounds = [Array(10), Array(10), Array(10), Array(10)];
     allSounds.selected = 0;
@@ -88,16 +112,20 @@ applyDarkMode(isDarkMode());
         for (let i = 0; i < paikat.length; i++) {
             if (typeof sounds[i] === "undefined") {
                 paikat[i].children[0].textContent = "Add sound";
-                paikat[i].children[3].style.display = "none";
-                paikat[i].children[4].style.display = "none";
-                paikat[i].children[5].style.display = "none";
+                paikat[i].children[3].style.visibility = "hidden";
+                paikat[i].children[4].style.visibility = "hidden";
+                paikat[i].children[5].style.visibility = "hidden";
             }
             else {
-                paikat[i].children[0].textContent = sounds[i].name;
-                paikat[i].children[3].style.display = "initial";
-                paikat[i].children[4].style.display = "initial";
+                let name = sounds[i].name;
+                if (name.length > 40) {
+                    name = name.substring(0, 40) + "...";
+                }
+                paikat[i].children[0].textContent = name;
+                paikat[i].children[3].style.visibility = "visible";
+                paikat[i].children[4].style.visibility = "visible";
                 paikat[i].children[4].setAttribute("src", sounds[i].sound);
-                paikat[i].children[5].style.display = "initial";  
+                paikat[i].children[5].style.visibility = "visible";
                 paikat[i].setAttribute("draggable", "true");
                 paikat[i].addEventListener("dragstart", function(e) {
                     e.dataTransfer.setData("text/plain", sounds[i].name);
