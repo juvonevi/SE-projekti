@@ -7,6 +7,22 @@
  * Tapahtuman kuuntelija sivun lataamiselle
  */
 window.addEventListener("load", function() {
+
+    let infoVisible = false;
+    document.getElementById("info").addEventListener("click", openOrCloseInfo);
+    document.getElementById("closePopup").addEventListener("click", openOrCloseInfo);
+
+    function openOrCloseInfo() {
+        if (infoVisible) {
+            document.getElementById("popup").style.display = "none";
+            infoVisible = false;
+        }
+        else {
+            document.getElementById("popup").style.display = "initial";
+            infoVisible = true;
+        }
+    }
+
     if (navigator.userAgent.indexOf("Firefox") <= 0) {
         changeAudioElementSize();
     }
@@ -38,6 +54,7 @@ window.addEventListener("load", function() {
             }
             document.querySelector("label[for=info]").style.background = "#3d414a";
             document.getElementById("info").style.color = "white";
+            document.getElementById("closePopup").style.color = "white";
         }
     };
     applyDarkMode(isDarkMode());

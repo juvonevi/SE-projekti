@@ -144,6 +144,27 @@ label[for=info] {
     border-radius: 5px;
 }
 
+#popup {
+    position: absolute;
+    background-color: #0e0f12;
+    width: 30vw;
+    height: 40vh;
+    left: calc(35vw - 2%);
+    bottom: 30vh;
+    padding: 2%;
+    border-radius: 35px;
+    display: none;
+}
+
+#closePopup {
+    position: absolute;
+    right: 4%;
+    top: 4%;
+    font-size: 2em;
+    background-color: transparent;
+    border: none;
+}
+
 @media (max-width: 1920px) {
     .aanirivi {
         zoom: 95%;
