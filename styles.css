@@ -72,7 +72,7 @@ form + #hakutulokset {
 
 .nappiValittuna {
     color:white;
-    background-color: darkslategrey;
+    background-color: rgb(0, 131, 218);
 }
 
 .loop {
@@ -146,7 +146,7 @@ label[for=info] {
 
 #popup {
     position: absolute;
-    background-color: #0e0f12;
+    background-color: #6c9daf;
     width: 30vw;
     height: 40vh;
     left: calc(35vw - 2%);
@@ -163,6 +163,10 @@ label[for=info] {
     font-size: 2em;
     background-color: transparent;
     border: none;
+}
+
+.searchresult {
+    cursor: grab;
 }
 
 @media (max-width: 1920px) {

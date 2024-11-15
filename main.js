@@ -55,6 +55,7 @@ window.addEventListener("load", function() {
             document.querySelector("label[for=info]").style.background = "#3d414a";
             document.getElementById("info").style.color = "white";
             document.getElementById("closePopup").style.color = "white";
+            this.document.getElementById("popup").style.background = "#0e0f12";
         }
     };
     applyDarkMode(isDarkMode());
@@ -292,6 +293,7 @@ window.addEventListener("load", function() {
         for (let aani of data) {
             let div = document.createElement("div");
             htdiv.appendChild(div);
+            div.classList.add("searchresult");
             let nimi = document.createElement("label");
             nimi.textContent = aani.name;
             div.appendChild(nimi);
