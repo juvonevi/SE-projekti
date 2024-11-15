@@ -140,6 +140,10 @@ label[for=info] {
     top: 1vh;
 }
 
+#search {
+    border-radius: 5px;
+}
+
 @media (max-width: 1920px) {
     .aanirivi {
         zoom: 95%;

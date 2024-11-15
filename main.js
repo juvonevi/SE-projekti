@@ -331,34 +331,38 @@ window.addEventListener("load", function() {
                 showMySounds();
             }
         }
-        buttons2[0].addEventListener("click", buttonPressedL);
-        function buttonPressedL() {
-            if (allSounds.selected === 0) {
-                allSounds.selected = 3;
-            }
-            else {
-                allSounds.selected = allSounds.selected-1;
-            }            
-            for (let j = 1; j < buttons2.length-1; j++) {
-                buttons2[j].style["font-weight"] = "normal";
-            }
-            buttons2[allSounds.selected+1].style["font-weight"] = "bold";
-            showMySounds();
-        }
+        buttons2[0].addEventListener("click", buttonPressedL);   
         buttons2[buttons2.length-1].addEventListener("click", buttonPressedR);
-        function buttonPressedR() {
-            if (allSounds.selected === 3) {
-                allSounds.selected = 0;
-            }
-            else {
-                allSounds.selected = allSounds.selected+1;
-            }            
-            for (let j = 1; j < buttons2.length-1; j++) {
-                buttons2[j].style["font-weight"] = "normal";
-            }
-            buttons2[allSounds.selected+1].style["font-weight"] = "bold";
-            showMySounds();
+    }
+
+    function buttonPressedR() {
+        let buttons2 = document.querySelectorAll("#preset > input");
+        if (allSounds.selected === 3) {
+            allSounds.selected = 0;
         }
+        else {
+            allSounds.selected = allSounds.selected+1;
+        }            
+        for (let j = 1; j < buttons2.length-1; j++) {
+            buttons2[j].style["font-weight"] = "normal";
+        }
+        buttons2[allSounds.selected+1].style["font-weight"] = "bold";
+        showMySounds();
+    }
+
+    function buttonPressedL() {
+        let buttons2 = document.querySelectorAll("#preset > input");
+        if (allSounds.selected === 0) {
+            allSounds.selected = 3;
+        }
+        else {
+            allSounds.selected = allSounds.selected-1;
+        }            
+        for (let j = 1; j < buttons2.length-1; j++) {
+            buttons2[j].style["font-weight"] = "normal";
+        }
+        buttons2[allSounds.selected+1].style["font-weight"] = "bold";
+        showMySounds();
     }
     
     //Kuuntelee nappia haku
@@ -456,19 +460,23 @@ window.addEventListener("load", function() {
             return;
         }
         console.log(key);
-        //Tallennetaan painettu näppäin
-        //play("./media/sci-fi.mp3")
-        //playByKey();
+
+        //Tarkistaa onko jokin nappi valittuna, ja yrittää muuttaa napin jos on
         let valittuna = document.getElementsByClassName("nappiValittuna");
         if (valittuna.length > 0) {
             changeKey(key, valittuna[0]);
         }
         else {
-            playByKeyTest(key);
+            if (key === "ArrowRight") {
+                buttonPressedR();
+            }
+            else if (key === "ArrowLeft") {
+                buttonPressedL();
+            }
+            else {
+                playByKeyTest(key);
+            }      
         }    
-        //Tarkistaa onko jokin nappi valittuna, ja yrittää muuttaa napin jos on
-        
-        
     }
 
     let changedKeys = Array(10);
