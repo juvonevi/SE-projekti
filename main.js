@@ -8,6 +8,35 @@
  */
 window.addEventListener("load", function() {
 
+    document.getElementById("darkmodeToggle").addEventListener("input", toggleDarkmode);
+    function toggleDarkmode() {
+        if (document.getElementById("darkmodeToggle").checked) {
+            applyDarkMode(true);
+        }
+        else {
+            applyLightmode();
+        }
+    }
+
+    function applyLightmode() {
+        document.body.style.background = "aliceblue";
+        document.body.style.color = "black";
+        document.getElementById("hakutulokset").style.background = "lightblue";
+        let aanirivit = document.querySelectorAll(".aanirivi");
+        for (let rivi of aanirivit) {
+            rivi.style.background = "lightblue";
+        }
+        document.querySelector("label[for=info]").style.background = "lightblue";
+        document.getElementById("info").style.color = "black";
+        document.getElementById("closePopup").style.color = "black";
+        document.getElementById("popup").style.background = "#6c9daf";
+        document.querySelector("label[for=darkmodeToggle] > span").textContent = "☼";
+        document.querySelector("label[for=darkmodeToggle] > span").style.bottom = "0.1em";
+        document.querySelector("label[for=darkmodeToggle] > span").style.top = "0";
+        document.querySelector("label[for=darkmodeToggle] > span").style.right = "0.1em";
+        document.querySelector("label[for=darkmodeToggle] > span").style["font-size"] = "3.5em";
+    }
+
     let infoVisible = false;
     document.getElementById("info").addEventListener("click", openOrCloseInfo);
     document.getElementById("closePopup").addEventListener("click", openOrCloseInfo);
@@ -55,7 +84,13 @@ window.addEventListener("load", function() {
             document.querySelector("label[for=info]").style.background = "#3d414a";
             document.getElementById("info").style.color = "white";
             document.getElementById("closePopup").style.color = "white";
-            this.document.getElementById("popup").style.background = "#0e0f12";
+            document.getElementById("popup").style.background = "#0e0f12";
+            document.getElementById("darkmodeToggle").checked = "checked";
+            document.querySelector("label[for=darkmodeToggle] > span").textContent = "☾";
+            document.querySelector("label[for=darkmodeToggle] > span").style.bottom = "0";
+            document.querySelector("label[for=darkmodeToggle] > span").style.top = "-0.3em";
+            document.querySelector("label[for=darkmodeToggle] > span").style.right = "0.2em";
+            document.querySelector("label[for=darkmodeToggle] > span").style["font-size"] = "4.5em";
         }
     };
     applyDarkMode(isDarkMode());

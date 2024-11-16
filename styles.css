@@ -2,6 +2,15 @@ body {
     background-color: aliceblue;
 }
 
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 #aanet {
     width: 45%;
     float: left;
@@ -30,6 +39,9 @@ canvas {
     margin-top: 5px;
 }
 
+input[type="button"] {
+    cursor: pointer;
+}
 
 .label {
     display: inline-block;
@@ -75,13 +87,13 @@ form + #hakutulokset {
     background-color: rgb(0, 131, 218);
 }
 
-.loop {
+.loop, #darkmodeToggle {
     appearance: none;
     margin: 0;
     padding: 0;
 }
 
-label[for]{
+label[for] {
     width: min-content;
 }
 
@@ -90,6 +102,7 @@ span {
     bottom: 0.1em;
     font-size: 3em;
     color:grey;
+    cursor: pointer;
 }
 
 .loop:checked ~ span {
@@ -121,7 +134,7 @@ span {
     bottom: 0.1em;
 }
 
-label[for=info] {
+label[for=info], label[for=darkmodeToggle] {
     position: absolute;
     left: 95%;
     top: 2vh;
@@ -131,12 +144,37 @@ label[for=info] {
     border-radius: 35px;
     text-align: center;
     background-color: lightblue;
+    cursor: pointer;
 }
+
+label[for=darkmodeToggle] {
+    left: 91%;
+}
+
+label[for=darkmodeToggle] > span {
+    position: absolute;
+    color: black;
+    font-size: 3.5em;
+    bottom: 0.1em;
+    right: 0.1em;
+}
+
+#darkmodeToggle:checked ~ span {
+    color: white;
+}
+
+#darkmodeToggle:checked + label[for=darkmodeToggle] {
+    background-color: #3d414a;
+}
+
+label[for=darkmodeToggle]:has(input[type="checkbox"]:checked){
+    background-color: #3d414a;
+}  
 
 #delete {
     font-size: 4em;
     position: absolute;
-    left: 91%;
+    left: 88%;
     top: 1vh;
 }
 
