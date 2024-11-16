@@ -22,10 +22,12 @@ body {
     background-color: lightblue; 
     margin: 0.3em; 
     border-radius: 15px;
+    cursor: grab;
 }
 
 canvas {
     border-radius: 5px;
+    cursor: grab;
 }
 
 .aanirivi_tumma {
@@ -50,6 +52,7 @@ input[type="button"] {
     margin-left: 3em;         
     margin-bottom: 0;       
     position: relative;
+    cursor: grab;
 }
 
 .sideButton {
@@ -184,7 +187,7 @@ label[for=darkmodeToggle]:has(input[type="checkbox"]:checked){
 
 #popup {
     position: absolute;
-    background-color: #6c9daf;
+    background-color: #3496ba;
     width: 30vw;
     height: 40vh;
     left: calc(35vw - 2%);
@@ -204,6 +207,17 @@ label[for=darkmodeToggle]:has(input[type="checkbox"]:checked){
 }
 
 .searchresult {
+    width: 97%;
+    background-color: #67b1cc;
+    margin: 0.1em; 
+    padding: 0.4em;
+    border-radius: 15px;
+    cursor: grab;
+}
+
+.searchresult > label {
+    position: relative;
+    top: 0.55em;
     cursor: grab;
 }
 

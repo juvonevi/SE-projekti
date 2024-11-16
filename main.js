@@ -18,10 +18,19 @@ window.addEventListener("load", function() {
         }
     }
 
+    let darkmode = false;
+
+    /**
+     * Vaihtaa värit lightmoden väreihin
+     */
     function applyLightmode() {
         document.body.style.background = "aliceblue";
         document.body.style.color = "black";
         document.getElementById("hakutulokset").style.background = "lightblue";
+        let hakutulokset = document.getElementsByClassName("searchresult");
+            for (let tulos of hakutulokset) {
+                tulos.style.background = "#67b1cc";
+            }
         let aanirivit = document.querySelectorAll(".aanirivi");
         for (let rivi of aanirivit) {
             rivi.style.background = "lightblue";
@@ -29,18 +38,22 @@ window.addEventListener("load", function() {
         document.querySelector("label[for=info]").style.background = "lightblue";
         document.getElementById("info").style.color = "black";
         document.getElementById("closePopup").style.color = "black";
-        document.getElementById("popup").style.background = "#6c9daf";
+        document.getElementById("popup").style.background = "#3496ba";
         document.querySelector("label[for=darkmodeToggle] > span").textContent = "☼";
         document.querySelector("label[for=darkmodeToggle] > span").style.bottom = "0.1em";
         document.querySelector("label[for=darkmodeToggle] > span").style.top = "0";
         document.querySelector("label[for=darkmodeToggle] > span").style.right = "0.1em";
         document.querySelector("label[for=darkmodeToggle] > span").style["font-size"] = "3.5em";
+        darkmode = false;
     }
 
     let infoVisible = false;
     document.getElementById("info").addEventListener("click", openOrCloseInfo);
     document.getElementById("closePopup").addEventListener("click", openOrCloseInfo);
 
+    /**
+     * Avaa tai sulkee info-popupin
+     */
     function openOrCloseInfo() {
         if (infoVisible) {
             document.getElementById("popup").style.display = "none";
@@ -52,13 +65,15 @@ window.addEventListener("load", function() {
         }
     }
 
+    let firefox = true;
     if (navigator.userAgent.indexOf("Firefox") <= 0) {
-        changeAudioElementSize();
+        changeForOtherBrowsers();
+        firefox = false;
     }
     /**
      * Muuttaa ulkoasua sopivammaksi Chromelle
      */
-    function changeAudioElementSize() {
+    function changeForOtherBrowsers() {
         let audios = document.getElementsByTagName("audio");
         for (let audio of audios) {
             audio.style.zoom = "90%";
@@ -77,6 +92,10 @@ window.addEventListener("load", function() {
             document.body.style.background = "#26292e";
             document.body.style.color = "#ffffff";
             document.getElementById("hakutulokset").style.background = "#3d414a";
+            let hakutulokset = document.getElementsByClassName("searchresult");
+            for (let tulos of hakutulokset) {
+                tulos.style.background = "#1b1d22";
+            }
             let aanirivit = document.querySelectorAll(".aanirivi");
             for (let rivi of aanirivit) {
                 rivi.style.background = "#3d414a";
@@ -91,6 +110,7 @@ window.addEventListener("load", function() {
             document.querySelector("label[for=darkmodeToggle] > span").style.top = "-0.3em";
             document.querySelector("label[for=darkmodeToggle] > span").style.right = "0.2em";
             document.querySelector("label[for=darkmodeToggle] > span").style["font-size"] = "4.5em";
+            darkmode = true;
         }
     };
     applyDarkMode(isDarkMode());
@@ -332,15 +352,20 @@ window.addEventListener("load", function() {
             let nimi = document.createElement("label");
             nimi.textContent = aani.name;
             div.appendChild(nimi);
+            if (!firefox) {
+                nimi.style.top = "1em";
+            }
             let audio = document.createElement("audio");
             audio.setAttribute("controls", "");
             audio.setAttribute("src", aani.previews["preview-hq-mp3"]);
             div.appendChild(audio);
-            div.style.width = "100%";
             div.style.display = "inline-block";
             nimi.style.float = "left";
             audio.style.float = "right";
             audio.style.clear = "right";
+            if (darkmode) {
+                div.style.background = "#1b1d22";
+            }
             div.setAttribute("draggable", "true");
             div.addEventListener("dragstart", function(e) {
                 e.dataTransfer.setData("text/plain", aani.name);
