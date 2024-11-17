@@ -249,8 +249,8 @@ label[for=darkmodeToggle]:has(input[type="checkbox"]:checked){
         width: 50vw;
     }
     .aanirivi {
-        zoom: 85%;
-        width: 44%;
+        zoom: 70%;
+        width: 45%;
     } 
     .hakupalkki {
         width: 46vw;
@@ -270,7 +270,7 @@ label[for=darkmodeToggle]:has(input[type="checkbox"]:checked){
     }
     #popup {
         width: 36vw;
-        height: 44vh;
+        height: 50vh;
         left: calc(32vw - 2%);
         bottom: 30vh;
     }
@@ -278,10 +278,10 @@ label[for=darkmodeToggle]:has(input[type="checkbox"]:checked){
 
 @media (max-width: 1366px) {
     #aanet {
-        width: 49vw;
+        width: 47vw;
     }
     .aanirivi {
-        zoom: 75%;
+        zoom: 66%;
         width: 42%;
     } 
     .hakupalkki {
@@ -303,9 +303,9 @@ label[for=darkmodeToggle]:has(input[type="checkbox"]:checked){
     }
     #popup {
         width: 40vw;
-        height: 50vh;
+        height: 52vh;
         left: calc(30vw - 2%);
-        bottom: 25vh;
+        bottom: 20vh;
     }
 }
 
@@ -314,7 +314,7 @@ label[for=darkmodeToggle]:has(input[type="checkbox"]:checked){
         width: 46vw;
     }
     .aanirivi {
-        zoom: 71%;
+        zoom: 60%;
         width: 45%;
     } 
     .hakupalkki {
@@ -336,5 +336,35 @@ label[for=darkmodeToggle]:has(input[type="checkbox"]:checked){
     h2 {
         margin-top: 0;
     }
+    #popup {
+        height: 56vh;
+    }
 }
 
+
+@media (max-width: 1024px) {
+    #aanet {
+        width: 44vw;
+    }
+    .aanirivi {
+        zoom: 55%;
+    } 
+    #delete {
+        left: 83%;
+        margin-top: -0.8vh;
+    }
+    label[for=darkmodeToggle] {
+        left: 87%;
+    }
+    label[for=info] {
+        left: 93%;
+    }
+    #popup {
+        height: 70vh;
+    }
+    .hakupalkki{
+        width: 54vw;
+    }
+
+
+} 
