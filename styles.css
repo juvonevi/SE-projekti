@@ -204,6 +204,7 @@ label[for=darkmodeToggle]:has(input[type="checkbox"]:checked){
     font-size: 2em;
     background-color: transparent;
     border: none;
+    cursor: pointer;
 }
 
 .searchresult {
@@ -243,12 +244,97 @@ label[for=darkmodeToggle]:has(input[type="checkbox"]:checked){
     }
 }
 
-@media (max-width: 1680px) {
+@media (max-width: 1600px) {
+    #aanet {
+        width: 50vw;
+    }
     .aanirivi {
-        zoom: 58%
+        zoom: 85%;
+        width: 44%;
     } 
+    .hakupalkki {
+        width: 46vw;
+    }
     #preset {
         width: 30%;
+    }
+    #downButtons {
+        width: 47%;
+    }
+    label[for=darkmodeToggle] {
+        left: 90%;
+    }
+    #delete {
+        left: 86.5%;
+        top: 0vh;
+    }
+    #popup {
+        width: 36vw;
+        height: 44vh;
+        left: calc(32vw - 2%);
+        bottom: 30vh;
+    }
+}
+
+@media (max-width: 1366px) {
+    #aanet {
+        width: 49vw;
+    }
+    .aanirivi {
+        zoom: 75%;
+        width: 42%;
     } 
+    .hakupalkki {
+        width: 48vw;
+    }
+    label[for=darkmodeToggle] {
+        left: 89.5%;
+    }
+    #delete {
+        left: 85.5%;
+        top: 0.3vh;
+    }
+    .searchresult > label {
+        max-width: 50%;
+    }
+    h2 {
+        margin-top: 0.1em;
+        margin-bottom: 0.5em;
+    }
+    #popup {
+        width: 40vw;
+        height: 50vh;
+        left: calc(30vw - 2%);
+        bottom: 25vh;
+    }
+}
+
+@media (max-width: 1280px) {
+    #aanet {
+        width: 46vw;
+    }
+    .aanirivi {
+        zoom: 71%;
+        width: 45%;
+    } 
+    .hakupalkki {
+        width: 51vw;
+    }
+    #downButtons {
+        width: 47%;
+    }
+    label[for=info] {
+        left: 94%;
+    }
+    label[for=darkmodeToggle] {
+        left: 88%;
+    }
+    #delete {
+        left: 84%;
+        top: 0.3vh;
+    }
+    h2 {
+        margin-top: 0;
+    }
 }
 
