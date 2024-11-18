@@ -1,5 +1,6 @@
 body {
     background-color: aliceblue;
+    color: black;
 }
 
 .unselectable {
@@ -28,10 +29,6 @@ body {
 canvas {
     border-radius: 5px;
     cursor: grab;
-}
-
-.aanirivi_tumma {
-    background-color: #3d414a;
 }
 
 #preset {
@@ -159,6 +156,7 @@ label[for=darkmodeToggle] > span {
     color: black;
     font-size: 3.5em;
     bottom: 0.1em;
+    top: 0;
     right: 0.1em;
 }
 
@@ -365,6 +363,4 @@ label[for=darkmodeToggle]:has(input[type="checkbox"]:checked){
     .hakupalkki{
         width: 54vw;
     }
-
-
 } 

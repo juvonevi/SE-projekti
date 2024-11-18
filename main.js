@@ -18,33 +18,13 @@ window.addEventListener("load", function() {
         }
     }
 
-    let darkmode = false;
-
     /**
-     * Vaihtaa värit lightmoden väreihin
+     * Palauttaa alkuperäiset värit
      */
     function applyLightmode() {
-        document.body.style.background = "aliceblue";
-        document.body.style.color = "black";
-        document.getElementById("hakutulokset").style.background = "lightblue";
-        let hakutulokset = document.getElementsByClassName("searchresult");
-            for (let tulos of hakutulokset) {
-                tulos.style.background = "#67b1cc";
-            }
-        let aanirivit = document.querySelectorAll(".aanirivi");
-        for (let rivi of aanirivit) {
-            rivi.style.background = "lightblue";
-        }
-        document.querySelector("label[for=info]").style.background = "lightblue";
-        document.getElementById("info").style.color = "black";
-        document.getElementById("closePopup").style.color = "black";
-        document.getElementById("popup").style.background = "#3496ba";
         document.querySelector("label[for=darkmodeToggle] > span").textContent = "☼";
-        document.querySelector("label[for=darkmodeToggle] > span").style.bottom = "0.1em";
-        document.querySelector("label[for=darkmodeToggle] > span").style.top = "0";
-        document.querySelector("label[for=darkmodeToggle] > span").style.right = "0.1em";
-        document.querySelector("label[for=darkmodeToggle] > span").style["font-size"] = "3.5em";
-        darkmode = false;
+        let secondLink = document.getElementsByTagName("link")[1];
+        secondLink.remove();
     }
 
     let infoVisible = false;
@@ -86,31 +66,20 @@ window.addEventListener("load", function() {
         }
     }
 
+    //Tarkistaa onko käyttäjällä darkmode käytössä
     const isDarkMode = () => window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    //Ottaa käyttöön darkmode.css tiedoston
     const applyDarkMode = (isDark) => {
         if (isDark) {
-            document.body.style.background = "#26292e";
-            document.body.style.color = "#ffffff";
-            document.getElementById("hakutulokset").style.background = "#3d414a";
-            let hakutulokset = document.getElementsByClassName("searchresult");
-            for (let tulos of hakutulokset) {
-                tulos.style.background = "#1b1d22";
-            }
-            let aanirivit = document.querySelectorAll(".aanirivi");
-            for (let rivi of aanirivit) {
-                rivi.style.background = "#3d414a";
-            }
-            document.querySelector("label[for=info]").style.background = "#3d414a";
-            document.getElementById("info").style.color = "white";
-            document.getElementById("closePopup").style.color = "white";
-            document.getElementById("popup").style.background = "#0e0f12";
             document.getElementById("darkmodeToggle").checked = "checked";
             document.querySelector("label[for=darkmodeToggle] > span").textContent = "☾";
-            document.querySelector("label[for=darkmodeToggle] > span").style.bottom = "0";
-            document.querySelector("label[for=darkmodeToggle] > span").style.top = "-0.3em";
-            document.querySelector("label[for=darkmodeToggle] > span").style.right = "0.2em";
-            document.querySelector("label[for=darkmodeToggle] > span").style["font-size"] = "4.5em";
-            darkmode = true;
+            
+            let link = document.createElement("link");
+            link.rel = "StyleSheet";
+            link.href = "darkmode.css";        
+            link.type = "text/css";
+            let firstLink = document.getElementsByTagName("link")[0];
+            firstLink.after(link);
         }
     };
     applyDarkMode(isDarkMode());
@@ -363,9 +332,6 @@ window.addEventListener("load", function() {
             nimi.style.float = "left";
             audio.style.float = "right";
             audio.style.clear = "right";
-            if (darkmode) {
-                div.style.background = "#1b1d22";
-            }
             div.setAttribute("draggable", "true");
             div.addEventListener("dragstart", function(e) {
                 e.dataTransfer.setData("text/plain", aani.name);
@@ -558,7 +524,6 @@ window.addEventListener("load", function() {
         }    
     }
 
-    let changedKeys = Array(10);
     /**
      * Vaihtaa napin näppäimen
      * @param {*} key 
