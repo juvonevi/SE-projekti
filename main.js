@@ -110,9 +110,7 @@ window.addEventListener("load", function() {
                     let url = blob.createObjectURL(file);
                     allSounds[i][j] = {"name" : cursor.value.name, "sound" : url, "db" : item_id};
                 }
-                else {
-                    cursor.continue();
-                }            
+                cursor.continue();      
             } 
             else {
                 console.log("Done");
@@ -392,8 +390,8 @@ window.addEventListener("load", function() {
             let sounds = allSounds[allSounds.selected];
             let lisatty = false;
             for (let i = 0; i < sounds.length; i++) {
-                if (!sounds[i]) {
-                    let audio = paikat[i].children[4];
+                let audio = paikat[i].children[4];
+                if (!audio.src) {                
                     audio.src = aani;
                     lisatty = true;            
                     addData(nimi, file, i, aani, allSounds.selected);
