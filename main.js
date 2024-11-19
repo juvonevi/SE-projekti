@@ -7,8 +7,125 @@
  * Tapahtuman kuuntelija sivun lataamiselle
  */
 window.addEventListener("load", function() {
+    let allSounds = [Array(10), Array(10), Array(10), Array(10)];
+    allSounds.selected = 0;
+    this.document.getElementById("buttonA").style["font-weight"] = "bold";
+    let dragImg = new Image();
+    dragImg.src = "GrabCursor.png";
+    document.getElementById("file-input").addEventListener("change",handleFile);
+    const defaultKeys = ["1","2","3","4","5","6","7","8","9","0"];  
+    let myKeys = Array.from(defaultKeys);
+
+    //Avataan indexed db
+    let db;
+    const openRequest = window.indexedDB.open("audiofiles", 1);
+    openRequest.addEventListener("error", () =>
+        console.error("Database failed to open"),
+    );
+
+    let gotStored = false;
+    openRequest.addEventListener("success", () => {
+        console.log("Database opened successfully");
+        db = openRequest.result;
+        if (!gotStored) {
+            getStoredSounds();
+            gotStored = true;
+        }
+        showMySounds();
+    });
+    openRequest.addEventListener("upgradeneeded", (e) => {
+        db = e.target.result;
+  
+        const objectStore = db.createObjectStore("audiofiles", {
+            keyPath: "id",
+            autoIncrement: true,
+        });
+  
+        objectStore.createIndex("name", "name", { unique: false });
+        objectStore.createIndex("file", "file", { unique: false });
+        console.log("Database setup complete");
+        showMySounds();
+    });
+
+    /**
+     * Lisää äänen indexed db:hen ja local storageen
+     * @param {String} filename 
+     * @param {File} audiofile 
+     * @param {number} i 
+     * @param {String} sound 
+     * @param {number} j 
+     */
+    function addData(filename, audiofile, i, sound, j) {
+        const newItem = { name: filename, file: audiofile };
+        const transaction = db.transaction(["audiofiles"], "readwrite");
+        const objectStore = transaction.objectStore("audiofiles");
+        const addRequest = objectStore.add(newItem);
+    
+        addRequest.addEventListener("success", (e) => {
+            console.log("Saved with id ", e.target.result);
+            let key = e.target.result;
+            allSounds[j][i] = {"name" : filename, "sound" : sound, "db" : key};
+            showMySounds();
+            localStorage.setItem("sounds" + (j+1),  JSON.stringify(allSounds[j]));
+        });
+    
+        // Report on the success of the transaction completing, when everything is done
+        transaction.addEventListener("complete", () => {
+        console.log("Transaction completed: database modification finished.");
+        });
+    
+        transaction.addEventListener("error", () =>
+        console.log("Transaction not opened due to error"),
+        );
+    }
+
+    /**
+     * Poistaa äänen indexed db:stä id:n perusteella
+     * @param {number} item_id 
+     */
+    function deleteItem(item_id) {
+        const transaction = db.transaction(["audiofiles"], "readwrite");
+        const objectStore = transaction.objectStore("audiofiles");
+        const deleteRequest = objectStore.delete(item_id);
+      
+        transaction.addEventListener("complete", () => {
+            console.log(`File ${item_id} deleted.`);
+        });
+    }
+
+    /**
+     * Hakee äänen indexed db:stä id:n perusteella
+     * @param {number} item_id 
+     * @param {number} i 
+     * @param {number} j 
+     */
+    function getData(item_id, i, j) {    
+        const objectStore = db.transaction("audiofiles").objectStore("audiofiles");
+        objectStore.openCursor().addEventListener("success", (e) => {
+            const cursor = e.target.result;
+            if (cursor) {
+                if (cursor.value.id === item_id) {
+                    let file = cursor.value.file;
+                    let blob = window.URL || window.webkitURL;
+                    let url = blob.createObjectURL(file);
+                    allSounds[i][j] = {"name" : cursor.value.name, "sound" : url, "db" : item_id};
+                }
+                else {
+                    cursor.continue();
+                }            
+            } 
+            else {
+                console.log("Done");
+                localStorage.setItem("sounds" + (i+1),  JSON.stringify(allSounds[i]));
+                showMySounds();
+            }
+        });
+    }
 
     document.getElementById("darkmodeToggle").addEventListener("input", toggleDarkmode);
+    /**
+     * Vaihtaa darkmode/lightmode checkboxin mukaan
+     */
     function toggleDarkmode() {
         if (document.getElementById("darkmodeToggle").checked) {
             applyDarkMode(true);
@@ -60,7 +177,7 @@ window.addEventListener("load", function() {
             audio.style.position = "relative";
             audio.style.top = "10px";
         }
-        let spans = document.getElementsByTagName("span");
+        let spans = document.querySelectorAll(".aanirivi span");
         for (let span of spans) {
             span.style.top = "0";
         }
@@ -84,19 +201,10 @@ window.addEventListener("load", function() {
     };
     applyDarkMode(isDarkMode());
 
-    let allSounds = [Array(10), Array(10), Array(10), Array(10)];
-    allSounds.selected = 0;
-    this.document.getElementById("buttonA").style["font-weight"] = "bold";
-    let dragImg = new Image();
-    dragImg.src = "GrabCursor.png";
-    document.getElementById("file-input").addEventListener("change",handleFile);
-    const defaultKeys = ["1","2","3","4","5","6","7","8","9","0"];  
-    let myKeys = Array.from(defaultKeys);
-
     /**
      * Hakee käyttäjän äänet local storagesta
      */
-    getStoredSounds();
+    //getStoredSounds();
     function getStoredSounds() {
         for (let i = 0; i < 4; i++) {
             let sounds = JSON.parse(localStorage.getItem("sounds"+(i+1)));
@@ -105,8 +213,7 @@ window.addEventListener("load", function() {
                 for (let j = 0; j < sounds.length; j++) {
                     if (typeof sounds[j] !== "undefined" && sounds[j]) {
                         if (sounds[j].sound.startsWith("blob")) {
-                            allSounds[i][j] = undefined;
-                            localStorage.setItem("sounds" + (i+1),  JSON.stringify(sounds));
+                            getData(parseInt(sounds[j].db), i, j);   
                         }
                         else {
                             allSounds[i][j] = sounds[j];
@@ -114,7 +221,7 @@ window.addEventListener("load", function() {
                     } 
                 }
             }
-        }    
+        }
     }
 
     /**
@@ -173,6 +280,9 @@ window.addEventListener("load", function() {
                     e.dataTransfer.setData("text/plain", sounds[i].name);
                     e.dataTransfer.setData("text/html", sounds[i].sound);
                     e.dataTransfer.setData("from", i);
+                    if (sounds[i].db) {
+                        e.dataTransfer.setData("db", sounds[i].db);
+                    }             
                     e.dataTransfer.setDragImage(dragImg, 30, 26);
                 });       
             }
@@ -217,6 +327,7 @@ window.addEventListener("load", function() {
                 let from = e.dataTransfer.getData("from");
                 let nimi = e.dataTransfer.getData("text/plain");
                 let aani = e.dataTransfer.getData("text/html");
+                let db = e.dataTransfer.getData("db");
                 if (from) {
                     if (typeof sounds[i] !== "undefined") {
                         sounds[from] = {"name" : sounds[i].name, "sound" : sounds[i].sound};
@@ -225,7 +336,12 @@ window.addEventListener("load", function() {
                         sounds[from] = undefined;
                     }
                 }
-                sounds[i] = {"name" : nimi, "sound" : aani};       
+                if (db) {
+                    sounds[i] = {"name" : nimi, "sound" : aani, "db" : db};   
+                }
+                else {
+                    sounds[i] = {"name" : nimi, "sound" : aani};    
+                }      
                 showMySounds();
                 let audio = paikat[i].children[4];
                 audio.src = aani;
@@ -245,6 +361,9 @@ window.addEventListener("load", function() {
             if (!from) {
                 return;
             }
+            if (sounds[from].db) {
+                deleteItem(sounds[from].db);
+            }
             sounds[from] = undefined;
             showMySounds();
             localStorage.setItem("sounds" + (allSounds.selected+1),  JSON.stringify(sounds));
@@ -256,7 +375,7 @@ window.addEventListener("load", function() {
      */
     function handleFile() {
         const files = document.getElementById("file-input").files;
-        console.log(files)
+        //console.log(files)
         for (const file of files) {
             let nimi = file.name;
             let blob = window.URL || window.webkitURL;
@@ -274,11 +393,10 @@ window.addEventListener("load", function() {
             let lisatty = false;
             for (let i = 0; i < sounds.length; i++) {
                 if (!sounds[i]) {
-                    sounds[i] = {"name" : nimi, "sound" : aani};
-                    showMySounds();
                     let audio = paikat[i].children[4];
                     audio.src = aani;
-                    lisatty = true;
+                    lisatty = true;            
+                    addData(nimi, file, i, aani, allSounds.selected);
                     break;
                 }
             }
@@ -288,11 +406,10 @@ window.addEventListener("load", function() {
                     if (j !== allSounds.selected) {
                         for (let i = 0; i < sounds.length; i++) {
                             if (!sounds[i]) {
-                                sounds[i] = {"name" : nimi, "sound" : aani};
-                                showMySounds();
                                 let audio = paikat[i].children[4];
                                 audio.src = aani;
                                 lisatty = true;
+                                addData(nimi, file, i, aani, j);
                                 break;
                             }
                         }
@@ -423,13 +540,13 @@ window.addEventListener("load", function() {
         }
         this.lastSearched = syote;
      
-        let haetutAanet = localStorage.getItem("haetutAanet");
+        if (localStorage.getItem("haetutAanet")) {
+            let haetutAanet = localStorage.getItem("haetutAanet");
             if(syote === haetutAanet[0]) {
                 //setupAudioAnalyser(sounds);
                 return;
-       
             }
-
+        }
         searchsound(syote).then(result => {
             // Palautetaan äänilinkki
             if (result.ok) {
@@ -444,37 +561,8 @@ window.addEventListener("load", function() {
             }
         })
     }
-     
-
-
-    // Lisätään se tietoraketeeseen
-    // esim. map mutta käyttö voi olla hankalampaa
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
-    let aanet = new Map();
-
-    aanet.set("1"," ./media/sci-fi.mp3");
-    aanet.set("2", "aanilinkki 3");
-    aanet.set("3", "aanilinkki 3");
-    aanet.set(4, "aanilinkki 4");
-    aanet.set("5", "aanilinkki 5");
-    aanet.set("6", "aanilinkki 6");
-   
-    console.log(aanet.has("3"));
-    // Tai yksinketaisemmin tallennetaan taulukkoon
-    let aania = ["./media/sci-fi.mp3","aanilinkki 2","aanilinkki 3"];
-    // Sitten tallennetaan localStrageen
-    localStorage.setItem("haetutAanet", aania);
-            
-    let haetutAanet = localStorage.getItem("haetutAanet");
-    //haetutAanet[0]; // toimii
-    console.log(haetutAanet, " Äänet local storagesta");
-   
-    //Tehtävä: funktion joka tarkastaa onko haettu ääni jo tietorakenteessa aanet tai aania taulukossa
-    //funktio palauttaa löytyneen äänen tai null
-    //funkiton malli: funktio (param: haettu ääni, param: taulukko / map äänistä) return ääni tai null
 
     const keys = ['1','2','3','4','5','6','7','8','9','0','q','w','e','r','t','y','u','i','o','p','a','s','d','f','g','h','j','k','l','z','x','c','v','b','n','m'];
-    
     
     /**
      * Setting up a dblpressed button
@@ -488,8 +576,6 @@ window.addEventListener("load", function() {
             valittuna[0].classList.remove("nappiValittuna");
         }
         button.classList.add("nappiValittuna");
-       
-        //document.addEventListener("keydown",  changeKey(event));
     }
 
     document.addEventListener("keydown", keyPressed);
@@ -519,7 +605,7 @@ window.addEventListener("load", function() {
                 buttonPressedL();
             }
             else {
-                playByKeyTest(key);
+                playByKey(key);
             }      
         }    
     }
@@ -546,55 +632,30 @@ window.addEventListener("load", function() {
         const pressedKey = key;
         for (let i = 0; i < keys.length; i++ ) {
         
-        // Tarkastetaan onko hyväksytty näppäin
-        if (pressedKey ===  keys[i] && !myKeys.includes(pressedKey)) {
-            button.value = pressedKey;
-             // Tallennetaan valinta
-            myKeys[buttonNumber] = pressedKey;
-            console.log("Passed key");
-            button.classList.remove("nappiValittuna");
-            localStorage.setItem("keys",  JSON.stringify(myKeys));
-            //document.removeEventListener("keydown",  changeKey(event));
-        }
+            // Tarkastetaan onko hyväksytty näppäin
+            if (pressedKey ===  keys[i] && !myKeys.includes(pressedKey)) {
+                button.value = pressedKey;
+                // Tallennetaan valinta
+                myKeys[buttonNumber] = pressedKey;
+                console.log("Passed key");
+                button.classList.remove("nappiValittuna");
+                localStorage.setItem("keys",  JSON.stringify(myKeys));
+            }
         }
     }
 
-    //console.log(myKeys);
-        function playByKeyTest(key) {
-            let audios = document.querySelectorAll(".aanirivi > audio");
-            for (let i = 0; i < myKeys.length; i++) {
-                if (key === myKeys[i]) {
-                    if (audios[i].paused) {
-                        audios[i].play();
-                    }
-                    else {
-                        audios[i].pause();
-                    }
-                }        
-            }
+    function playByKey(key) {
+        let audios = document.querySelectorAll(".aanirivi > audio");
+        for (let i = 0; i < myKeys.length; i++) {
+            if (key === myKeys[i]) {
+                if (audios[i].paused) {
+                    audios[i].play();
+                }
+                else {
+                    audios[i].pause();
+                }
+            }        
         }
+    }
           
-        /**
-         * Funktio soittaa äänen näppäimen mukaan
-         * @param {*} key 
-         */
-        function playByKey(key) {
-            
-            // console.log(aanet.has("1")); // Kyselee mapista
-            // Taulukko näppäimistön nappuloista
-            const keys = [1,2,3,4,5,6,7,8,9,0,'q','w','e','r','t','y','u','i','o','p','a','s','d','f','g','h','j','k','l','z','x','c','v','b','n','m'];  
-            //,a,s,d,f,g,h,j,k,l,z,x,c,v,b,n,m
-            for(let i = 0; i < aania.length; i++) {
-                
-                if(key == keys[i]) {
-                    // soita ääni, näppäimen mukaan
-                    /*
-                    if(aania[i].indexOf(".mp3")) { // Tarkastetaan ettei ole pelkkää tekstiä
-                        console.log("soita ääni ",aania[i]);
-                        setupAudioAnalyser(aania[i]);
-                    }*/
-                 }
-                break;
-            }           
-        }
 });
