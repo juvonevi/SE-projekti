@@ -389,9 +389,10 @@ window.addEventListener("load", function() {
             let paikat = document.getElementsByClassName("aanirivi");
             let sounds = allSounds[allSounds.selected];
             let lisatty = false;
-            for (let i = 0; i < sounds.length; i++) {
-                let audio = paikat[i].children[4];
-                if (!audio.src) {                
+            for (let i = 0; i < sounds.length; i++) {         
+                if (!sounds[i]) {      
+                    sounds[i] = {"name" : "placeholder", "sound" : "placeholder", "db" : 0};      
+                    let audio = paikat[i].children[4];    
                     audio.src = aani;
                     lisatty = true;            
                     addData(nimi, file, i, aani, allSounds.selected);
@@ -404,6 +405,7 @@ window.addEventListener("load", function() {
                     if (j !== allSounds.selected) {
                         for (let i = 0; i < sounds.length; i++) {
                             if (!sounds[i]) {
+                                sounds[i] = {"name" : "placeholder", "sound" : "placeholder", "db" : 0}; 
                                 let audio = paikat[i].children[4];
                                 audio.src = aani;
                                 lisatty = true;
