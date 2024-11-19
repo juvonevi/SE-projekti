@@ -9,7 +9,7 @@
 window.addEventListener("load", function() {
     let allSounds = [Array(10), Array(10), Array(10), Array(10)];
     allSounds.selected = 0;
-    this.document.getElementById("buttonA").style["font-weight"] = "bold";
+    document.getElementById("buttonA").classList.add("selectedPage");
     let dragImg = new Image();
     dragImg.src = "GrabCursor.png";
     document.getElementById("file-input").addEventListener("change",handleFile);
@@ -485,9 +485,11 @@ window.addEventListener("load", function() {
             function buttonPressed2() {
                 allSounds.selected = i-1;
                 for (let j = 1; j < buttons2.length-1; j++) {
-                    buttons2[j].style["font-weight"] = "normal";
+                    //buttons2[j].style["font-weight"] = "normal";
+                    buttons2[j].classList.remove("selectedPage");
                 }
-                buttons2[i].style["font-weight"] = "bold";
+                //buttons2[i].style["font-weight"] = "bold";
+                buttons2[i].classList.add("selectedPage");
                 showMySounds();
             }
         }
@@ -504,9 +506,9 @@ window.addEventListener("load", function() {
             allSounds.selected = allSounds.selected+1;
         }            
         for (let j = 1; j < buttons2.length-1; j++) {
-            buttons2[j].style["font-weight"] = "normal";
+            buttons2[j].classList.remove("selectedPage");
         }
-        buttons2[allSounds.selected+1].style["font-weight"] = "bold";
+        buttons2[allSounds.selected+1].classList.add("selectedPage");
         showMySounds();
     }
 
@@ -519,9 +521,9 @@ window.addEventListener("load", function() {
             allSounds.selected = allSounds.selected-1;
         }            
         for (let j = 1; j < buttons2.length-1; j++) {
-            buttons2[j].style["font-weight"] = "normal";
+            buttons2[j].classList.remove("selectedPage");
         }
-        buttons2[allSounds.selected+1].style["font-weight"] = "bold";
+        buttons2[allSounds.selected+1].classList.add("selectedPage");
         showMySounds();
     }
     

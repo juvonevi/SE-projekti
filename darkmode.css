@@ -15,6 +15,13 @@ body {
     background-color: var(--second-color); 
 }
 
+.selectedPage {
+    background-color: var(--second-color);
+    color: var(--text-color);
+    border-color: var(--text-color);
+    border-width: 2px;
+}
+
 form + #hakutulokset {
     background-color: var(--second-color); 
 }

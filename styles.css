@@ -1,6 +1,14 @@
+:root {
+    --background-color: aliceblue;
+    --second-color: lightblue;
+    --searchresult-color: #67b1cc;
+    --popup-color: #3496ba;
+    --text-color: #011a42;
+}  
+
 body {
-    background-color: aliceblue;
-    color: black;
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 
 .unselectable {
@@ -20,7 +28,7 @@ body {
 .aanirivi {
     width: 55%;
     float: left;
-    background-color: lightblue; 
+    background-color: var(--second-color); 
     margin: 0.3em; 
     border-radius: 15px;
     cursor: grab;
@@ -29,6 +37,14 @@ body {
 canvas {
     border-radius: 5px;
     cursor: grab;
+}
+
+.selectedPage {
+    background-color: var(--second-color);
+    border-color: var(--text-color);
+    border-width: 1px;
+    border-radius: 3px;
+    font-weight: bold;
 }
 
 #preset {
@@ -73,7 +89,7 @@ form + #hakutulokset {
     display: block;
     width: 100%;    
     margin-top: 1em;
-    background-color: lightblue; 
+    background-color: var(--second-color); 
     max-width: 800px; 
 }
 
@@ -127,6 +143,7 @@ span {
 }
 
 #info {
+    color: var(--text-color);
     background-color: transparent;
     border: none;
     font-size: 4em;
@@ -143,7 +160,7 @@ label[for=info], label[for=darkmodeToggle] {
     width: 4em;
     border-radius: 35px;
     text-align: center;
-    background-color: lightblue;
+    background-color: var(--second-color);
     cursor: pointer;
 }
 
@@ -153,7 +170,7 @@ label[for=darkmodeToggle] {
 
 label[for=darkmodeToggle] > span {
     position: absolute;
-    color: black;
+    color: var(--text-color);
     font-size: 3.5em;
     bottom: 0.1em;
     top: 0;
@@ -162,10 +179,6 @@ label[for=darkmodeToggle] > span {
 
 #darkmodeToggle:checked ~ span {
     color: white;
-}
-
-#darkmodeToggle:checked + label[for=darkmodeToggle] {
-    background-color: #3d414a;
 }
 
 label[for=darkmodeToggle]:has(input[type="checkbox"]:checked){
@@ -185,7 +198,7 @@ label[for=darkmodeToggle]:has(input[type="checkbox"]:checked){
 
 #popup {
     position: absolute;
-    background-color: #3496ba;
+    background-color: var(--popup-color);
     width: 30vw;
     height: 40vh;
     left: calc(35vw - 2%);
@@ -196,6 +209,7 @@ label[for=darkmodeToggle]:has(input[type="checkbox"]:checked){
 }
 
 #closePopup {
+    color: var(--text-color);
     position: absolute;
     right: 4%;
     top: 4%;
@@ -207,7 +221,7 @@ label[for=darkmodeToggle]:has(input[type="checkbox"]:checked){
 
 .searchresult {
     width: 97%;
-    background-color: #67b1cc;
+    background-color: var(--searchresult-color);
     margin: 0.1em; 
     padding: 0.4em;
     border-radius: 15px;
