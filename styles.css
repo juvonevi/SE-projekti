@@ -196,7 +196,7 @@ label[for=darkmodeToggle]:has(input[type="checkbox"]:checked){
     border-radius: 5px;
 }
 
-#popup {
+#popup, #noSpace {
     position: absolute;
     background-color: var(--popup-color);
     width: 30vw;
@@ -205,10 +205,18 @@ label[for=darkmodeToggle]:has(input[type="checkbox"]:checked){
     bottom: 30vh;
     padding: 2%;
     border-radius: 35px;
+    box-shadow: 0px 0px 15px 5px #062442;
     display: none;
 }
 
-#closePopup {
+#noSpace {
+    width: 16vw;
+    height: 10vh;
+    left: calc(42vw - 2%);
+    bottom: 50vh;
+}
+
+#closePopup, #closeWarning {
     color: var(--text-color);
     position: absolute;
     right: 4%;

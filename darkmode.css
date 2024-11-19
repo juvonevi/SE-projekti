@@ -54,11 +54,16 @@ label[for=darkmodeToggle]:has(input[type="checkbox"]:checked){
     color: var(--text-color);
 }
 
-#popup {
+#popup, #noSpace {
     background-color: var(--popup-color);
+    box-shadow: 0px 0px 15px 5px var(--popup-color);
 }
 
-#closePopup {
+#noSpace {
+    box-shadow: 0px 0px 15px 5px black;
+}
+
+#closePopup, #closeWarning {
     color: var(--text-color);
 }
 

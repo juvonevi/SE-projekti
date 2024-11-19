@@ -160,6 +160,23 @@ window.addEventListener("load", function() {
         }
     }
 
+    let warningVisible = false;
+    document.getElementById("closeWarning").addEventListener("click", openOrCloseWarning);
+
+    /**
+     * Avaa tai sulkee varoituksen tilan puutteesta
+     */
+    function openOrCloseWarning() {
+        if (warningVisible) {
+            document.getElementById("noSpace").style.display = "none";
+            warningVisible = false;
+        }
+        else {
+            document.getElementById("noSpace").style.display = "initial";
+            warningVisible = true;
+        }
+    }
+
     let firefox = true;
     if (navigator.userAgent.indexOf("Firefox") <= 0) {
         changeForOtherBrowsers();
@@ -417,7 +434,7 @@ window.addEventListener("load", function() {
                 }                   
             }
             if (!lisatty) {
-                console.log("Ei tilaa");
+                openOrCloseWarning();
             }
         }      
     }
