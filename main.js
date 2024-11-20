@@ -496,6 +496,28 @@ window.addEventListener("load", function() {
         }
     }
 
+
+    let searchVisible = false;
+    document.querySelector('.toggle-button').addEventListener("click", toggleSearchBar);
+
+    /**
+     * Näyttää tai piilottaa hakupalkin
+     */
+    function toggleSearchBar() {
+        const searchBar = document.getElementById("hakupalkki");
+        const toggleButton = document.querySelector('.toggle-button');
+
+        if (searchVisible) {
+            searchBar.style.display = "none";
+            toggleButton.textContent = "Show Search"; 
+            searchVisible = false;
+        } else {
+            searchBar.style.display = "block"; 
+            toggleButton.textContent = "Hide Search"; 
+            searchVisible = true;
+        }
+    }
+
     //Kuuntelee nappeja
     addButtonListeners();
     function addButtonListeners() {
