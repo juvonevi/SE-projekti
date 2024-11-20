@@ -7,14 +7,35 @@
  * Tapahtuman kuuntelija sivun lataamiselle
  */
 window.addEventListener("load", function() {
-    let allSounds = [Array(10), Array(10), Array(10), Array(10)];
+    const numOfPages = 5;
+    let allSounds = [];
+    for (let i = 0; i < numOfPages; i++) {
+        allSounds[i] = Array(10);
+    }
     allSounds.selected = 0;
-    document.getElementById("buttonA").classList.add("selectedPage");
+    createPageButtons();
+    document.getElementById("pageButton1").classList.add("selectedPage");
     let dragImg = new Image();
     dragImg.src = "GrabCursor.png";
     document.getElementById("file-input").addEventListener("change",handleFile);
     const defaultKeys = ["1","2","3","4","5","6","7","8","9","0"];  
     let myKeys = Array.from(defaultKeys);
+
+    /**
+     * Luo sivumäärälle tarvittavat napit
+     */
+    function createPageButtons() {
+        let arrow = document.getElementById("arrowLeft");
+        let after = arrow;
+        for (let i = 0; i < numOfPages; i++) {
+            let button = document.createElement("input");
+            button.type = "button";
+            button.id = "pageButton" + (i+1);
+            button.value = i + 1;
+            after.after(button);
+            after = button;
+        }
+    }
 
     //Avataan indexed db
     let db;
@@ -221,7 +242,7 @@ window.addEventListener("load", function() {
      */
     //getStoredSounds();
     function getStoredSounds() {
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < numOfPages; i++) {
             let sounds = JSON.parse(localStorage.getItem("sounds"+(i+1)));
             if (sounds) {
                 console.log(sounds);
@@ -417,7 +438,7 @@ window.addEventListener("load", function() {
                 }
             }
             if (!lisatty) {
-                for (let j = 0; j < 4; j++) {
+                for (let j = 0; j < numOfPages; j++) {
                     let sounds = allSounds[j];
                     if (j !== allSounds.selected) {
                         for (let i = 0; i < sounds.length; i++) {
@@ -504,10 +525,8 @@ window.addEventListener("load", function() {
             function buttonPressed2() {
                 allSounds.selected = i-1;
                 for (let j = 1; j < buttons2.length-1; j++) {
-                    //buttons2[j].style["font-weight"] = "normal";
                     buttons2[j].classList.remove("selectedPage");
                 }
-                //buttons2[i].style["font-weight"] = "bold";
                 buttons2[i].classList.add("selectedPage");
                 showMySounds();
             }
@@ -518,7 +537,7 @@ window.addEventListener("load", function() {
 
     function buttonPressedR() {
         let buttons2 = document.querySelectorAll("#preset > input");
-        if (allSounds.selected === 3) {
+        if (allSounds.selected === numOfPages-1) {
             allSounds.selected = 0;
         }
         else {
@@ -534,7 +553,7 @@ window.addEventListener("load", function() {
     function buttonPressedL() {
         let buttons2 = document.querySelectorAll("#preset > input");
         if (allSounds.selected === 0) {
-            allSounds.selected = 3;
+            allSounds.selected = numOfPages-1;
         }
         else {
             allSounds.selected = allSounds.selected-1;

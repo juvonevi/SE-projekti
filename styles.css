@@ -54,6 +54,10 @@ canvas {
     margin-top: 5px;
 }
 
+#preset > input {
+    float: left;
+}
+
 input[type="button"] {
     cursor: pointer;
 }
