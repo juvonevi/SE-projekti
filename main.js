@@ -177,8 +177,12 @@ window.addEventListener("load", function() {
      */
     function applyLightmode() {
         document.querySelector("label[for=darkmodeToggle] > span").textContent = "☼";
-        let secondLink = document.getElementsByTagName("link")[1];
-        secondLink.remove();
+        let links = document.getElementsByTagName("link");
+        for (let link of links) {
+            if (link.href.includes("darkmode.css")) {
+                link.remove();
+            }
+        }
     }
 
     let infoVisible = false;
@@ -525,11 +529,21 @@ window.addEventListener("load", function() {
         const toggleButton = document.querySelector('.toggle-button');
 
         if (searchVisible) {
-            searchBar.style.display = "none";
+            let link = document.createElement("link");
+            link.rel = "StyleSheet";
+            link.href = "searchHidden.css";        
+            link.type = "text/css";
+            let firstLink = document.getElementsByTagName("link")[0];
+            firstLink.after(link);
             toggleButton.textContent = "Show Search"; 
             searchVisible = false;
         } else {
-            searchBar.style.display = "block"; 
+            let links = document.getElementsByTagName("link");
+             for (let link of links) {
+                if (link.href.includes("searchHidden.css")) {
+                    link.remove();
+                }
+            }
             toggleButton.textContent = "Hide Search"; 
             searchVisible = true;
         }
