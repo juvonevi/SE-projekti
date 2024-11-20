@@ -21,6 +21,24 @@ window.addEventListener("load", function() {
     const defaultKeys = ["1","2","3","4","5","6","7","8","9","0"];  
     let myKeys = Array.from(defaultKeys);
 
+    showAdultContentWarning();
+    function showAdultContentWarning() {
+        if (localStorage.getItem("warningShown")) {
+            return;
+        }
+        document.getElementById("adultContentWarning").style.display = "initial";
+        //document.getElementById("downButtons").style.display = "none";
+        document.getElementById("aanet").style.display = "none";
+        //document.getElementById("hakupalkki").style.display = "none";
+        document.getElementById("closeWarning2").addEventListener("click", function() {
+            document.getElementById("adultContentWarning").style.display = "none";
+            document.getElementById("aanet").style.display = "initial";
+            //document.getElementById("hakupalkki").style.display = "initial";
+            //document.getElementById("downButtons").style.display = "initial";
+            localStorage.setItem("warningShown", "true");
+        });
+    }
+
     /**
      * Luo sivumäärälle tarvittavat napit
      */
@@ -496,6 +514,28 @@ window.addEventListener("load", function() {
         }
     }
 
+
+    let searchVisible = false;
+    document.querySelector('.toggle-button').addEventListener("click", toggleSearchBar);
+
+    /**
+     * Näyttää tai piilottaa hakupalkin
+     */
+    function toggleSearchBar() {
+        const searchBar = document.getElementById("hakupalkki");
+        const toggleButton = document.querySelector('.toggle-button');
+
+        if (searchVisible) {
+            searchBar.style.display = "none";
+            toggleButton.textContent = "Show Search"; 
+            searchVisible = false;
+        } else {
+            searchBar.style.display = "block"; 
+            toggleButton.textContent = "Hide Search"; 
+            searchVisible = true;
+        }
+    }
+
     //Kuuntelee nappeja
     addButtonListeners();
     function addButtonListeners() {
@@ -567,7 +607,7 @@ window.addEventListener("load", function() {
     
     //Kuuntelee nappia haku
     document.getElementById("haku").addEventListener("click", hakuPressed);
-    document.getElementById("hakulomike").addEventListener("submit", hakuPressed);
+    document.getElementById("hakulomake").addEventListener("submit", hakuPressed);
     function hakuPressed(e) {
         e.preventDefault()
         let syote = document.forms[0].elements[0].value;
