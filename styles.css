@@ -99,14 +99,13 @@ form + #hakutulokset {
     margin-top: 1em;
     background-color: var(--second-color); 
     max-width: 800px; 
-}
+} 
 
 #hakutulokset{
     height: 60vh;
     overflow-y: auto;
     border-radius: 15px;
 }
-
 
 .hakupalkki{
     display: none;
@@ -116,6 +115,7 @@ form + #hakutulokset {
     padding: 20px; 
     border-radius: 5px;
 }
+
 
 .toggle-button {
     display: block;
@@ -128,6 +128,8 @@ form + #hakutulokset {
     cursor: pointer;
     font-size: 16px;
 }
+
+
 
 #hakulomike input[type="search"] {
     width: 100%;
