@@ -172,6 +172,9 @@ window.addEventListener("load", function() {
             changeThemeOpen = false;
             return;
         }
+        for (let child of div.children) {
+            child.remove();
+        }
         div.style.display = "initial";
         changeThemeOpen = true;
         for (let i = 0; i < themes.length; i++) {
