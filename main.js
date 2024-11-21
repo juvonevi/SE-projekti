@@ -20,10 +20,10 @@ window.addEventListener("load", function() {
     document.getElementById("file-input").addEventListener("change",handleFile);
     const defaultKeys = ["1","2","3","4","5","6","7","8","9","0"];  
     let myKeys = Array.from(defaultKeys);
-    let themes = ["lightmode", "darkmode.css"];
-    let themeIcons = ["☼", "☾"];
-    let themeColors = ["lightblue", "#3d414a"];
-    let themeTextColors = ["#011a42", "white"];
+    let themes = ["lightmode", "darkmode.css"]; //css tiedoston nimi
+    let themeIcons = ["☼", "☾"]; //Napin käyttämä ikoni
+    let themeColors = ["lightblue", "#3d414a"]; //Napin käyttämä väri (css-tiedoston second color)
+    let themeTextColors = ["#011a42", "white"]; //Napin tekstin väri (css-tiedoston text color)
     themes.chosen = 0;
 
     showAdultContentWarning();
