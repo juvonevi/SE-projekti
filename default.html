@@ -137,16 +137,19 @@
         </div>  
     </div>
 
-    <label id="delete">🗑</label>
+    <label id="delete" class="unselectable">🗑</label>
     <label for="info">
         <input type="button" id="info" value="?"/>
     </label>
-    <label for="darkmodeToggle">
-        <input type="checkbox" id="darkmodeToggle"/>
-        <span class="unselectable">☼</span>
-    </label>
 
     <button class="toggle-button">Hide Search</button>
+
+    <div id="chooseTheme">
+    </div>
+
+    <label for="changeTheme">
+        <input type="button" id="changeTheme" value="☼"/>
+    </label>
 
     <div class="hakupalkki" id="hakupalkki">
         <form id="hakulomike">

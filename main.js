@@ -20,6 +20,8 @@ window.addEventListener("load", function() {
     document.getElementById("file-input").addEventListener("change",handleFile);
     const defaultKeys = ["1","2","3","4","5","6","7","8","9","0"];  
     let myKeys = Array.from(defaultKeys);
+    let themes = ["lightmode", "darkmode.css"];
+    themes.chosen = 0;
 
     showAdultContentWarning();
     function showAdultContentWarning() {
@@ -159,30 +161,69 @@ window.addEventListener("load", function() {
         });
     }
 
-    document.getElementById("darkmodeToggle").addEventListener("input", toggleDarkmode);
+    let changeThemeOpen = false;
+    document.getElementById("changeTheme").addEventListener("click", chooseTheme);
     /**
-     * Vaihtaa darkmode/lightmode checkboxin mukaan
+     * Avaa teemanvaihtovalikon
      */
-    function toggleDarkmode() {
-        if (document.getElementById("darkmodeToggle").checked) {
+    function chooseTheme() {
+        let div = document.getElementById("chooseTheme");
+        if (changeThemeOpen) {
+            div.style.display = "none";
+            changeThemeOpen = false;
+            return;
+        }
+        div.style.display = "initial";
+        changeThemeOpen = true;
+        for (let i = 0; i < themes.length; i++) {
+            if (i !== themes.chosen) {
+                let label = document.createElement("label");
+                label.for = "theme" + i;
+                label.classList.add("roundButtonLabel");
+                div.appendChild(label);
+                let button = document.createElement("input");
+                button.type = "button";
+                button.id = "theme" + i;
+                button.classList.add("roundButton");
+                if (i === 0) {
+                    button.value = "☼";
+                    label.style.background = "lightblue";
+                    button.style.color = "#011a42";
+                } else if (i === 1) {
+                    button.value = "☾";
+                    label.style.background = "#3d414a";
+                    button.style.color = "white";
+                }
+                label.appendChild(button);
+                button.theme = i;
+                button.addEventListener("click", changeTheme);
+            }
+        }
+    }
+
+    function changeTheme(e) {
+        let theme = e.target.theme;
+        if (theme === 0) {
+            applyLightmode();
+        } else {
             applyDarkMode(true);
         }
-        else {
-            applyLightmode();
-        }
+        document.getElementById("chooseTheme").style.display = "none";
+        changeThemeOpen = false;
     }
 
     /**
      * Palauttaa alkuperäiset värit
      */
     function applyLightmode() {
-        document.querySelector("label[for=darkmodeToggle] > span").textContent = "☼";
+        document.getElementById("changeTheme").value = "☼";
         let links = document.getElementsByTagName("link");
         for (let link of links) {
-            if (link.href.includes("darkmode.css")) {
+            if (link.href.includes(themes[themes.chosen])) {
                 link.remove();
             }
         }
+        themes.chosen = 0;
     }
 
     let infoVisible = false;
@@ -246,8 +287,7 @@ window.addEventListener("load", function() {
     //Ottaa käyttöön darkmode.css tiedoston
     const applyDarkMode = (isDark) => {
         if (isDark) {
-            document.getElementById("darkmodeToggle").checked = "checked";
-            document.querySelector("label[for=darkmodeToggle] > span").textContent = "☾";
+            document.getElementById("changeTheme").value = "☾";
             
             let link = document.createElement("link");
             link.rel = "StyleSheet";
@@ -255,6 +295,7 @@ window.addEventListener("load", function() {
             link.type = "text/css";
             let firstLink = document.getElementsByTagName("link")[0];
             firstLink.after(link);
+            themes.chosen = 1;
         }
     };
     applyDarkMode(isDarkMode());

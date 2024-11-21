@@ -187,7 +187,7 @@ span {
     margin-top: 5px;
 }
 
-#info {
+#info, #changeTheme, .roundButton {
     color: var(--text-color);
     background-color: transparent;
     border: none;
@@ -196,7 +196,7 @@ span {
     bottom: 0.1em;
 }
 
-label[for=info], label[for=darkmodeToggle] {
+label[for=info], label[for=changeTheme], .roundButtonLabel {
     position: absolute;
     left: 95%;
     top: 1vh;
@@ -209,26 +209,23 @@ label[for=info], label[for=darkmodeToggle] {
     cursor: pointer;
 }
 
-label[for=darkmodeToggle] {
+.roundButtonLabel {
+    left: 0;
+}
+
+label[for=changeTheme] {
     left: 91%;
 }
 
-label[for=darkmodeToggle] > span {
+#chooseTheme {
     position: absolute;
-    color: var(--text-color);
-    font-size: 3.5em;
-    bottom: 0.1em;
-    top: 0;
-    right: 0.1em;
+    background-color: var(--searchresult-color);
+    width: 10vw;
+    height: 10vh;
+    top: 40vh;
+    left: 50vw;
+    display: none;
 }
-
-#darkmodeToggle:checked ~ span {
-    color: white;
-}
-
-label[for=darkmodeToggle]:has(input[type="checkbox"]:checked){
-    background-color: #3d414a;
-}  
 
 #delete {
     font-size: 4em;
