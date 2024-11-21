@@ -149,6 +149,7 @@ form + #hakutulokset {
     border-radius: 5px;
     cursor: pointer;
 }
+
 .nappiValittuna {
     color:white;
     background-color: rgb(0, 131, 218);
@@ -196,6 +197,16 @@ span {
     bottom: 0.1em;
 }
 
+#changeTheme {
+    bottom: 0.1em;
+    font-size: 3.5em;
+}
+
+.roundButton {
+    bottom: 0.2em;
+    right: 0.01em;
+}
+
 label[for=info], label[for=changeTheme], .roundButtonLabel {
     position: absolute;
     left: 95%;
@@ -210,6 +221,7 @@ label[for=info], label[for=changeTheme], .roundButtonLabel {
 }
 
 .roundButtonLabel {
+    margin: 5%;
     left: 0;
 }
 
@@ -220,10 +232,11 @@ label[for=changeTheme] {
 #chooseTheme {
     position: absolute;
     background-color: var(--searchresult-color);
-    width: 10vw;
-    height: 10vh;
+    width: 20vw;
+    height: 15vh;
     top: 40vh;
     left: 50vw;
+    border-radius: 35px;
     display: none;
 }
 
