@@ -21,6 +21,9 @@ window.addEventListener("load", function() {
     const defaultKeys = ["1","2","3","4","5","6","7","8","9","0"];  
     let myKeys = Array.from(defaultKeys);
     let themes = ["lightmode", "darkmode.css"];
+    let themeIcons = ["☼", "☾"];
+    let themeColors = ["lightblue", "#3d414a"];
+    let themeTextColors = ["#011a42", "white"];
     themes.chosen = 0;
 
     showAdultContentWarning();
@@ -29,14 +32,10 @@ window.addEventListener("load", function() {
             return;
         }
         document.getElementById("adultContentWarning").style.display = "initial";
-        //document.getElementById("downButtons").style.display = "none";
         document.getElementById("aanet").style.display = "none";
-        //document.getElementById("hakupalkki").style.display = "none";
         document.getElementById("closeWarning2").addEventListener("click", function() {
             document.getElementById("adultContentWarning").style.display = "none";
             document.getElementById("aanet").style.display = "initial";
-            //document.getElementById("hakupalkki").style.display = "initial";
-            //document.getElementById("downButtons").style.display = "initial";
             localStorage.setItem("warningShown", "true");
         });
     }
@@ -185,15 +184,9 @@ window.addEventListener("load", function() {
                 button.type = "button";
                 button.id = "theme" + i;
                 button.classList.add("roundButton");
-                if (i === 0) {
-                    button.value = "☼";
-                    label.style.background = "lightblue";
-                    button.style.color = "#011a42";
-                } else if (i === 1) {
-                    button.value = "☾";
-                    label.style.background = "#3d414a";
-                    button.style.color = "white";
-                }
+                button.value = themeIcons[i];      
+                label.style.background = themeColors[i];
+                button.style.color = themeTextColors[i];
                 label.appendChild(button);
                 button.theme = i;
                 button.addEventListener("click", changeTheme);
@@ -201,29 +194,30 @@ window.addEventListener("load", function() {
         }
     }
 
+    /**
+     * Vaihtaa teeman
+     * @param {*} e 
+     */
     function changeTheme(e) {
         let theme = e.target.theme;
-        if (theme === 0) {
-            applyLightmode();
-        } else {
-            applyDarkMode(true);
-        }
-        document.getElementById("chooseTheme").style.display = "none";
-        changeThemeOpen = false;
-    }
-
-    /**
-     * Palauttaa alkuperäiset värit
-     */
-    function applyLightmode() {
-        document.getElementById("changeTheme").value = "☼";
         let links = document.getElementsByTagName("link");
         for (let link of links) {
             if (link.href.includes(themes[themes.chosen])) {
                 link.remove();
             }
         }
-        themes.chosen = 0;
+        document.getElementById("changeTheme").value = themeIcons[theme];
+        if (theme !== 0) {
+            let link = document.createElement("link");
+            link.rel = "StyleSheet";
+            link.href = themes[theme];        
+            link.type = "text/css";
+            let firstLink = document.getElementsByTagName("link")[0];
+            firstLink.after(link);
+        }
+        themes.chosen = theme;
+        document.getElementById("chooseTheme").style.display = "none";
+        changeThemeOpen = false;
     }
 
     let infoVisible = false;
