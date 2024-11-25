@@ -373,6 +373,7 @@ window.addEventListener("load", function() {
                 paikat[i].children[3].style.visibility = "hidden";
                 paikat[i].children[4].style.visibility = "hidden";
                 paikat[i].children[5].style.visibility = "hidden";
+                paikat[i].removeAttribute("draggable");
             }
             else {
                 let name = sounds[i].name;
@@ -406,6 +407,7 @@ window.addEventListener("load", function() {
                     paikat[i].children[3].style.visibility = "hidden";
                     paikat[i].children[4].style.visibility = "hidden";
                     paikat[i].children[5].style.visibility = "hidden";
+                    paikat[i].removeAttribute("draggable");
                 }
                 else {
                     let name = sounds[i].name;
@@ -796,10 +798,21 @@ window.addEventListener("load", function() {
             buttons2[i].addEventListener("click", buttonPressed2);
             function buttonPressed2() {
                 allSounds.selected = i-1;
+                if (!searchVisible && allSounds.selected % 2 !== 0) {
+                    allSounds.selected = allSounds.selected - 1;
+                }
                 for (let j = 1; j < buttons2.length-1; j++) {
                     buttons2[j].classList.remove("selectedPage");
                 }
                 buttons2[i].classList.add("selectedPage");
+                if (!searchVisible && allSounds.selected !== numOfPages-1) {
+                    if (i % 2 !== 0) {
+                        buttons2[i+1].classList.add("selectedPage");
+                    }
+                    else {
+                        buttons2[i-1].classList.add("selectedPage");
+                    }
+                }
                 showMySounds();
             }
         }
@@ -812,13 +825,22 @@ window.addEventListener("load", function() {
         if (allSounds.selected === numOfPages-1) {
             allSounds.selected = 0;
         }
+        else if (!searchVisible && numOfPages % 2 !== 0 && allSounds.selected === numOfPages-2) {
+            allSounds.selected = 0;
+        }
         else {
             allSounds.selected = allSounds.selected+1;
+            if (!searchVisible && allSounds.selected % 2 !== 0) {
+                allSounds.selected = allSounds.selected + 1;
+            }
         }            
         for (let j = 1; j < buttons2.length-1; j++) {
             buttons2[j].classList.remove("selectedPage");
         }
         buttons2[allSounds.selected+1].classList.add("selectedPage");
+        if (!searchVisible && allSounds.selected !== numOfPages-1) {
+            buttons2[allSounds.selected+2].classList.add("selectedPage");
+        }
         showMySounds();
     }
 
@@ -827,13 +849,22 @@ window.addEventListener("load", function() {
         if (allSounds.selected === 0) {
             allSounds.selected = numOfPages-1;
         }
+        else if (!searchVisible && allSounds.selected === 0 && numOfPages % 2 === 0) {
+            allSounds.selected = numOfPages-2;
+        }
         else {
             allSounds.selected = allSounds.selected-1;
+            if (!searchVisible && allSounds.selected % 2 !== 0) {
+                allSounds.selected = allSounds.selected - 1;
+            }
         }            
         for (let j = 1; j < buttons2.length-1; j++) {
             buttons2[j].classList.remove("selectedPage");
         }
         buttons2[allSounds.selected+1].classList.add("selectedPage");
+        if (!searchVisible && allSounds.selected !== numOfPages-1) {
+            buttons2[allSounds.selected+2].classList.add("selectedPage");
+        }
         showMySounds();
     }
     
