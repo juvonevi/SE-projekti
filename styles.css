@@ -221,8 +221,8 @@ label[for=info], label[for=changeTheme], .roundButtonLabel {
 }
 
 .roundButtonLabel {
-    margin: 5%;
-    left: 0;
+    margin: 1%;
+    position: static;
 }
 
 label[for=changeTheme] {

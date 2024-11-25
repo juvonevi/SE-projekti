@@ -172,8 +172,8 @@ window.addEventListener("load", function() {
             changeThemeOpen = false;
             return;
         }
-        for (let child of div.children) {
-            child.remove();
+        while(div.firstChild){
+            div.removeChild(div.firstChild);
         }
         div.style.display = "initial";
         changeThemeOpen = true;
