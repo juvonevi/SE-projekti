@@ -29,7 +29,7 @@ body {
     float: left;
 }
 
-.aanirivi {
+.aanirivi, .aanirivi2 {
     width: 55%;
     float: left;
     background-color: var(--second-color); 
@@ -39,8 +39,11 @@ body {
 }
 
 canvas {
+    border: 1px solid black;
     border-radius: 5px;
     cursor: grab;
+    width: 200px;
+    height: 50px;
 }
 
 .selectedPage {
@@ -66,7 +69,7 @@ input[type="button"] {
     cursor: pointer;
 }
 
-.label {
+.label, .label2 {
     display: inline-block;
     width: 80%;              
     margin-right: 0.5em;      
@@ -76,7 +79,7 @@ input[type="button"] {
     cursor: grab;
 }
 
-.sideButton {
+.sideButton, .sideButton2 {
     width: 2em;
     height: 2em;
     margin-right: 0.5em;
@@ -155,7 +158,7 @@ form + #hakutulokset {
     background-color: rgb(0, 131, 218);
 }
 
-.loop, #darkmodeToggle {
+.loop, .loop2 {
     appearance: none;
     margin: 0;
     padding: 0;
@@ -173,7 +176,7 @@ span {
     cursor: pointer;
 }
 
-.loop:checked ~ span {
+.loop:checked ~ span, .loop2:checked ~ span {
     color:black;
 }
 
@@ -326,21 +329,21 @@ label[for=changeTheme] {
 }
 
 @media (max-width: 1920px) {
-    .aanirivi {
+    .aanirivi, .aanirivi2 {
         zoom: 95%;
         width: 41%;
         height: 20%;
     } 
-    .sideButton {
+    .sideButton, .sideButton2 {
         position: relative;
         bottom: 42px;
     }
-    .aanirivi > canvas {
+    canvas {
         position: relative;
         right: 41px;
         top: 30px;
     }
-    .aanirivi > label:first-child {
+    .aanirivi > label:first-child, .aanirivi2 > label:first-child {
         position: relative;
         left: 5px;
         top: 12px;

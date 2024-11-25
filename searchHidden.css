@@ -6,17 +6,16 @@
     width: 100%;
 }
 
-.aanirivi {
+.aanirivi, .aanirivi2 {
     width: 24%;
-    zoom: 120%;
 }
 
 #downButtons {
-    width: 48%;
+    width: 95%;
 }
 
 #preset > input, #file-input {
-    font-size: 1.3em;
+    font-size: 1.2em;
 }
 
 #preset {

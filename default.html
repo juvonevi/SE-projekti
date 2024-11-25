@@ -20,8 +20,8 @@
             <label class="label">teksti1</label>
             <br>
             <input type="button" id="button1" value="1" class="sideButton"/>
-            <canvas id="canvas1" width="200" height="50" style="border:1px solid #000000;"></canvas>
-            <audio id = "audio1" crossorigin="anonymous" controls></audio>
+            <canvas id="canvas1"></canvas>
+            <audio id = "audio1" crossorigin="anonymous" class="audio" controls></audio>
             <label for="cb1">
                 <input type="checkbox" id="cb1" class="loop"/>
                 <span>⟳</span>
@@ -32,8 +32,8 @@
             <label class="label">teksti2</label>
             <br>
             <input type="button" id="button2" value="2" class="sideButton"/>
-            <canvas id="canvas2"  width="200" height="50" style="border:1px solid #000000;"></canvas>
-            <audio id = "audio2" controls></audio>
+            <canvas id="canvas2"></canvas>
+            <audio id = "audio2" class="audio" controls></audio>
             <label for="cb2">
                 <input type="checkbox" id="cb2" class="loop"/>
                 <span>⟳</span>
@@ -44,8 +44,8 @@
             <label class="label">teksti3</label>
             <br>
             <input type="button" id="button3" value="3" class="sideButton"/>
-            <canvas id="canvas3" width="200" height="50" style="border:1px solid #000000;"></canvas>
-            <audio id = "audio3" controls></audio>
+            <canvas id="canvas3"></canvas>
+            <audio id = "audio3" class="audio" controls></audio>
             <label for="cb3">
                 <input type="checkbox" id="cb3" class="loop"/>
                 <span>⟳</span>
@@ -56,8 +56,8 @@
             <label class="label">teksti4</label>
             <br>
             <input type="button" id="button4" value="4" class="sideButton"/>
-            <canvas id="canvas4" width="200" height="50" style="border:1px solid #000000;"></canvas>
-            <audio id = "audio4" controls></audio>
+            <canvas id="canvas4"></canvas>
+            <audio id = "audio4" class="audio" controls></audio>
             <label for="cb4">
                 <input type="checkbox" id="cb4" class="loop"/>
                 <span>⟳</span>
@@ -68,8 +68,8 @@
             <label class="label">teksti5</label>
             <br>
             <input type="button" id="button5" value="5" class="sideButton"/>
-            <canvas id="canvas5" width="200" height="50" style="border:1px solid #000000;"></canvas>
-            <audio id = "audio5" controls></audio>
+            <canvas id="canvas5"></canvas>
+            <audio id = "audio5" class="audio" controls></audio>
             <label for="cb5">
                 <input type="checkbox" id="cb5" class="loop"/>
                 <span>⟳</span>
@@ -80,8 +80,8 @@
             <label class="label">teksti6</label>
             <br>
             <input type="button" id="button6" value="6" class="sideButton"/>
-            <canvas id="canvas6" width="200" height="50" style="border:1px solid #000000;"></canvas>
-            <audio id = "audio6" controls></audio>
+            <canvas id="canvas6"></canvas>
+            <audio id = "audio6" class="audio" controls></audio>
             <label for="cb6">
                 <input type="checkbox" id="cb6" class="loop"/>
                 <span>⟳</span>
@@ -92,8 +92,8 @@
             <label class="label">teksti7</label>
             <br>
             <input type="button" id="button7" value="7" class="sideButton"/> 
-            <canvas id="canvas7" width="200" height="50" style="border:1px solid #000000;"></canvas>
-            <audio id = "audio7" controls></audio>
+            <canvas id="canvas7"></canvas>
+            <audio id = "audio7" class="audio" controls></audio>
             <label for="cb7">
                 <input type="checkbox" id="cb7" class="loop"/>
                 <span>⟳</span>
@@ -104,8 +104,8 @@
             <label class="label">teksti8</label>
             <br>
             <input type="button" id="button8" value="8" class="sideButton"/>
-            <canvas id="canvas8" width="200" height="50" style="border:1px solid #000000;"></canvas>
-            <audio id = "audio8" controls></audio>
+            <canvas id="canvas8"></canvas>
+            <audio id = "audio8" class="audio" controls></audio>
             <label for="cb8">
                 <input type="checkbox" id="cb8" class="loop"/>
                 <span>⟳</span>
@@ -116,8 +116,8 @@
             <label class="label">teksti9</label>
             <br>
             <input type="button" id="button9" value="9" class="sideButton"/>
-            <canvas id="canvas9" width="200" height="50" style="border:1px solid #000000;"></canvas>
-            <audio id = "audio9" controls></audio>
+            <canvas id="canvas9"></canvas>
+            <audio id = "audio9" class="audio" controls></audio>
             <label for="cb9">
                 <input type="checkbox" id="cb9" class="loop"/>
                 <span>⟳</span>
@@ -128,8 +128,8 @@
             <label class="label">teksti0</label>
             <br>
             <input type="button" id="button0" value="0" class="sideButton"/>
-            <canvas id="canvas0" width="200" height="50" style="border:1px solid #000000;"></canvas>
-            <audio id = "audio0" controls></audio>
+            <canvas id="canvas0"></canvas>
+            <audio id = "audio0" class="audio" controls></audio>
             <label for="cb10">
                 <input type="checkbox" id="cb10" class="loop"/>
                 <span>⟳</span>
@@ -176,8 +176,9 @@
         <p>You can search for sounds or use your local files. All searched sounds use the CC0 license.</p>
         <p>If you want to save a searched sound, drag it to a slot in My sounds. You can change the slot by dragging.</p>
         <p>If you want to delete a sound, drag it into the trash can.</p>
-        <p>You can play and pause a sound by pressing it's key on your keyboard.
-        You can change these keys by double-clicking the button and pressing the new key. All numbers and letters are allowed.</p>
+        <p>You can play and pause a sound by pressing its key on your keyboard.
+        You can change these keys by double-clicking the button and pressing the new key. All numbers and letters are allowed.
+        If the key is already in use, the keys will switch places.</p>
         <p>You can move between My sounds pages by clicking or pressing the left and right arrow keys on your keyboard.</p>
     </div>  
     <div id="noSpace">
