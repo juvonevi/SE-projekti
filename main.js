@@ -148,23 +148,18 @@ window.addEventListener("load", function() {
      * @param {number} j 
      */
     function getData(item_id, i, j) {    
-        const objectStore = db.transaction("audiofiles").objectStore("audiofiles");
-        objectStore.openCursor().addEventListener("success", (e) => {
-            const cursor = e.target.result;
-            if (cursor) {
-                if (cursor.value.id === item_id) {
-                    let file = cursor.value.file;
-                    let blob = window.URL || window.webkitURL;
-                    let url = blob.createObjectURL(file);
-                    allSounds[i][j] = {"name" : cursor.value.name, "sound" : url, "db" : item_id};
-                }
-                cursor.continue();      
-            } 
-            else {
-                console.log("Done");
-                localStorage.setItem("sounds" + (i+1),  JSON.stringify(allSounds[i]));
-                showMySounds();
-            }
+        const transaction = db.transaction(["audiofiles"], "readwrite");
+        const objectStore = transaction.objectStore("audiofiles");
+        const getRequest = objectStore.get(item_id);
+        transaction.addEventListener("complete", () => {
+            const result = getRequest.result;
+            let file = result.file;
+            let blob = window.URL || window.webkitURL;
+            let url = blob.createObjectURL(file);
+            allSounds[i][j] = {"name" : result.name, "sound" : url, "db" : item_id};
+            localStorage.setItem("sounds" + (i+1),  JSON.stringify(allSounds[i]));
+            //console.log("a" + (i+1), allSounds[i]);
+            showMySounds();
         });
     }
 
@@ -366,6 +361,8 @@ window.addEventListener("load", function() {
     showMySounds();
     function showMySounds() {
         let sounds = allSounds[allSounds.selected];
+        //console.log(allSounds.selected);
+        //console.log(sounds);
         let paikat = document.getElementsByClassName("aanirivi");
         for (let i = 0; i < paikat.length; i++) {
             if (!sounds[i] || typeof sounds[i] === "undefined") {
@@ -385,53 +382,62 @@ window.addEventListener("load", function() {
                 paikat[i].children[4].style.visibility = "visible";
                 paikat[i].children[4].setAttribute("src", sounds[i].sound);
                 paikat[i].children[5].style.visibility = "visible";
-                paikat[i].setAttribute("draggable", "true");
-                paikat[i].addEventListener("dragstart", function(e) {
-                    e.dataTransfer.setData("text/plain", sounds[i].name);
-                    e.dataTransfer.setData("text/html", sounds[i].sound);
-                    e.dataTransfer.setData("from", i);
-                    e.dataTransfer.setData("array", allSounds.selected);
-                    if (sounds[i].db) {
-                        e.dataTransfer.setData("db", sounds[i].db);
-                    }             
-                    e.dataTransfer.setDragImage(dragImg, 30, 26);
-                });       
+                paikat[i].setAttribute("draggable", "true");    
+                addDragListeners("aanirivi", sounds);   
             }
         }
         if (!searchVisible && allSounds.selected !== numOfPages-1) {
-            sounds = allSounds[allSounds.selected+1];
-            paikat = document.getElementsByClassName("aanirivi2");
-            for (let i = 0; i < paikat.length; i++) {
-                if (!sounds[i] || typeof sounds[i] === "undefined") {
-                    paikat[i].children[0].textContent = "Add sound";
-                    paikat[i].children[3].style.visibility = "hidden";
-                    paikat[i].children[4].style.visibility = "hidden";
-                    paikat[i].children[5].style.visibility = "hidden";
-                    paikat[i].removeAttribute("draggable");
+            let sounds2 = allSounds[allSounds.selected+1];
+            let paikat2 = document.getElementsByClassName("aanirivi2");
+            for (let i = 0; i < paikat2.length; i++) {
+                if (!sounds2[i] || typeof sounds2[i] === "undefined") {
+                    paikat2[i].children[0].textContent = "Add sound";
+                    paikat2[i].children[3].style.visibility = "hidden";
+                    paikat2[i].children[4].style.visibility = "hidden";
+                    paikat2[i].children[5].style.visibility = "hidden";
+                    paikat2[i].removeAttribute("draggable");
                 }
                 else {
-                    let name = sounds[i].name;
+                    let name = sounds2[i].name;
                     if (name.length > 40) {
                         name = name.substring(0, 40) + "...";
                     }
-                    paikat[i].children[0].textContent = name;
-                    paikat[i].children[3].style.visibility = "visible";
-                    paikat[i].children[4].style.visibility = "visible";
-                    paikat[i].children[4].setAttribute("src", sounds[i].sound);
-                    paikat[i].children[5].style.visibility = "visible";
-                    paikat[i].setAttribute("draggable", "true");
-                    paikat[i].addEventListener("dragstart", function(e) {
-                        e.dataTransfer.setData("text/plain", sounds[i].name);
-                        e.dataTransfer.setData("text/html", sounds[i].sound);
-                        e.dataTransfer.setData("from", i);
-                        e.dataTransfer.setData("array", allSounds.selected+1);
-                        if (sounds[i].db) {
-                            e.dataTransfer.setData("db", sounds[i].db);
-                        }             
-                        e.dataTransfer.setDragImage(dragImg, 30, 26);
-                    });       
+                    paikat2[i].children[0].textContent = name;
+                    paikat2[i].children[3].style.visibility = "visible";
+                    paikat2[i].children[4].style.visibility = "visible";
+                    paikat2[i].children[4].setAttribute("src", sounds2[i].sound);
+                    paikat2[i].children[5].style.visibility = "visible";
+                    paikat2[i].setAttribute("draggable", "true");
+                    addDragListeners("aanirivi2", sounds2);
                 }   
             }
+        }
+    }
+
+    /**
+     * Lisää dragstart event listenerit
+     * @param {String} soundSlotClass 
+     * @param {Object} sounds 
+     */
+    function addDragListeners(soundSlotClass, sounds) {
+        let paikat = document.getElementsByClassName(soundSlotClass);
+        for (let i = 0; i < paikat.length; i++) {
+            paikat[i].addEventListener("dragstart", function(e) {
+                e.stopImmediatePropagation();
+                e.dataTransfer.setData("text/plain", sounds[i].name);
+                e.dataTransfer.setData("text/html", sounds[i].sound);
+                e.dataTransfer.setData("from", i);
+                if (soundSlotClass === "aanirivi") {
+                    e.dataTransfer.setData("array", allSounds.selected);
+                }
+                else {
+                    e.dataTransfer.setData("array", allSounds.selected+1);
+                }
+                if (sounds[i].db) {
+                    e.dataTransfer.setData("db", sounds[i].db);
+                }             
+                e.dataTransfer.setDragImage(dragImg, 30, 26);
+            });
         }
     }
 
@@ -498,64 +504,76 @@ window.addEventListener("load", function() {
             paikat[i].addEventListener("drop", function(e) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
+                console.log("drop");
                 let from = e.dataTransfer.getData("from");
                 let array = parseInt(e.dataTransfer.getData("array"));
-                let nimi = e.dataTransfer.getData("text/plain");
-                let aani = e.dataTransfer.getData("text/html");
                 let db = e.dataTransfer.getData("db");
+                let nimi = e.dataTransfer.getData("text/plain");
+                let aani = e.dataTransfer.getData("text/html");    
                 let sounds = allSounds[allSounds.selected];
-                if (!searchVisible) { 
-                    if (from) {
-                        if (array % 2 === 0 && paikat[i].classList.contains("aanirivi2")) {
-                            if (typeof allSounds[array+1][i] !== "undefined") {
-                                allSounds[array][from] = {"name" : sounds[i].name, "sound" : sounds[i].sound};
+                if (!searchVisible && (array !== allSounds.selected || paikat[i].classList.contains("aanirivi2"))) { 
+                    if (array % 2 === 0 && paikat[i].classList.contains("aanirivi2")) {
+                        if (typeof allSounds[array+1][i] !== "undefined") {
+                            if (allSounds[array][i].db) {
+                                allSounds[array][from] = {"name" : allSounds[array][i].name, "sound" : allSounds[array][i].sound, "db" : allSounds[array][i].db};
                             }
-                            else {
-                                allSounds[array][from] = undefined;
-                            }
-                            if (db) {
-                                allSounds[array+1][i] = {"name" : nimi, "sound" : aani, "db" : db};
-                            }
-                            else {
-                                allSounds[array+1][i] = {"name" : nimi, "sound" : aani};
-                            }
-                            localStorage.setItem("sounds" + (array+2),  JSON.stringify(allSounds[array+1]));
-                        }
-                        else if (array % 2 !== 0 && paikat[i].classList.contains("aanirivi")) {
-                            if (typeof allSounds[array-1][i] !== "undefined") {
-                                allSounds[array][from] = {"name" : sounds[i].name, "sound" : sounds[i].sound};
-                            }
-                            else {
-                                allSounds[array][from] = undefined;
-                            }
-                            if (db) {
-                                allSounds[array-1][i] = {"name" : nimi, "sound" : aani, "db" : db};
-                            }
-                            else {
-                                allSounds[array-1][i] = {"name" : nimi, "sound" : aani};
-                            }
-                            localStorage.setItem("sounds" + array,  JSON.stringify(allSounds[array-1]));
+                            allSounds[array][from] = {"name" : sounds[i].name, "sound" : sounds[i].sound};
                         }
                         else {
-                            if (typeof allSounds[array][i] !== "undefined") {
-                                allSounds[array][from] = {"name" : allSounds[array][i].name, "sound" : allSounds[array][i].sound};
+                            allSounds[array][from] = undefined;
+                        }
+                        if (db) {
+                            allSounds[array+1][i] = {"name" : nimi, "sound" : aani, "db" : db};
+                        }
+                        else {
+                            allSounds[array+1][i] = {"name" : nimi, "sound" : aani};
+                        }
+                        console.log(allSounds[array+1]);
+                        localStorage.setItem("sounds" + (array+2),  JSON.stringify(allSounds[array+1]));
+                    }
+                    else if (array % 2 !== 0 && paikat[i].classList.contains("aanirivi")) {
+                        if (typeof allSounds[array-1][i] !== "undefined") {
+                            if (allSounds[array][i].db) {
+                                allSounds[array][from] = {"name" : allSounds[array][i].name, "sound" : allSounds[array][i].sound, "db" : allSounds[array][i].db};
                             }
-                            else {
-                                allSounds[array][from] = undefined;
+                            allSounds[array][from] = {"name" : allSounds[array][i].name, "sound" : allSounds[array][i].sound};
+                        }
+                        else {
+                            allSounds[array][from] = undefined;
+                        }
+                        if (db) {
+                            allSounds[array-1][i] = {"name" : nimi, "sound" : aani, "db" : db};
+                        }
+                        else {
+                            allSounds[array-1][i] = {"name" : nimi, "sound" : aani};
+                        }
+                        console.log(allSounds[array-1]);
+                        localStorage.setItem("sounds" + array,  JSON.stringify(allSounds[array-1]));
+                    }
+                    else {
+                        if (typeof allSounds[array][i] !== "undefined") {
+                            if (allSounds[array][i].db) {
+                                allSounds[array][from] = {"name" : allSounds[array][i].name, "sound" : allSounds[array][i].sound, "db" : allSounds[array][i].db};
                             }
-                            if (db) {
-                                allSounds[array][i] = {"name" : nimi, "sound" : aani, "db" : db};                             
-                            }
-                            else {
-                                allSounds[array][i] = {"name" : nimi, "sound" : aani};
-                            }
+                            allSounds[array][from] = {"name" : allSounds[array][i].name, "sound" : allSounds[array][i].sound};
+                        }
+                        else {
+                            allSounds[array][from] = undefined;
+                        }
+                        if (db) {
+                            allSounds[array][i] = {"name" : nimi, "sound" : aani, "db" : db};                             
+                        }
+                        else {
+                            allSounds[array][i] = {"name" : nimi, "sound" : aani};
                         }
                     }
+                    console.log(allSounds[array]);
+                    localStorage.setItem("sounds" + (array+1),  JSON.stringify(allSounds[array]));
                 }
                 else {
                     if (from) {
                         if (typeof sounds[i] !== "undefined") {
-                            if (db) {
+                            if (sounds[i].db) {
                                 sounds[from] = {"name" : sounds[i].name, "sound" : sounds[i].sound, "db" : sounds[i].db};   
                             }
                             sounds[from] = {"name" : sounds[i].name, "sound" : sounds[i].sound};
@@ -569,14 +587,14 @@ window.addEventListener("load", function() {
                     }
                     else {
                         sounds[i] = {"name" : nimi, "sound" : aani};    
-                    }      
-                }
-                          
+                    }     
+                    console.log(sounds);
+                    localStorage.setItem("sounds" + (allSounds.selected+1),  JSON.stringify(allSounds[allSounds.selected]));
+                }     
                 showMySounds();
                 let audio = paikat[i].children[4];
                 audio.src = aani;
-                localStorage.setItem("sounds" + (array+1),  JSON.stringify(allSounds[array]));
-                console.log(localStorage.getItem("sounds" + (array+1)));
+                
                 return;
             });
         }
@@ -716,6 +734,11 @@ window.addEventListener("load", function() {
             }
             toggleButton.textContent = "Hide Search"; 
             searchVisible = true;
+            let buttons2 = document.querySelectorAll("#preset > input");
+            for (let j = 1; j < buttons2.length-1; j++) {
+                buttons2[j].classList.remove("selectedPage");
+            }
+            buttons2[allSounds.selected+1].classList.add("selectedPage"); 
         }
     }
 
@@ -1029,16 +1052,18 @@ window.addEventListener("load", function() {
                 }
             }        
         }
-        let audios2 = document.querySelectorAll(".aanirivi2 > audio");
-        for (let i = 0; i < myKeys2.length; i++) {
-            if (key === myKeys2[i]) {
-                if (audios2[i].paused) {
-                    audios2[i].play();
-                }
-                else {
-                    audios2[i].pause();
-                }
-            }        
+        if (!searchVisible) {
+            let audios2 = document.querySelectorAll(".aanirivi2 > audio");
+            for (let i = 0; i < myKeys2.length; i++) {
+                if (key === myKeys2[i]) {
+                    if (audios2[i].paused) {
+                        audios2[i].play();
+                    }
+                    else {
+                        audios2[i].pause();
+                    }
+                }        
+            }
         }
     }  
 });
