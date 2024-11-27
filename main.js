@@ -924,7 +924,7 @@ window.addEventListener("load", function() {
             return;
         }
         this.lastSearched = syote;
-     
+        
         if (localStorage.getItem("haetutAanet")) {
             let haetutAanet = localStorage.getItem("haetutAanet");
             if(syote === haetutAanet[0]) {
@@ -934,6 +934,7 @@ window.addEventListener("load", function() {
         }
         searchsound(syote).then(result => {
             // Palautetaan äänilinkki
+
             if (result.ok) {
                 result.json().then((json) => { 
                     console.log(json.results)
@@ -941,9 +942,18 @@ window.addEventListener("load", function() {
                 })
             }
             else {
-                // TODO: Jokin ilmoitusjärjestelmä?
-                console.log(result.statusText)
+                // Not found notice
+                const info = document.createElement("div");
+                info.textContent = "Not found nothing";
+                info.setAttribute("value", "info");
+                info.setAttribute("id", "info");
+                info.addEventListener("click", function() {
+                    info.remove();
+                });
+                const hakupalkki = document.getElementById("hakupalkki");
+                hakupalkki.appendChild(info);
             }
+            
         })
     }
 
