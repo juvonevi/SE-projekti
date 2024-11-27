@@ -383,7 +383,7 @@ window.addEventListener("load", function() {
                 paikat[i].children[4].setAttribute("src", sounds[i].sound);
                 paikat[i].children[5].style.visibility = "visible";
                 paikat[i].setAttribute("draggable", "true");    
-                addDragListeners("aanirivi", sounds);   
+                addDragListeners("aanirivi", 1);   
             }
         }
         if (!searchVisible && allSounds.selected !== numOfPages-1) {
@@ -408,7 +408,7 @@ window.addEventListener("load", function() {
                     paikat2[i].children[4].setAttribute("src", sounds2[i].sound);
                     paikat2[i].children[5].style.visibility = "visible";
                     paikat2[i].setAttribute("draggable", "true");
-                    addDragListeners("aanirivi2", sounds2);
+                    addDragListeners("aanirivi2", 2);
                 }   
             }
         }
@@ -417,12 +417,20 @@ window.addEventListener("load", function() {
     /**
      * Lisää dragstart event listenerit
      * @param {String} soundSlotClass 
-     * @param {Object} sounds 
+     * @param {number} page
      */
-    function addDragListeners(soundSlotClass, sounds) {
+    function addDragListeners(soundSlotClass, page) {
         let paikat = document.getElementsByClassName(soundSlotClass);
         for (let i = 0; i < paikat.length; i++) {
             paikat[i].addEventListener("dragstart", function(e) {
+                let sounds;
+                if (page === 1) {
+                    sounds = allSounds[allSounds.selected];
+                }
+                else {
+                    sounds = allSounds[allSounds.selected+1];
+                }
+                console.log(allSounds.selected);
                 e.stopImmediatePropagation();
                 e.dataTransfer.setData("text/plain", sounds[i].name);
                 e.dataTransfer.setData("text/html", sounds[i].sound);
@@ -820,6 +828,15 @@ window.addEventListener("load", function() {
         for (let i = 1; i < buttons2.length-1; i++) {
             buttons2[i].addEventListener("click", buttonPressed2);
             function buttonPressed2() {
+                if (!searchVisible && allSounds.selected === numOfPages-1 && numOfPages % 2 !== 0 && i !== buttons2.length-2) {
+                    createMoreAudioSpaces();
+                }
+                if (!searchVisible && allSounds.selected !== numOfPages-1 && numOfPages % 2 !== 0 && i === buttons2.length-2) {
+                    let sounds2 = document.getElementsByClassName("aanirivi2");
+                    while (sounds2[0]) {
+                        sounds2[0].remove();
+                    }
+                }
                 allSounds.selected = i-1;
                 if (!searchVisible && allSounds.selected % 2 !== 0) {
                     allSounds.selected = allSounds.selected - 1;
@@ -845,6 +862,7 @@ window.addEventListener("load", function() {
 
     function buttonPressedR() {
         let buttons2 = document.querySelectorAll("#preset > input");
+        let oldSelected = allSounds.selected;
         if (allSounds.selected === numOfPages-1) {
             allSounds.selected = 0;
         }
@@ -864,11 +882,21 @@ window.addEventListener("load", function() {
         if (!searchVisible && allSounds.selected !== numOfPages-1) {
             buttons2[allSounds.selected+2].classList.add("selectedPage");
         }
+        if (!searchVisible && allSounds.selected === numOfPages-1 && numOfPages % 2 !== 0 && oldSelected !== numOfPages-1) {
+            let sounds2 = document.getElementsByClassName("aanirivi2");
+            while (sounds2[0]) {
+                sounds2[0].remove();
+            }
+        }
+        if (!searchVisible && allSounds.selected !== numOfPages-1 && numOfPages % 2 !== 0 && oldSelected === numOfPages-1) {
+            createMoreAudioSpaces();
+        }
         showMySounds();
     }
 
     function buttonPressedL() {
         let buttons2 = document.querySelectorAll("#preset > input");
+        let oldSelected = allSounds.selected;
         if (allSounds.selected === 0) {
             allSounds.selected = numOfPages-1;
         }
@@ -887,6 +915,15 @@ window.addEventListener("load", function() {
         buttons2[allSounds.selected+1].classList.add("selectedPage");
         if (!searchVisible && allSounds.selected !== numOfPages-1) {
             buttons2[allSounds.selected+2].classList.add("selectedPage");
+        }
+        if (!searchVisible && allSounds.selected === numOfPages-1 && numOfPages % 2 !== 0 && oldSelected !== numOfPages-1) {
+            let sounds2 = document.getElementsByClassName("aanirivi2");
+            while (sounds2[0]) {
+                sounds2[0].remove();
+            }
+        }
+        if (!searchVisible && allSounds.selected !== numOfPages-1 && numOfPages % 2 !== 0 && oldSelected === numOfPages-1) {
+            createMoreAudioSpaces();
         }
         showMySounds();
     }
