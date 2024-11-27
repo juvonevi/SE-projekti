@@ -7,8 +7,8 @@
  * Tapahtuman kuuntelija sivun lataamiselle
  */
 window.addEventListener("load", function() {
-    const numOfPages = 5;
-    let searchVisible = true;
+    const numOfPages = 5; //My sounds-sivujen määrä
+    let searchVisible = true; 
     let allSounds = [];
     for (let i = 0; i < numOfPages; i++) {
         allSounds[i] = Array(10);
@@ -97,11 +97,11 @@ window.addEventListener("load", function() {
 
     /**
      * Lisää äänen indexed db:hen ja local storageen
-     * @param {String} filename 
-     * @param {File} audiofile 
-     * @param {number} i 
-     * @param {String} sound 
-     * @param {number} j 
+     * @param {String} filename tiedoston nimi
+     * @param {File} audiofile äänitiedosto
+     * @param {number} i äänen paikka arrayssa
+     * @param {String} sound äänilinkki
+     * @param {number} j äänen array
      */
     function addData(filename, audiofile, i, sound, j) {
         const newItem = { name: filename, file: audiofile };
@@ -142,10 +142,11 @@ window.addEventListener("load", function() {
     }
 
     /**
-     * Hakee äänen indexed db:stä id:n perusteella
-     * @param {number} item_id 
-     * @param {number} i 
-     * @param {number} j 
+     * Hakee äänen indexed db:stä id:n perusteella, luo sille uuden linkin
+     * ja lisää sen local storageen
+     * @param {number} item_id id jolla haetaan
+     * @param {number} i äänen array
+     * @param {number} j äänen paikka arrayssa
      */
     function getData(item_id, i, j) {    
         const transaction = db.transaction(["audiofiles"], "readwrite");
@@ -158,13 +159,13 @@ window.addEventListener("load", function() {
             let url = blob.createObjectURL(file);
             allSounds[i][j] = {"name" : result.name, "sound" : url, "db" : item_id};
             localStorage.setItem("sounds" + (i+1),  JSON.stringify(allSounds[i]));
-            //console.log("a" + (i+1), allSounds[i]);
             showMySounds();
         });
     }
 
     let changeThemeOpen = false;
     document.getElementById("changeTheme").addEventListener("click", chooseTheme);
+
     /**
      * Avaa teemanvaihtovalikon
      */
@@ -266,6 +267,7 @@ window.addEventListener("load", function() {
         changeForOtherBrowsers();
         firefox = false;
     }
+
     /**
      * Muuttaa ulkoasua sopivammaksi Chromelle
      */
@@ -302,7 +304,6 @@ window.addEventListener("load", function() {
     /**
      * Hakee käyttäjän äänet local storagesta
      */
-    //getStoredSounds();
     function getStoredSounds() {
         for (let i = 0; i < numOfPages; i++) {
             let sounds = JSON.parse(localStorage.getItem("sounds"+(i+1)));
@@ -344,6 +345,10 @@ window.addEventListener("load", function() {
     }
 
     audioEventListeners("audio");
+    /**
+     * Lisää audioelementteihin kuuntelijat
+     * @param {String} audioClass 
+     */
     function audioEventListeners(audioClass) {
         // Odottaa että ääni on saapunut ja sitten piirtää graafin
         let audios = document.getElementsByClassName(audioClass);
@@ -355,15 +360,27 @@ window.addEventListener("load", function() {
         }      
     }
     
+    showMySounds();
     /**
      * Näyttää käyttäjän äänet sivulla
      */
-    showMySounds();
     function showMySounds() {
-        let sounds = allSounds[allSounds.selected];
-        //console.log(allSounds.selected);
-        //console.log(sounds);
-        let paikat = document.getElementsByClassName("aanirivi");
+        //Näyttää valitun sivun äänet
+        showMySounds2(allSounds.selected, "aanirivi");
+        //Jos näkyvissä 20 ääntä ja valittuna ei ole viimeinen sivu, näytetään myös seuraavan sivun äänet
+        if (!searchVisible && allSounds.selected !== numOfPages-1) {
+            showMySounds2(allSounds.selected+1, "aanirivi2");
+        }
+    }
+
+    /**
+     * Näyttää käyttäjän äänet sivulla
+     * @param {number} array 
+     * @param {String} soundSlotClass 
+     */
+    function showMySounds2(array, soundSlotClass) {
+        let sounds = allSounds[array];
+        let paikat = document.getElementsByClassName(soundSlotClass);
         for (let i = 0; i < paikat.length; i++) {
             if (!sounds[i] || typeof sounds[i] === "undefined") {
                 paikat[i].children[0].textContent = "Add sound";
@@ -383,33 +400,7 @@ window.addEventListener("load", function() {
                 paikat[i].children[4].setAttribute("src", sounds[i].sound);
                 paikat[i].children[5].style.visibility = "visible";
                 paikat[i].setAttribute("draggable", "true");    
-                addDragListeners("aanirivi", 1);   
-            }
-        }
-        if (!searchVisible && allSounds.selected !== numOfPages-1) {
-            let sounds2 = allSounds[allSounds.selected+1];
-            let paikat2 = document.getElementsByClassName("aanirivi2");
-            for (let i = 0; i < paikat2.length; i++) {
-                if (!sounds2[i] || typeof sounds2[i] === "undefined") {
-                    paikat2[i].children[0].textContent = "Add sound";
-                    paikat2[i].children[3].style.visibility = "hidden";
-                    paikat2[i].children[4].style.visibility = "hidden";
-                    paikat2[i].children[5].style.visibility = "hidden";
-                    paikat2[i].removeAttribute("draggable");
-                }
-                else {
-                    let name = sounds2[i].name;
-                    if (name.length > 40) {
-                        name = name.substring(0, 40) + "...";
-                    }
-                    paikat2[i].children[0].textContent = name;
-                    paikat2[i].children[3].style.visibility = "visible";
-                    paikat2[i].children[4].style.visibility = "visible";
-                    paikat2[i].children[4].setAttribute("src", sounds2[i].sound);
-                    paikat2[i].children[5].style.visibility = "visible";
-                    paikat2[i].setAttribute("draggable", "true");
-                    addDragListeners("aanirivi2", 2);
-                }   
+                addDragListeners(soundSlotClass, array);   
             }
         }
     }
@@ -419,18 +410,11 @@ window.addEventListener("load", function() {
      * @param {String} soundSlotClass 
      * @param {number} page
      */
-    function addDragListeners(soundSlotClass, page) {
+    function addDragListeners(soundSlotClass, array) {
         let paikat = document.getElementsByClassName(soundSlotClass);
         for (let i = 0; i < paikat.length; i++) {
             paikat[i].addEventListener("dragstart", function(e) {
-                let sounds;
-                if (page === 1) {
-                    sounds = allSounds[allSounds.selected];
-                }
-                else {
-                    sounds = allSounds[allSounds.selected+1];
-                }
-                console.log(allSounds.selected);
+                let sounds = allSounds[array];
                 e.stopImmediatePropagation();
                 e.dataTransfer.setData("text/plain", sounds[i].name);
                 e.dataTransfer.setData("text/html", sounds[i].sound);
@@ -474,8 +458,10 @@ window.addEventListener("load", function() {
      */
     prepareDrop();
     function prepareDrop() {
+        //Äänipaikat
         soundSlotDrop("aanirivi");
 
+        //Roskakori
         let trash = document.getElementById("delete");
         trash.addEventListener("dragover", function(e) {
             e.preventDefault();
@@ -483,7 +469,6 @@ window.addEventListener("load", function() {
         });
         trash.addEventListener("drop", function(e) {
             e.preventDefault();
-            //let sounds = allSounds[allSounds.selected];
             let from = e.dataTransfer.getData("from");
             let array = e.dataTransfer.getData("array");
             if (!from) {
@@ -500,6 +485,7 @@ window.addEventListener("load", function() {
 
     /**
      * Mahdollistaa äänien droppauksen äänilistaan
+     * @param {String} slotClass äänipaikan luokka
      */
     function soundSlotDrop(slotClass) {
         let paikat = document.getElementsByClassName(slotClass);
@@ -512,14 +498,15 @@ window.addEventListener("load", function() {
             paikat[i].addEventListener("drop", function(e) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
-                console.log("drop");
                 let from = e.dataTransfer.getData("from");
                 let array = parseInt(e.dataTransfer.getData("array"));
                 let db = e.dataTransfer.getData("db");
                 let nimi = e.dataTransfer.getData("text/plain");
                 let aani = e.dataTransfer.getData("text/html");    
                 let sounds = allSounds[allSounds.selected];
+                //Mennään tänne kaikissa muissa tapauksissa paitsi jos siirretään ääniä aanirivi-elementistä toiseen
                 if (!searchVisible && (array !== allSounds.selected || paikat[i].classList.contains("aanirivi2"))) { 
+                    //Mennään tänne jos siirretään edeltävästä arraysta seuraavaan
                     if (array % 2 === 0 && paikat[i].classList.contains("aanirivi2")) {
                         if (typeof allSounds[array+1][i] !== "undefined") {
                             if (allSounds[array][i].db) {
@@ -539,6 +526,7 @@ window.addEventListener("load", function() {
                         console.log(allSounds[array+1]);
                         localStorage.setItem("sounds" + (array+2),  JSON.stringify(allSounds[array+1]));
                     }
+                    //Mennään tänne jos siirretään jälkimmäisestä arraysta edelliseen
                     else if (array % 2 !== 0 && paikat[i].classList.contains("aanirivi")) {
                         if (typeof allSounds[array-1][i] !== "undefined") {
                             if (allSounds[array][i].db) {
@@ -558,6 +546,7 @@ window.addEventListener("load", function() {
                         console.log(allSounds[array-1]);
                         localStorage.setItem("sounds" + array,  JSON.stringify(allSounds[array-1]));
                     }
+                    //Mennään tänne jos siirretään jälkimmäisestä arraysta itseensä
                     else {
                         if (typeof allSounds[array][i] !== "undefined") {
                             if (allSounds[array][i].db) {
@@ -578,6 +567,7 @@ window.addEventListener("load", function() {
                     console.log(allSounds[array]);
                     localStorage.setItem("sounds" + (array+1),  JSON.stringify(allSounds[array]));
                 }
+                //Siirrot aanirivista toiseen
                 else {
                     if (from) {
                         if (typeof sounds[i] !== "undefined") {
@@ -602,8 +592,6 @@ window.addEventListener("load", function() {
                 showMySounds();
                 let audio = paikat[i].children[4];
                 audio.src = aani;
-                
-                return;
             });
         }
     }
@@ -796,6 +784,11 @@ window.addEventListener("load", function() {
         }
     }
 
+    /**
+     * Lisää ääninapeille kuuntelijat
+     * @param {String} buttonClass 
+     * @param {String} audioClass 
+     */
     function soundButtonListeners(buttonClass, audioClass) {
         let buttons = document.getElementsByClassName(buttonClass);
         let audios = document.getElementsByClassName(audioClass);
@@ -817,111 +810,102 @@ window.addEventListener("load", function() {
         }
     }
 
-    //Kuuntelee nappeja
     addButtonListeners();
+    /**
+     * Lisää napeille kuuntelijat
+     */
     function addButtonListeners() {
         //My sounds napit
         soundButtonListeners("sideButton", "audio");
         
-        //Presettienvaihtonapit
+        //Sivujenvaihtonapit
         let buttons2 = document.querySelectorAll("#preset > input");
         for (let i = 1; i < buttons2.length-1; i++) {
             buttons2[i].addEventListener("click", buttonPressed2);
             function buttonPressed2() {
-                if (!searchVisible && allSounds.selected === numOfPages-1 && numOfPages % 2 !== 0 && i !== buttons2.length-2) {
-                    createMoreAudioSpaces();
-                }
-                if (!searchVisible && allSounds.selected !== numOfPages-1 && numOfPages % 2 !== 0 && i === buttons2.length-2) {
-                    let sounds2 = document.getElementsByClassName("aanirivi2");
-                    while (sounds2[0]) {
-                        sounds2[0].remove();
-                    }
-                }
+                let oldSelected = allSounds.selected;
+                //Asetetaan valittu sivu napin avulla
                 allSounds.selected = i-1;
+                //Jos haku on piilossa, pidetään valittu sivu parillisena
                 if (!searchVisible && allSounds.selected % 2 !== 0) {
                     allSounds.selected = allSounds.selected - 1;
                 }
-                for (let j = 1; j < buttons2.length-1; j++) {
-                    buttons2[j].classList.remove("selectedPage");
-                }
-                buttons2[i].classList.add("selectedPage");
-                if (!searchVisible && allSounds.selected !== numOfPages-1) {
-                    if (i % 2 !== 0) {
-                        buttons2[i+1].classList.add("selectedPage");
-                    }
-                    else {
-                        buttons2[i-1].classList.add("selectedPage");
-                    }
-                }
-                showMySounds();
+                pageButton(oldSelected);
             }
         }
         buttons2[0].addEventListener("click", buttonPressedL);   
         buttons2[buttons2.length-1].addEventListener("click", buttonPressedR);
     }
 
+    /**
+     * Käsittelee oikealle osoittavan nuolinapin painamisen
+     */
     function buttonPressedR() {
-        let buttons2 = document.querySelectorAll("#preset > input");
         let oldSelected = allSounds.selected;
+        //Jos valittuna viimeinen, siirrytään ensimmäiseen
         if (allSounds.selected === numOfPages-1) {
             allSounds.selected = 0;
         }
+        //Jos haku ei näkyvissä ja valittuna toiseksi viimeinen ja sivuja parillinen määrä, siirrytään ensimmäiseen
         else if (!searchVisible && numOfPages % 2 !== 0 && allSounds.selected === numOfPages-2) {
             allSounds.selected = 0;
         }
+        //Muulloin siirrytään 1 sivu eteenpäin, ja haun ollessa piilossa mahd. 2, jotta valittu sivu pysyy parillisena
         else {
             allSounds.selected = allSounds.selected+1;
             if (!searchVisible && allSounds.selected % 2 !== 0) {
                 allSounds.selected = allSounds.selected + 1;
             }
-        }            
-        for (let j = 1; j < buttons2.length-1; j++) {
-            buttons2[j].classList.remove("selectedPage");
-        }
-        buttons2[allSounds.selected+1].classList.add("selectedPage");
-        if (!searchVisible && allSounds.selected !== numOfPages-1) {
-            buttons2[allSounds.selected+2].classList.add("selectedPage");
-        }
-        if (!searchVisible && allSounds.selected === numOfPages-1 && numOfPages % 2 !== 0 && oldSelected !== numOfPages-1) {
-            let sounds2 = document.getElementsByClassName("aanirivi2");
-            while (sounds2[0]) {
-                sounds2[0].remove();
-            }
-        }
-        if (!searchVisible && allSounds.selected !== numOfPages-1 && numOfPages % 2 !== 0 && oldSelected === numOfPages-1) {
-            createMoreAudioSpaces();
-        }
-        showMySounds();
+        }      
+        pageButton(oldSelected);
     }
 
+    /**
+     * Käsittelee vasemmalle osoittavan nuolinapin painamisen
+     */
     function buttonPressedL() {
-        let buttons2 = document.querySelectorAll("#preset > input");
         let oldSelected = allSounds.selected;
+        //Jos valittuna ensimmäinen, siirrytään viimeiseen
         if (allSounds.selected === 0) {
             allSounds.selected = numOfPages-1;
         }
+        //Jos haku ei näkyvissä ja valittuna ensimmäinen ja sivuja parillinen määrä, siirrytään toiseksi viimeiseen
         else if (!searchVisible && allSounds.selected === 0 && numOfPages % 2 === 0) {
             allSounds.selected = numOfPages-2;
         }
+        //Muulloin siirrytään 1 sivu taaksepäin, ja haun ollessa piilossa mahd. 2, jotta valittu sivu pysyy parillisena
         else {
             allSounds.selected = allSounds.selected-1;
             if (!searchVisible && allSounds.selected % 2 !== 0) {
                 allSounds.selected = allSounds.selected - 1;
             }
-        }            
+        }
+        pageButton(oldSelected);
+    }
+
+    /**
+     * Tekee sivua vaihtavien nappien yhteisiä asioita
+     */
+    function pageButton(oldSelected) {
+        let buttons2 = document.querySelectorAll("#preset > input");
+        //Poistetaan napeista tyyli            
         for (let j = 1; j < buttons2.length-1; j++) {
             buttons2[j].classList.remove("selectedPage");
         }
+        //Lisätään valittuna olevaan nappiin tyyli
         buttons2[allSounds.selected+1].classList.add("selectedPage");
+        //Jos haku piilossa ja valittuna ei ole viimeinen sivu, lisätään tyyli myös seuraavaan nappiin
         if (!searchVisible && allSounds.selected !== numOfPages-1) {
             buttons2[allSounds.selected+2].classList.add("selectedPage");
         }
+        //Jos sivuja on pariton määrä ja mennään viimeiselle sivulle haun ollessa piilossa, poistetaan ylimääräiset äänipaikat
         if (!searchVisible && allSounds.selected === numOfPages-1 && numOfPages % 2 !== 0 && oldSelected !== numOfPages-1) {
             let sounds2 = document.getElementsByClassName("aanirivi2");
             while (sounds2[0]) {
                 sounds2[0].remove();
             }
         }
+        //Jos sivuja on pariton määrä ja poistutaan viimeiseltä sivulta haun ollessa piilossa, lisätään äänipaikkoja
         if (!searchVisible && allSounds.selected !== numOfPages-1 && numOfPages % 2 !== 0 && oldSelected === numOfPages-1) {
             createMoreAudioSpaces();
         }
@@ -963,6 +947,7 @@ window.addEventListener("load", function() {
         })
     }
 
+    //Hyväksytyt näppäimet
     const keys = ['1','2','3','4','5','6','7','8','9','0','q','w','e','r','t','y','u','i','o','p','a','s','d','f','g','h','j','k','l','z','x','c','v','b','n','m'];
     
     /**
@@ -1020,6 +1005,7 @@ window.addEventListener("load", function() {
             button.classList.remove("nappiValittuna");
         }
 
+        //Hakee napin paikan siinä arrayssa missä se on
         let buttonNumber;
         if (button.classList.contains("sideButton")) {
             let buttons = document.getElementsByClassName("sideButton");
@@ -1047,6 +1033,7 @@ window.addEventListener("load", function() {
             if (pressedKey ===  keys[i]) {
                 let buttons = document.getElementsByClassName("sideButton");
                 let buttons2 = document.getElementsByClassName("sideButton2");
+                //Jos nappi löytyy jo jommasta kummasta listasta, vaihdetaan nappien paikat
                 if (myKeys.includes(pressedKey)) {
                     let oldLocation = myKeys.indexOf(pressedKey);
                     buttons[oldLocation].value = button.value;
@@ -1055,7 +1042,6 @@ window.addEventListener("load", function() {
                 if (myKeys2.includes(pressedKey)) {
                     let oldLocation = myKeys2.indexOf(pressedKey);
                     if (!searchVisible) {
-                        let buttons2 = document.getElementsByClassName("sideButton2");
                         buttons2[oldLocation].value = button.value;
                     }
                     myKeys2[oldLocation] = button.value;
@@ -1089,6 +1075,7 @@ window.addEventListener("load", function() {
                 }
             }        
         }
+        //Tarkistaa myKeys2-avaimet vain jos näkyvillä 20 ääntä
         if (!searchVisible) {
             let audios2 = document.querySelectorAll(".aanirivi2 > audio");
             for (let i = 0; i < myKeys2.length; i++) {
