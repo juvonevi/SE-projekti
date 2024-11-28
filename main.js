@@ -365,6 +365,7 @@ window.addEventListener("load", function() {
      * Näyttää käyttäjän äänet sivulla
      */
     function showMySounds() {
+        console.log(allSounds.selected);
         //Näyttää valitun sivun äänet
         showMySounds2(allSounds.selected, "aanirivi");
         //Jos näkyvissä 20 ääntä ja valittuna ei ole viimeinen sivu, näytetään myös seuraavan sivun äänet
@@ -391,6 +392,8 @@ window.addEventListener("load", function() {
             }
             else {
                 let name = sounds[i].name;
+                let sound = sounds[i].sound;
+                let db = sounds[i].db;
                 if (name.length > 40) {
                     name = name.substring(0, 40) + "...";
                 }
@@ -399,38 +402,38 @@ window.addEventListener("load", function() {
                 paikat[i].children[4].style.visibility = "visible";
                 paikat[i].children[4].setAttribute("src", sounds[i].sound);
                 paikat[i].children[5].style.visibility = "visible";
-                paikat[i].setAttribute("draggable", "true");    
-                addDragListeners(soundSlotClass, array);   
+                paikat[i].setAttribute("draggable", "true");
+                addDragstartEvent(paikat[i], sounds[i].name, sounds[i].sound, i, soundSlotClass, db);  
+                 
             }
         }
     }
 
     /**
-     * Lisää dragstart event listenerit
-     * @param {String} soundSlotClass 
-     * @param {number} page
+     * Lisää elementtiin dragstart eventin
+     * @param {*} element elementti johon lisätään
+     * @param {*} name äänen nimi
+     * @param {*} sound äänen linkki
+     * @param {*} i äänen paikka arrayssa
+     * @param {*} soundSlotClass äänipaikan luokka
+     * @param {*} db äänen paikka indexed db:ssä (jos ääni tiedostosta)
      */
-    function addDragListeners(soundSlotClass, array) {
-        let paikat = document.getElementsByClassName(soundSlotClass);
-        for (let i = 0; i < paikat.length; i++) {
-            paikat[i].addEventListener("dragstart", function(e) {
-                let sounds = allSounds[array];
-                e.stopImmediatePropagation();
-                e.dataTransfer.setData("text/plain", sounds[i].name);
-                e.dataTransfer.setData("text/html", sounds[i].sound);
-                e.dataTransfer.setData("from", i);
-                if (soundSlotClass === "aanirivi") {
-                    e.dataTransfer.setData("array", allSounds.selected);
-                }
-                else {
-                    e.dataTransfer.setData("array", allSounds.selected+1);
-                }
-                if (sounds[i].db) {
-                    e.dataTransfer.setData("db", sounds[i].db);
-                }             
-                e.dataTransfer.setDragImage(dragImg, 30, 26);
-            });
-        }
+    function addDragstartEvent(element, name, sound, i, soundSlotClass, db) {
+        element.addEventListener("dragstart", function(e) {
+            e.dataTransfer.setData("text/plain", name);
+            e.dataTransfer.setData("text/html", sound);
+            e.dataTransfer.setData("from", i);
+            if (soundSlotClass === "aanirivi") {
+                e.dataTransfer.setData("array", allSounds.selected);
+            }
+            else {
+                e.dataTransfer.setData("array", allSounds.selected+1);
+            }
+            if (db) {
+                e.dataTransfer.setData("db", db);
+            }             
+            e.dataTransfer.setDragImage(dragImg, 30, 26);
+        });    
     }
 
     /**
@@ -500,12 +503,40 @@ window.addEventListener("load", function() {
                 e.stopImmediatePropagation();
                 let from = e.dataTransfer.getData("from");
                 let array = parseInt(e.dataTransfer.getData("array"));
+
                 let db = e.dataTransfer.getData("db");
                 let nimi = e.dataTransfer.getData("text/plain");
                 let aani = e.dataTransfer.getData("text/html");    
                 let sounds = allSounds[allSounds.selected];
-                //Mennään tänne kaikissa muissa tapauksissa paitsi jos siirretään ääniä aanirivi-elementistä toiseen
-                if (!searchVisible && (array !== allSounds.selected || paikat[i].classList.contains("aanirivi2"))) { 
+
+                if (!from) {
+                    array = allSounds.selected;
+                }
+
+                //Mennään tänne jos siirretään saman arrayn sisällä
+                if (searchVisible || !searchVisible && (array % 2 === 0 && paikat[i].classList.contains("aanirivi") || array % 2 !== 0 && paikat[i].classList.contains("aanirivi2"))) {
+                    if (from) {
+                        if (typeof allSounds[array][i] !== "undefined") {
+                            if (allSounds[array][i].db) {
+                                allSounds[array][from] = {"name" : allSounds[array][i].name, "sound" : allSounds[array][i].sound, "db" : allSounds[array][i].db};
+                            }
+                            allSounds[array][from] = {"name" : allSounds[array][i].name, "sound" : allSounds[array][i].sound};
+                        }
+                        else {
+                            allSounds[array][from] = undefined;
+                        }
+                    }
+                    if (db) {
+                        allSounds[array][i] = {"name" : nimi, "sound" : aani, "db" : db};                             
+                    }
+                    else {
+                        allSounds[array][i] = {"name" : nimi, "sound" : aani};
+                    }
+                    console.log(allSounds[array]);
+                    localStorage.setItem("sounds" + (array+1),  JSON.stringify(allSounds[array]));
+                }
+                //Mennään tänne jos siirretään arraysta toiseen
+                else { 
                     //Mennään tänne jos siirretään edeltävästä arraysta seuraavaan
                     if (array % 2 === 0 && paikat[i].classList.contains("aanirivi2")) {
                         if (typeof allSounds[array+1][i] !== "undefined") {
@@ -545,50 +576,9 @@ window.addEventListener("load", function() {
                         }
                         console.log(allSounds[array-1]);
                         localStorage.setItem("sounds" + array,  JSON.stringify(allSounds[array-1]));
-                    }
-                    //Mennään tänne jos siirretään jälkimmäisestä arraysta itseensä
-                    else {
-                        if (typeof allSounds[array][i] !== "undefined") {
-                            if (allSounds[array][i].db) {
-                                allSounds[array][from] = {"name" : allSounds[array][i].name, "sound" : allSounds[array][i].sound, "db" : allSounds[array][i].db};
-                            }
-                            allSounds[array][from] = {"name" : allSounds[array][i].name, "sound" : allSounds[array][i].sound};
-                        }
-                        else {
-                            allSounds[array][from] = undefined;
-                        }
-                        if (db) {
-                            allSounds[array][i] = {"name" : nimi, "sound" : aani, "db" : db};                             
-                        }
-                        else {
-                            allSounds[array][i] = {"name" : nimi, "sound" : aani};
-                        }
-                    }
-                    console.log(allSounds[array]);
-                    localStorage.setItem("sounds" + (array+1),  JSON.stringify(allSounds[array]));
+                    }                        
                 }
-                //Siirrot aanirivista toiseen
-                else {
-                    if (from) {
-                        if (typeof sounds[i] !== "undefined") {
-                            if (sounds[i].db) {
-                                sounds[from] = {"name" : sounds[i].name, "sound" : sounds[i].sound, "db" : sounds[i].db};   
-                            }
-                            sounds[from] = {"name" : sounds[i].name, "sound" : sounds[i].sound};
-                        }
-                        else {
-                            sounds[from] = undefined;
-                        }
-                    }
-                    if (db) {
-                        sounds[i] = {"name" : nimi, "sound" : aani, "db" : db};   
-                    }
-                    else {
-                        sounds[i] = {"name" : nimi, "sound" : aani};    
-                    }     
-                    console.log(sounds);
-                    localStorage.setItem("sounds" + (allSounds.selected+1),  JSON.stringify(allSounds[allSounds.selected]));
-                }     
+                
                 showMySounds();
                 let audio = paikat[i].children[4];
                 audio.src = aani;
@@ -944,7 +934,7 @@ window.addEventListener("load", function() {
             else {
                 // Not found notice
                 const info = document.createElement("div");
-                info.textContent = "Not found nothing";
+                info.textContent = "Found nothing";
                 info.setAttribute("value", "info");
                 info.setAttribute("id", "info");
                 info.addEventListener("click", function() {
