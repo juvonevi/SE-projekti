@@ -1,0 +1,72 @@
+:root {
+    --background-color:#660033;
+    --second-color: #b3005ad3;
+    --searchresult-color:  #99004d;
+    --popup-color: 	 #4d0026;
+    --text-color: white;
+}  
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.aanirivi {
+    background-color: var(--second-color); 
+}
+
+.selectedPage {
+    background-color: var(--second-color);
+    color: var(--text-color);
+    border-color: var(--text-color);
+    border-width: 2px;
+}
+
+form + #hakutulokset {
+    background-color: var(--second-color); 
+}
+
+label[for=info], label[for=darkmodeToggle] {
+    background-color: var(--second-color);
+    color: var(--text-color);
+}
+
+label[for=darkmodeToggle] > span {
+    bottom: 0;
+    top: -0.3em;
+    right: 0.2em;
+    font-size: 4.5em;
+}
+
+#darkmodeToggle:checked ~ span {
+    color: var(--text-color);
+}
+
+#darkmodeToggle:checked + label[for=darkmodeToggle] {
+    background-color: var(--second-color);
+}
+
+label[for=darkmodeToggle]:has(input[type="checkbox"]:checked){
+    background-color: var(--second-color);
+}  
+
+#info {
+    color: var(--text-color);
+}
+
+#popup, #noSpace {
+    background-color: var(--popup-color);
+    box-shadow: 0px 0px 15px 5px var(--popup-color);
+}
+
+#noSpace {
+    box-shadow: 0px 0px 15px 5px black;
+}
+
+#closePopup, #closeWarning {
+    color: var(--text-color);
+}
+
+.searchresult {
+    background-color: var(--searchresult-color);
+}
