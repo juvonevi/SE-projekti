@@ -121,18 +121,15 @@ form + #hakutulokset {
 }
 
 .toggle-button {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
+    order: 1;
     background-color: var(--second-color);
     color: var(--text-color);
+    margin: 20px auto;
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    position: absolute;
-    left: 80.5%;
-    top: 0.2vh;
 }
 
 #hakulomike input[type="search"] {
@@ -196,31 +193,39 @@ span {
     background-color: transparent;
     border: none;
     font-size: 4em;
-    position: relative;
-    bottom: 0.1em;
+    position: relative; 
+    bottom: 0.1em; 
 }
 
-#changeTheme {
+ #changeTheme {
     bottom: 0.1em;
-    font-size: 3.5em;
-}
+    font-size: 3em;
+} 
 
 .roundButton {
     bottom: 0.2em;
     right: 0.01em;
 }
 
-label[for=info], label[for=changeTheme], .roundButtonLabel {
-    position: absolute;
-    left: 95%;
-    top: 1vh;
+ label[for=info], label[for=changeTheme], .roundButtonLabel {
+    left:95%; /** tarviiko */
     display: inline-block;
-    height: 4em;
-    width: 4em;
+    height: 3.5em;
+    width: 3.5em;
     border-radius: 35px;
     text-align: center;
     background-color: var(--second-color);
     cursor: pointer;
+} 
+
+label[for=info] {
+    order: 4;
+    font-size: 1em;
+}
+
+label[for=changeTheme] {
+    font-size: 1em;
+    order: 3;
 }
 
 .roundButtonLabel {
@@ -243,11 +248,25 @@ label[for=changeTheme] {
     display: none;
 }
 
+#ylapalkki {
+    position: absolute;
+    top: -3vh;
+    right: 0;
+    display: flex; /* Käytetään Flexboxia elementtien järjestämiseen */
+    align-items: center; /* Kohdistetaan pystysuunnassa keskelle */
+    gap: 10px; /* Väli elementtien välille */
+    padding: 10px; /* Lisää hieman tyhjää tilaa reunoille */
+   
+}
+
 #delete {
+    order: 2;
     font-size: 4em;
+    /**
     position: absolute;
     left: 88%;
     top: -0.5vh;
+    */
 }
 
 #search {
