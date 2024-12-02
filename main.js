@@ -827,6 +827,49 @@ window.addEventListener("load", function() {
         buttons2[0].addEventListener("click", buttonPressedL);   
         buttons2[buttons2.length-1].addEventListener("click", buttonPressedR);
     }
+    
+
+    // Nappi joka sallii audion lähettämisen backendiin
+    streamAudioToD();
+    function streamAudioToD() {
+        const button = document.getElementById("streamButton");
+        var buttonState = false;
+        button.addEventListener("click", () => { buttonState = !buttonState; });
+
+        let aanet = document.getElementsByClassName("audio");
+        let streamCaps = [];
+        console.log(aanet)
+
+        for (let i = 0; i < 1; i++) {
+            var streamCap;
+            // Firefoxin streamCapin versio on eriävä
+            if (navigator.userAgent.toLowerCase().includes('firefox')) {
+                streamCap = aanet[i].mozCaptureStream();
+            } else {
+                streamCap = aanet[i].captureStream();
+            }
+            streamCaps.push(streamCap);
+
+            console.log(streamCap)
+            outPutStreamCap();
+            function outPutStreamCap() {
+                if (streamCap.active == true) { console.log(streamCap) }
+                //setTimeout(() => outPutStreamCap(), 1000);
+            }
+        }
+        console.log(streamCaps)
+        
+        // Äänien Yhdistäminen yhteen streamiin? 
+        const outStream = new MediaStream();
+        streamCaps.forEach(stream => { 
+            if (stream) outStream.addTrack(stream.getTracks()); 
+        });
+        
+
+        // Virtojen lähettäminen
+        
+    }
+    
 
     /**
      * Käsittelee oikealle osoittavan nuolinapin painamisen
