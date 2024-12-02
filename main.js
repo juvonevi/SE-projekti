@@ -196,6 +196,9 @@ window.addEventListener("load", function() {
                 label.style.background = themeColors[i];
                 button.style.color = themeTextColors[i];
                 label.appendChild(button);
+                if (i === 0) {
+                    button.style.right = "0.05em";
+                }
                 button.theme = i;
                 button.addEventListener("click", changeTheme);
             }
