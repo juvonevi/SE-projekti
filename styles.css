@@ -223,18 +223,18 @@ label[for=changeTheme] {
 
 #changeTheme {
     position: relative; 
-    left: -0.1em; 
 }
 
 #chooseTheme {
     position: absolute; 
     background-color: var(--searchresult-color);
-    width: 16vw;
+    width: 15vw;
     height: 7vh;
     top: 10vh;
     left: 80vw;
     border-radius: 35px;
     display: none; 
+    padding: 0.5em;
 }
 
 #ylapalkki {
@@ -244,8 +244,7 @@ label[for=changeTheme] {
     display: flex; 
     align-items: center; 
     gap: 10px; 
-    padding: 10px; 
-   
+    padding: 10px;  
 }
 
 #delete {
@@ -370,9 +369,6 @@ label[for=changeTheme] {
     #downButtons {
         width: 47%;
     }
-    label[for=darkmodeToggle] {
-        left: 90%;
-    }
     #delete {
         left: 86.5%;
         top: 0vh;
@@ -396,9 +392,6 @@ label[for=changeTheme] {
     .hakupalkki {
         width: 48vw;
     }
-    label[for=darkmodeToggle] {
-        left: 89.5%;
-    }
     #delete {
         left: 85.5%;
         top: 0.3vh;
@@ -415,6 +408,9 @@ label[for=changeTheme] {
         height: 52vh;
         left: calc(30vw - 2%);
         bottom: 20vh;
+    }
+    #chooseTheme {
+        height: 6vh;
     }
 }
 
@@ -447,6 +443,9 @@ label[for=changeTheme] {
     }
     #popup {
         height: 56vh;
+    }
+    #chooseTheme {
+        height: 5vh;
     }
 }
 
@@ -481,5 +480,8 @@ label[for=changeTheme] {
     }
     .hakupalkki{
         width: 46vw;
+    }
+    #chooseTheme {
+        height: 5vh;
     }
 } 
