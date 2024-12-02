@@ -357,7 +357,7 @@ label[for=changeTheme] {
     #aanet {
         width: 46vw;
     }
-    .aanirivi {
+    .aanirivi, .aanirivi2 {
         zoom: 70%;
         width: 45%;
     } 
@@ -389,7 +389,7 @@ label[for=changeTheme] {
     #aanet {
         width: 47vw;
     }
-    .aanirivi {
+    .aanirivi, .aanirivi2 {
         zoom: 66%;
         width: 42%;
     } 
@@ -422,7 +422,7 @@ label[for=changeTheme] {
     #aanet {
         width: 46vw;
     }
-    .aanirivi {
+    .aanirivi, .aanirivi2 {
         zoom: 60%;
         width: 46%;
     } 
@@ -463,7 +463,7 @@ label[for=changeTheme] {
     #aanet {
         width: 46vw;
     }
-    .aanirivi {
+    .aanirivi, .aanirivi2 {
         zoom: 55%;
     } 
     .hakupalkki {
