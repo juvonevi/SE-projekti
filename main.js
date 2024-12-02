@@ -286,6 +286,12 @@ window.addEventListener("load", function() {
         for (let span of spans) {
             span.style.top = "0";
         }
+        if (!searchVisible) {
+            let spans = document.querySelectorAll(".aanirivi2 span");
+            for (let span of spans) {
+                span.style.top = "0";
+            }
+        }
     }
 
     //Tarkistaa onko käyttäjällä darkmode käytössä
@@ -710,6 +716,9 @@ window.addEventListener("load", function() {
             if (allSounds.selected !== numOfPages-1) {
                 buttons[allSounds.selected+2].classList.add("selectedPage");
             }         
+            if (!firefox) {
+                changeForOtherBrowsers();
+            }
         } else {
             let links = document.getElementsByTagName("link");
              for (let link of links) {
@@ -770,6 +779,7 @@ window.addEventListener("load", function() {
             span.textContent = "⟳";
             labelfor.appendChild(span);
             div.appendChild(labelfor);
+            labelfor.style.marginLeft = "0.5em";
             aanet.appendChild(div);
             soundButtonListeners("sideButton2", "audio2");
             audioEventListeners("audio2");
@@ -902,6 +912,9 @@ window.addEventListener("load", function() {
         //Jos sivuja on pariton määrä ja poistutaan viimeiseltä sivulta haun ollessa piilossa, lisätään äänipaikkoja
         if (!searchVisible && allSounds.selected !== numOfPages-1 && numOfPages % 2 !== 0 && oldSelected === numOfPages-1) {
             createMoreAudioSpaces();
+            if (!firefox) {
+                changeForOtherBrowsers();
+            }
         }
         showMySounds();
     }
