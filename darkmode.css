@@ -32,8 +32,7 @@ label[for=info], label[for=changeTheme] {
 }
 
 #changeTheme {
-    bottom: 0.22em;
-    font-size: 4em;
+    font-size: 3vw;
 }
 
 #darkmodeToggle:checked ~ span {
