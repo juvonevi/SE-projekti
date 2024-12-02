@@ -840,7 +840,7 @@ window.addEventListener("load", function() {
         let streamCaps = [];
         console.log(aanet)
 
-        for (let i = 0; i < 1; i++) {
+        for (let i = 0; i < 10; i++) {
             var streamCap;
             // Firefoxin streamCapin versio on eriävä
             if (navigator.userAgent.toLowerCase().includes('firefox')) {
@@ -859,13 +859,26 @@ window.addEventListener("load", function() {
         }
         console.log(streamCaps)
         
+        const audioContext = new window.AudioContext();
         // Äänien Yhdistäminen yhteen streamiin? 
-        const outStream = new MediaStream();
-        streamCaps.forEach(stream => { 
-            if (stream) outStream.addTrack(stream.getTracks()); 
+        const destination = audioContext.createMediaStreamDestination();
+        streamCaps.forEach(stream => {
+            console.log(stream)
+            if (stream) {
+                console.log(stream);
+                const source = audioContext.createMediaStreamSource(stream);
+                console.log(source);
+                const gain = audioContext.createGain();
+                source.connect(gain);
+                gain.connect(destination);
+            }
         });
-        
+        console.log("4");
+        console.log(streamCaps.length)
+        const outStream = destination.stream;
 
+        console.log(outStream);
+        
         // Virtojen lähettäminen
         
     }
