@@ -189,84 +189,68 @@ span {
 }
 
 #info, #changeTheme, .roundButton {
+    width: 3vw; 
+    height: 3vw; 
+    font-size: 3vw; 
+    text-align: center;
+    line-height: 3vw; 
     color: var(--text-color);
     background-color: transparent;
     border: none;
-    font-size: 4em;
-    position: relative; 
-    bottom: 0.1em; 
+    position: relative;
+    bottom: 0.05em;
 }
 
- #changeTheme {
-    bottom: 0.1em;
-    font-size: 3em;
-} 
-
-.roundButton {
-    bottom: 0.2em;
-    right: 0.01em;
-}
-
- label[for=info], label[for=changeTheme], .roundButtonLabel {
-    left:95%; /** tarviiko */
-    display: inline-block;
-    height: 3.5em;
-    width: 3.5em;
-    border-radius: 35px;
-    text-align: center;
+label[for=info], label[for=changeTheme], .roundButtonLabel {
+    display: inline-block; 
+    height: 3vw; 
+    width: 3vw;  
+    line-height: 3vw;
+    font-size: 3vw;
+    border-radius: 50%; 
     background-color: var(--second-color);
     cursor: pointer;
-} 
+    text-align: center;
+}
 
 label[for=info] {
     order: 4;
-    font-size: 1em;
 }
 
 label[for=changeTheme] {
-    font-size: 1em;
     order: 3;
 }
 
-.roundButtonLabel {
-    margin: 1%;
-    position: static;
-}
-
-label[for=changeTheme] {
-    left: 91%;
+#changeTheme {
+    position: relative; 
+    left: -0.1em; 
 }
 
 #chooseTheme {
-    position: absolute;
+    position: absolute; 
     background-color: var(--searchresult-color);
-    width: 20vw;
-    height: 15vh;
-    top: 40vh;
-    left: 50vw;
+    width: 16vw;
+    height: 7vh;
+    top: 10vh;
+    left: 80vw;
     border-radius: 35px;
-    display: none;
+    display: none; 
 }
 
 #ylapalkki {
     position: absolute;
     top: -3vh;
     right: 0;
-    display: flex; /* Käytetään Flexboxia elementtien järjestämiseen */
-    align-items: center; /* Kohdistetaan pystysuunnassa keskelle */
-    gap: 10px; /* Väli elementtien välille */
-    padding: 10px; /* Lisää hieman tyhjää tilaa reunoille */
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    padding: 10px; 
    
 }
 
 #delete {
     order: 2;
-    font-size: 4em;
-    /**
-    position: absolute;
-    left: 88%;
-    top: -0.5vh;
-    */
+    font-size: 3em;
 }
 
 #search {
@@ -440,7 +424,7 @@ label[for=changeTheme] {
     }
     .aanirivi {
         zoom: 60%;
-        width: 45%;
+        width: 46%;
     } 
     .hakupalkki {
         width: 47vw;
@@ -468,6 +452,14 @@ label[for=changeTheme] {
 
 
 @media (max-width: 1024px) {
+    label[for=info], label[for=changeTheme] {
+        font-size: 2vw; 
+        line-height: 3vw; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    } 
     #aanet {
         width: 46vw;
     }
@@ -477,28 +469,13 @@ label[for=changeTheme] {
     .hakupalkki {
         margin-top: 4.2%;
         zoom: 88%;
-    }
+    } 
     #delete {
-        zoom: 65%;
-        left: 85%;
-        margin-top: -0.7vh;
-    }
-    label[for=darkmodeToggle] {
-        zoom: 65%;
-        left: 89%;
-    }
-    label[for=info] {
-        zoom: 65%;
-        left: 94%;
-    }
-    #info {
-        font-size: 2.5em;
-    }
+        zoom: 70%;
+    } 
     .toggle-button {
         zoom: 75%;
-        left: 74%;
-        margin-top: 0.6vh;
-    }
+    } 
     #popup {
         height: 60vh;
     }
