@@ -834,53 +834,68 @@ window.addEventListener("load", function() {
     function streamAudioToD() {
         const button = document.getElementById("streamButton");
         var buttonState = false;
-        button.addEventListener("click", () => { buttonState = !buttonState; });
+        //button.addEventListener("click", () => { buttonState = !buttonState; });
 
         let aanet = document.getElementsByClassName("audio");
-        let streamCaps = [];
-        console.log(aanet)
-
-        for (let i = 0; i < 10; i++) {
-            var streamCap;
-            // Firefoxin streamCapin versio on eriävä
-            if (navigator.userAgent.toLowerCase().includes('firefox')) {
-                streamCap = aanet[i].mozCaptureStream();
-            } else {
-                streamCap = aanet[i].captureStream();
-            }
-            streamCaps.push(streamCap);
-
-            console.log(streamCap)
-            outPutStreamCap();
-            function outPutStreamCap() {
-                if (streamCap.active == true) { console.log(streamCap) }
-                //setTimeout(() => outPutStreamCap(), 1000);
-            }
-        }
-        console.log(streamCaps)
         
+
         const audioContext = new window.AudioContext();
-        // Äänien Yhdistäminen yhteen streamiin? 
         const destination = audioContext.createMediaStreamDestination();
-        streamCaps.forEach(stream => {
-            console.log(stream)
-            if (stream) {
-                console.log(stream);
-                const source = audioContext.createMediaStreamSource(stream);
-                console.log(source);
-                const gain = audioContext.createGain();
-                source.connect(gain);
-                gain.connect(destination);
-            }
-        });
-        console.log("4");
-        console.log(streamCaps.length)
-        const outStream = destination.stream;
+        console.log(aanet)
+        for (let i = 0; i < aanet.length; i++) {
+            if (aanet[i]) 
+                aanet[i].addEventListener("play", () => {
+                    console.log("played")
+                    var streamCap;
+                    if (navigator.userAgent.toLowerCase().includes('firefox')) {
+                        streamCap = aanet[i].mozCaptureStream();
+                    } else {
+                        streamCap = aanet[i].captureStream();
+                    }
 
+                    if (streamCap.getAudioTracks().length) {
+                        console.log(streamCap);
+                        const source = audioContext.createMediaStreamSource(streamCap);
+                        console.log(source);
+                        const gain = audioContext.createGain();
+                        source.connect(gain);
+                        gain.connect(destination);
+                    }
+
+                    
+                    //test();
+                    //function test() {
+                    //    console.log(streamCap)
+                    //    setTimeout(() => test(), 1000);
+                }
+            );
+        }
+
+        const outStream = destination.stream;
         console.log(outStream);
+        /*test();
+        function test() {
+            console.log(outStream)
+            setTimeout(() => test(), 1000); 
+        }*/
+
+        const mediaRecorder = new MediaRecorder(outStream);
         
-        // Virtojen lähettäminen
-        
+        button.onclick = () => {
+            buttonState = !buttonState;
+            if (buttonState) { 
+                mediaRecorder.start(1000); // ms perusteinen slice on tuo aika
+            } 
+            else mediaRecorder.stop();
+        }
+
+        // Äänen lähettäminen
+        const socket = new WebSocket('ws://localhost:5000');
+
+        mediaRecorder.ondataavailable = (e) => {
+            console.log(e.data);
+            socket.send(e.data);
+        };
     }
     
 
