@@ -23,7 +23,7 @@ window.addEventListener("load", function() {
     const defaultKeys2 = ["q","w","e","r","t","y","u","i","o","p"];  
     let myKeys = Array.from(defaultKeys);
     let myKeys2 = Array.from(defaultKeys2);
-
+    
     /**
      * Näyttää varoituksen mahdollisesti aikuissisältöä sisältävistä äänistä,
      * jos sitä ei ole näytetty vielä

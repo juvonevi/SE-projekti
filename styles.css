@@ -110,6 +110,10 @@ form + #hakutulokset {
     border-radius: 15px;
 }
 
+#hakulomike label {
+    margin-left: 1%;
+}
+
 .hakupalkki{
     display: block;
     float: right; 
