@@ -1,7 +1,7 @@
 :root {
-    --background-color:#660033;
-    --second-color: #b3005ad3;
-    --searchresult-color:  #700038d0;
+    --background-color:#6b0036;
+    --second-color: #9e004f;
+    --searchresult-color:  #690035;
     --popup-color: 	 #4d0026;
     --text-color: white;
 }  
@@ -26,29 +26,10 @@ form + #hakutulokset {
     background-color: var(--second-color); 
 }
 
-label[for=info], label[for=darkmodeToggle] {
+label[for=info] {
     background-color: var(--second-color);
     color: var(--text-color);
 }
-
-label[for=darkmodeToggle] > span {
-    bottom: 0;
-    top: -0.3em;
-    right: 0.2em;
-    font-size: 4.5em;
-}
-
-#darkmodeToggle:checked ~ span {
-    color: var(--text-color);
-}
-
-#darkmodeToggle:checked + label[for=darkmodeToggle] {
-    background-color: var(--second-color);
-}
-
-label[for=darkmodeToggle]:has(input[type="checkbox"]:checked){
-    background-color: var(--second-color);
-}  
 
 #info {
     color: var(--text-color);
@@ -57,10 +38,6 @@ label[for=darkmodeToggle]:has(input[type="checkbox"]:checked){
 #popup, #noSpace {
     background-color: var(--popup-color);
     box-shadow: 0px 0px 15px 5px var(--popup-color);
-}
-
-#noSpace {
-    box-shadow: 0px 0px 15px 5px black;
 }
 
 #closePopup, #closeWarning {

@@ -224,6 +224,10 @@ label[for=info], label[for=changeTheme], .roundButtonLabel {
     text-align: center;
 }
 
+.roundButtonLabel {
+    margin: 1.8%;
+}
+
 label[for=info] {
     order: 4;
 }
@@ -239,8 +243,8 @@ label[for=changeTheme] {
 #chooseTheme {
     position: absolute; 
     background-color: var(--searchresult-color);
-    width: 15vw;
-    height: 7vh;
+    width: 14.3vw;
+    height: 14vh;
     top: 10vh;
     left: 80vw;
     border-radius: 35px;

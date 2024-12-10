@@ -1,9 +1,9 @@
 :root {
-    --background-color:#2f5231;
-    --second-color: #447444;
-    --searchresult-color:  	 #254628;
-    --popup-color: 	 #1f351f;
-    --text-color: white;
+    --background-color:#8f6f57;
+    --second-color: #b89a81;
+    --searchresult-color: #6e5746;
+    --popup-color: #4b3c31;
+    --text-color: rgb(43, 29, 24);
 }  
 
 body {
@@ -28,20 +28,21 @@ form + #hakutulokset {
 
 label[for=info] {
     background-color: var(--second-color);
-    color: var(--text-color);
+    color: black;
 }
 
 #info {
-    color: var(--text-color);
+    color: black;
 }
 
 #popup, #noSpace {
     background-color: var(--popup-color);
     box-shadow: 0px 0px 15px 5px var(--popup-color);
+    color: black;
 }
 
 #closePopup, #closeWarning {
-    color: var(--text-color);
+    color: black;
 }
 
 .searchresult {
