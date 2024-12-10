@@ -461,13 +461,18 @@ window.addEventListener("load", function() {
 
                 //Mennään tänne jos siirretään saman arrayn sisällä
                 if (searchVisible || !searchVisible && (array % 2 === 0 && paikat[i].classList.contains("aanirivi") || array % 2 !== 0 && paikat[i].classList.contains("aanirivi2"))) {
+                    //Tänne jos ääni siirretään vanhasta äänipaikasta uuteen
                     if (from) {
+                        //Jos siinä paikassa johon siirretään on jo ääni, siirretään vanha ääni uuden edelliseen paikkaan
                         if (typeof allSounds[array][i] !== "undefined") {
                             if (allSounds[array][i].db) {
                                 allSounds[array][from] = {"name" : allSounds[array][i].name, "sound" : allSounds[array][i].sound, "db" : allSounds[array][i].db};
                             }
-                            allSounds[array][from] = {"name" : allSounds[array][i].name, "sound" : allSounds[array][i].sound};
+                            else {
+                                allSounds[array][from] = {"name" : allSounds[array][i].name, "sound" : allSounds[array][i].sound};
+                            }
                         }
+                        //Jos uudessa paikassa ei ole mitään, muutetaan vanha paikka tyhjäksi
                         else {
                             allSounds[array][from] = undefined;
                         }
@@ -489,7 +494,9 @@ window.addEventListener("load", function() {
                             if (allSounds[array][i].db) {
                                 allSounds[array][from] = {"name" : allSounds[array][i].name, "sound" : allSounds[array][i].sound, "db" : allSounds[array][i].db};
                             }
-                            allSounds[array][from] = {"name" : sounds[i].name, "sound" : sounds[i].sound};
+                            else {
+                                allSounds[array][from] = {"name" : sounds[i].name, "sound" : sounds[i].sound};
+                            }
                         }
                         else {
                             allSounds[array][from] = undefined;
@@ -509,7 +516,9 @@ window.addEventListener("load", function() {
                             if (allSounds[array][i].db) {
                                 allSounds[array][from] = {"name" : allSounds[array][i].name, "sound" : allSounds[array][i].sound, "db" : allSounds[array][i].db};
                             }
-                            allSounds[array][from] = {"name" : allSounds[array][i].name, "sound" : allSounds[array][i].sound};
+                            else {
+                                allSounds[array][from] = {"name" : allSounds[array][i].name, "sound" : allSounds[array][i].sound};
+                            }
                         }
                         else {
                             allSounds[array][from] = undefined;
@@ -524,7 +533,6 @@ window.addEventListener("load", function() {
                         localStorage.setItem("sounds" + array,  JSON.stringify(allSounds[array-1]));
                     }                        
                 }
-                
                 showMySounds();
                 let audio = paikat[i].children[4];
                 audio.src = aani;
@@ -537,7 +545,6 @@ window.addEventListener("load", function() {
      */
     function handleFile() {
         const files = document.getElementById("file-input").files;
-        //console.log(files)
         for (const file of files) {
             let nimi = file.name;
             let blob = window.URL || window.webkitURL;
@@ -546,9 +553,6 @@ window.addEventListener("load", function() {
                 return;           
             }
             let fileURL = blob.createObjectURL(file);
-            //console.log(file);
-            //console.log('File name: ' + file.name);
-            //console.log('File BlobURL: ' + fileURL);
             let aani = fileURL;
             let paikat = document.getElementsByClassName("aanirivi");
             let sounds = allSounds[allSounds.selected];
