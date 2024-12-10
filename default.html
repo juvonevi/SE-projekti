@@ -163,7 +163,16 @@
         <form id="hakulomike">
             <h2>Search</h2>
             <input type="search" id="search"/> 
-            <input type="button" id="haku" value="Search"/>
+            <input type= "button" id="haku" value="Search"/>
+            <select id="sortOption">
+                <option value="score">Relevance</option>
+                <option value="duration_asc">Duration, shortest first</option>
+                <option value="duration_desc">Duration, longest first</option>
+                <option value="rating_desc">Highest rated first</option>
+                <option value="downloads_desc">Most downloaded first</option>
+            </select>
+            
+            <!-- <input type="button" id="haku" value="Search"/> -->
         </form>
         <div id="hakutulokset">
             <p>Search for sounds</p>
@@ -177,6 +186,8 @@
         </div>
         <input type="file" id="file-input" accept="audio/*" multiple />
     </div>
+
+
 
     <div id="popup">
         <h2>Info</h2>

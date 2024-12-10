@@ -261,6 +261,10 @@ label[for=changeTheme] {
     border-radius: 5px;
 }
 
+#sortOption {
+    border-radius: 5px;
+}
+
 #popup, #noSpace {
     position: absolute;
     background-color: var(--popup-color);
