@@ -27,7 +27,6 @@ window.addEventListener("load", function() {
     let themeIcons = ["☼", "☾", "☆", "★", "♥", "☘", "✿", "☁", "⯌"]; //Napin käyttämä ikoni
     let themeColors = ["lightblue", "#3d414a", "#ffb3d9", "#b3005ad3", "#b22222", "#637c36", "#8db969", "#303858", "#b89a81"]; //Napin käyttämä väri (css-tiedoston second color)
     let themeTextColors = ["#011a42", "white", "#1a000d", "white", "white", "white", "rgb(22, 44, 28)", "white", "rgb(43, 29, 24)"]; //Napin tekstin väri (css-tiedoston text color)
-
     themes.chosen = 0;
 
 
@@ -331,23 +330,38 @@ window.addEventListener("load", function() {
     /**
      * Hakee käyttäjän äänet local storagesta
      */
-    function getStoredSounds() {
+    function getStoredSounds(sortOption = "score") {
         for (let i = 0; i < numOfPages; i++) {
-            let sounds = JSON.parse(localStorage.getItem("sounds"+(i+1)));
+            let sounds = JSON.parse(localStorage.getItem("sounds" + (i + 1)));
             if (sounds) {
                 console.log(sounds);
+                // Sorttaus lisätään tähän
+                sounds.sort((a, b) => {
+                    if (sortOption === "duration_asc") {
+                        return (a.duration || 0) - (b.duration || 0);
+                    } else if (sortOption === "duration_desc") {
+                        return (b.duration || 0) - (a.duration || 0);
+                    } else if (sortOption === "downloads_desc") {
+                        return (b.downloads || 0) - (a.downloads || 0);
+                    } else if (sortOption === "rating_desc") {
+                        return (b.rating || 0) - (a.rating || 0);
+                    } else {
+                        return 0; // Oletuksena ei sortata
+                    }
+                });
+    
                 for (let j = 0; j < sounds.length; j++) {
                     if (typeof sounds[j] !== "undefined" && sounds[j]) {
                         if (sounds[j].sound.startsWith("blob")) {
-                            getData(parseInt(sounds[j].db), i, j);   
-                        }
-                        else {
+                            getData(parseInt(sounds[j].db), i, j);
+                        } else {
                             allSounds[i][j] = sounds[j];
-                        }                 
-                    } 
+                        }
+                    }
                 }
             }
         }
+        showMySounds();
     }
 
     /**
@@ -672,6 +686,7 @@ window.addEventListener("load", function() {
      * @param {*} data 
      */
     function showSearchResults(data) {
+        console.log("Search results:", data); 
         let htdiv = document.getElementById("hakutulokset");
         while(htdiv.firstChild){
             htdiv.removeChild(htdiv.firstChild);
@@ -703,11 +718,12 @@ window.addEventListener("load", function() {
         }
     }
 
-    document.querySelector('.toggle-button').addEventListener("click", toggleSearchBar);
 
     /**
      * Näyttää tai piilottaa hakupalkin
      */
+    document.querySelector('.toggle-button').addEventListener("click", toggleSearchBar);
+
     function toggleSearchBar() {
         const searchBar = document.getElementById("hakupalkki");
         const toggleButton = document.querySelector('.toggle-button');
@@ -935,33 +951,42 @@ window.addEventListener("load", function() {
         }
         showMySounds();
     }
-    
-    //Kuuntelee nappia haku
+
+    //Hakee hakutuloksia backendilta
+    function searchsound(syote, sortOption) {
+        const query = `http://localhost:3000/api/search/${syote}?sort=${sortOption}`;
+        return fetch(query);
+    }
+
+    //Kuuntelee haku-nappia
     document.getElementById("haku").addEventListener("click", hakuPressed);
     document.getElementById("hakulomike").addEventListener("submit", hakuPressed);
+    document.getElementById("sortOption").addEventListener("change", hakuPressed);
+
     function hakuPressed(e) {
         e.preventDefault()
-        let syote = document.forms[0].elements[0].value;
-        if ((this.lastSearched && 
-            this.lastSearched === syote) ||
-            !syote) { // <- Viimeinen on tyhjan haun lähettämisen esto
+        let syote = document.getElementById("search").value;
+        let sortOption = document.getElementById("sortOption").value;
+        console.log(`Search term: ${syote}, Sort option: ${sortOption}`);  // Tarkistus
+
+        if(!syote) {
             return;
         }
-        this.lastSearched = syote;
         
         if (localStorage.getItem("haetutAanet")) {
             let haetutAanet = localStorage.getItem("haetutAanet");
             if(syote === haetutAanet[0]) {
                 //setupAudioAnalyser(sounds);
+                //Jos sama tulos, mutta sorttaus vaihtuu, haetaan uudelleen
+                getStoredSounds(sortOption)
                 return;
-            }
-        }
-        searchsound(syote).then(result => {
+            } 
+        } 
+        searchsound(syote, sortOption).then(result => {
             // Palautetaan äänilinkki
-
             if (result.ok) {
                 result.json().then((json) => { 
-                    console.log(json.results)
+                    console.log("Received JSON:", json);
                     showSearchResults(json.results);
                 })
             }
@@ -977,8 +1002,9 @@ window.addEventListener("load", function() {
                 const hakupalkki = document.getElementById("hakupalkki");
                 hakupalkki.appendChild(info);
             }
-            
-        })
+        }).catch(error => {
+            console.log("Error during search:", error);  // Virheenkäsittely
+        });
     }
 
     //Hyväksytyt näppäimet
