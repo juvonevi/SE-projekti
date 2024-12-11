@@ -133,13 +133,16 @@ form + #hakutulokset {
 }
 
 #hakulomike input[type="button"] {
-    width: 10%;
     padding: 6px;
     background-color: var(--background-color);
     color: var(--text-color);
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+#hakulomike input[type="button"]:active {
+    background-color: var(--searchresult-color);
 }
 
 .nappiValittuna {
@@ -262,11 +265,21 @@ label[for=changeTheme] {
 }
 
 #search {
+    background-color: white;
     border-radius: 5px;
 }
 
 #sortOption {
+    padding: 6px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: none;
     border-radius: 5px;
+    cursor: pointer;
+} 
+
+#sortOption:focus {
+    outline: none;
 }
 
 #popup, #noSpace {
@@ -414,6 +427,10 @@ label[for=changeTheme] {
         margin-top: 0.2em;
         margin-bottom: 1em;
     }
+    #chooseTheme {
+        top: 60px;
+        height: 100px;
+    }
 }
 
 @media (max-width: 1366px) {
@@ -435,16 +452,16 @@ label[for=changeTheme] {
         margin-bottom: 0.5em;
     }
     #popup {
+        top: 10vh;
         width: 40vw;
-        height: 52vh;
-        left: calc(30vw - 2%);
-        bottom: 20vh;
+        height: 40vh;
     }
     #ylapalkki {
-        top: -3vh;
+        top: -2vh;
     }
     #chooseTheme {
-        height: 6vh;
+        top: 60px;
+        height: 90px;
     }
 }
 
@@ -459,14 +476,22 @@ label[for=changeTheme] {
     .hakupalkki {
         width: 47vw;
     }
+    #popup {
+        top: 10vh;
+        height: 42vh;
+    }
     #downButtons {
         width: 49%;
     }
     #ylapalkki {
-        top: -3vh;
+        top: -2vh;
     }
     #chooseTheme {
-        height: 5vh;
+        top: 60px;
+        height: 80px;
+    }
+    #preset{
+        width: 35%
     }
 }
 
@@ -482,13 +507,18 @@ label[for=changeTheme] {
         margin-top: 4.2%;
     } 
     #popup {
-        height: 60vh;
+        top: 10vh;
+        height: 42vh;
     }
     .hakupalkki{
         width: 46vw;
     }
     #chooseTheme {
-        height: 5vh;
+        top: 60px;
+        height: 70px;
+    }
+    #preset{
+        width: 40%
     }
 } 
 
@@ -500,16 +530,18 @@ label[for=changeTheme] {
         zoom: 49%;
     } 
     #popup {
-        height: 60vh;
+        top: 10vh;
+        height: 47vh;
     }
     .hakupalkki{
         width: 44vw;
     }
     #chooseTheme {
-        height: 4vh;
+        top: 6vh;
+        height: 70px;
     }
     #ylapalkki {
-        top: -4.5vh;
+        top: -3vh;
     }
     #preset{
         width: 40%
@@ -521,22 +553,27 @@ label[for=changeTheme] {
 
 @media (max-width: 766px) {
     #aanet {
-        width: 49vw;
+        width: 48vw;
     }
     .aanirivi, .aanirivi2 {
         zoom: 47%;
     } 
     #popup {
-        height: 60vh;
+        top: 10vh;
+        height: 45vh;
     }
     .hakupalkki{
-        width: 45vw;
+        width: 44vw;
     }
     #chooseTheme {
-        height: 4vh;
+        height: 6.5vh;
+        top: 4vh;
     }
     #ylapalkki {
-        top: -4.5vh;
+        top: -3vh;
+    }
+    #downButtons {
+        width: 50%;
     }
     #preset{
         width: 40%
