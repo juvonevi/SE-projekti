@@ -14,7 +14,7 @@ window.addEventListener("load", function() {
         allSounds[i] = Array(10);
     }
     allSounds.selected = 0;
-    createPageButtons();
+    createPageButtons(numOfPages);
     document.getElementById("pageButton1").classList.add("selectedPage");
     let dragImg = new Image();
     dragImg.src = "GrabCursor.png";
@@ -28,22 +28,6 @@ window.addEventListener("load", function() {
     //Näyttää varoituksen, jos ei vielä näytetty
     showAdultContentWarning();
     
-    /**
-     * Luo sivumäärälle tarvittavat napit
-     */
-    function createPageButtons() {
-        let arrow = document.getElementById("arrowLeft");
-        let after = arrow;
-        for (let i = 0; i < numOfPages; i++) {
-            let button = document.createElement("input");
-            button.type = "button";
-            button.id = "pageButton" + (i+1);
-            button.value = i + 1;
-            after.after(button);
-            after = button;
-        }
-    }
-
     //Avataan indexed db
     let db;
     const openRequest = window.indexedDB.open("audiofiles", 1);
@@ -169,28 +153,6 @@ window.addEventListener("load", function() {
     }
 
     /**
-     * Muuttaa ulkoasua sopivammaksi Chromelle
-     */
-    function changeForOtherBrowsers() {
-        let audios = document.getElementsByTagName("audio");
-        for (let audio of audios) {
-            audio.style.zoom = "90%";
-            audio.style.position = "relative";
-            audio.style.top = "10px";
-        }
-        let spans = document.querySelectorAll(".aanirivi span");
-        for (let span of spans) {
-            span.style.top = "0";
-        }
-        if (!searchVisible) {
-            let spans = document.querySelectorAll(".aanirivi2 span");
-            for (let span of spans) {
-                span.style.top = "0";
-            }
-        }
-    }
-
-    /**
      * Hakee käyttäjän äänet local storagesta
      */
     function getStoredSounds(sortOption = "score") {
@@ -248,21 +210,8 @@ window.addEventListener("load", function() {
         }
     }
 
+    //Lisää audioelementteihin kuuntelijat
     audioEventListeners("audio");
-    /**
-     * Lisää audioelementteihin kuuntelijat
-     * @param {String} audioClass 
-     */
-    function audioEventListeners(audioClass) {
-        // Odottaa että ääni on saapunut ja sitten piirtää graafin
-        let audios = document.getElementsByClassName(audioClass);
-        for (let audio of audios) {
-            audio.addEventListener("durationchange", (e) => {
-                e.preventDefault();
-                setupAudioAnalyser(audio.parentElement);
-            });
-        }      
-    }
     
     showMySounds();
     /**
@@ -307,58 +256,14 @@ window.addEventListener("load", function() {
                 paikat[i].children[4].setAttribute("src", sounds[i].sound);
                 paikat[i].children[5].style.visibility = "visible";
                 paikat[i].setAttribute("draggable", "true");
-                addDragstartEvent(paikat[i], sounds[i].name, sounds[i].sound, i, soundSlotClass, db);  
+                addDragstartEvent(paikat[i], sounds[i].name, sounds[i].sound, i, soundSlotClass, db, allSounds, dragImg);  
                  
             }
         }
     }
 
-    /**
-     * Lisää elementtiin dragstart eventin
-     * @param {*} element elementti johon lisätään
-     * @param {*} name äänen nimi
-     * @param {*} sound äänen linkki
-     * @param {*} i äänen paikka arrayssa
-     * @param {*} soundSlotClass äänipaikan luokka
-     * @param {*} db äänen paikka indexed db:ssä (jos ääni tiedostosta)
-     */
-    function addDragstartEvent(element, name, sound, i, soundSlotClass, db) {
-        element.addEventListener("dragstart", function(e) {
-            e.dataTransfer.setData("text/plain", name);
-            e.dataTransfer.setData("text/html", sound);
-            e.dataTransfer.setData("from", i);
-            if (soundSlotClass === "aanirivi") {
-                e.dataTransfer.setData("array", allSounds.selected);
-            }
-            else {
-                e.dataTransfer.setData("array", allSounds.selected+1);
-            }
-            if (db) {
-                e.dataTransfer.setData("db", db);
-            }             
-            e.dataTransfer.setDragImage(dragImg, 30, 26);
-        });    
-    }
-
-    /**
-     * Lisää checkboxeihin event listenerit
-     */
+    //Checkboxeille kuuntelijat
     prepareCheckboxes("loop", "audio");
-    function prepareCheckboxes(cbClass, audioClass) {
-        let checkboxes = document.getElementsByClassName(cbClass);
-        let audios = document.getElementsByClassName(audioClass);
-        for (let i = 0; i < checkboxes.length; i++) {
-            checkboxes[i].addEventListener("input", cbInput);
-            function cbInput() {
-                if (checkboxes[i].checked) {
-                    audios[i].loop = true;
-                }
-                else {
-                    audios[i].loop = false;
-                }
-            }
-        }
-    }
 
     /**
      * Alustaa droppaukset
@@ -548,49 +453,12 @@ window.addEventListener("load", function() {
         }      
     }
 
-    /**
-     * Laittaa hakutulokset näkyviin sivulle
-     * @param {*} data 
-     */
-    function showSearchResults(data) {
-        console.log("Search results:", data); 
-        let htdiv = document.getElementById("hakutulokset");
-        while(htdiv.firstChild){
-            htdiv.removeChild(htdiv.firstChild);
-        }
-        for (let aani of data) {
-            let div = document.createElement("div");
-            htdiv.appendChild(div);
-            div.classList.add("searchresult");
-            let nimi = document.createElement("label");
-            nimi.textContent = aani.name;
-            div.appendChild(nimi);
-            if (!firefox) {
-                nimi.style.top = "1em";
-            }
-            let audio = document.createElement("audio");
-            audio.setAttribute("controls", "");
-            audio.setAttribute("src", aani.previews["preview-hq-mp3"]);
-            div.appendChild(audio);
-            div.style.display = "inline-block";
-            nimi.style.float = "left";
-            audio.style.float = "right";
-            audio.style.clear = "right";
-            div.setAttribute("draggable", "true");
-            div.addEventListener("dragstart", function(e) {
-                e.dataTransfer.setData("text/plain", aani.name);
-                e.dataTransfer.setData("text/html", aani.previews["preview-hq-mp3"]);
-                e.dataTransfer.setDragImage(dragImg, 30, 26);
-            });
-        }
-    }
-
+    //Lisää toggle searchbar nappiin kuuntelijan
+    document.querySelector('.toggle-button').addEventListener("click", toggleSearchBar);
 
     /**
      * Näyttää tai piilottaa hakupalkin
      */
-    document.querySelector('.toggle-button').addEventListener("click", toggleSearchBar);
-
     function toggleSearchBar() {
         const searchBar = document.getElementById("hakupalkki");
         const toggleButton = document.querySelector('.toggle-button');
@@ -645,73 +513,11 @@ window.addEventListener("load", function() {
      * Luo lisää paikkoja äänille
      */
     function createMoreAudioSpaces() {
-        let aanet = document.getElementById("aanet");
-        for (let i = 0; i < 10; i++) {
-            let div = document.createElement("div");
-            div.classList.add("aanirivi2");
-            let label = document.createElement("label");
-            label.classList.add("label2");
-            label.textContent = "placeholder";
-            div.appendChild(label);
-            div.appendChild(document.createElement("br"));
-            let button = document.createElement("input");
-            button.type = "button";
-            button.id = "button2" + (i+1);
-            button.value = myKeys2[i];
-            button.classList.add("sideButton2");
-            div.appendChild(button);
-            let canvas = document.createElement("canvas");
-            canvas.id = "canvas2" + (i+1);
-            div.appendChild(canvas);
-            let audio = document.createElement("audio");
-            audio.id = "audio2" + (i+1);
-            audio.setAttribute("controls", "");
-            audio.classList.add("audio2");
-            div.appendChild(audio);
-            let labelfor = document.createElement("label");
-            labelfor.for = "cb2" + (i+1);
-            let cb = document.createElement("input");
-            cb.type = "checkbox"; 
-            cb.id = "cb2" + (i+1);
-            cb.classList.add("loop2");
-            labelfor.appendChild(cb);
-            let span = document.createElement("span");
-            span.textContent = "⟳";
-            labelfor.appendChild(span);
-            div.appendChild(labelfor);
-            labelfor.style.marginLeft = "0.5em";
-            aanet.appendChild(div);
-            soundButtonListeners("sideButton2", "audio2");
-            audioEventListeners("audio2");
-            soundSlotDrop("aanirivi2");
-            prepareCheckboxes("loop2", "audio2");
-        }
-    }
-
-    /**
-     * Lisää ääninapeille kuuntelijat
-     * @param {String} buttonClass 
-     * @param {String} audioClass 
-     */
-    function soundButtonListeners(buttonClass, audioClass) {
-        let buttons = document.getElementsByClassName(buttonClass);
-        let audios = document.getElementsByClassName(audioClass);
-        for (let i = 0; i < buttons.length; i++) {
-            buttons[i].addEventListener("click", buttonPressed);
-            buttons[i].addEventListener("dblclick", setupButton);
-            function buttonPressed(event) {
-                if (event.defaultPrevented) {
-                    return; // Do nothing if the event was already processed
-                }
-                console.log("Pressed button " + (i+1));
-                if (audios[i].paused) {
-                    audios[i].play();
-                }
-                else {
-                    audios[i].pause();
-                }
-            }
-        }
+        createAudioSpaces(myKeys2);
+        soundButtonListeners("sideButton2", "audio2");
+        audioEventListeners("audio2");
+        soundSlotDrop("aanirivi2");
+        prepareCheckboxes("loop2", "audio2");
     }
 
     addButtonListeners();
@@ -854,7 +660,7 @@ window.addEventListener("load", function() {
             if (result.ok) {
                 result.json().then((json) => { 
                     console.log("Received JSON:", json);
-                    showSearchResults(json.results);
+                    showSearchResults(json.results, firefox, dragImg);
                 })
             }
             else {
@@ -876,19 +682,6 @@ window.addEventListener("load", function() {
 
     //Hyväksytyt näppäimet
     const keys = ['1','2','3','4','5','6','7','8','9','0','q','w','e','r','t','y','u','i','o','p','a','s','d','f','g','h','j','k','l','z','x','c','v','b','n','m'];
-    
-    /**
-     * Setting up a dblpressed button
-     * @param {*} event 
-     */
-   function setupButton(event) {
-        const button = event.target;
-        let valittuna = document.getElementsByClassName("nappiValittuna");
-        if (valittuna.length > 0) {
-            valittuna[0].classList.remove("nappiValittuna");
-        }
-        button.classList.add("nappiValittuna");
-    }
 
     document.addEventListener("keydown", keyPressed);
 
