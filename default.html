@@ -5,6 +5,7 @@
         <meta charset="utf-8"/>
         <script src="./services/soundsearch.js"></script>
         <script src="graph.js"></script>
+        <script src="themes.js"></script>
         <script src="main.js"></script>
         <link rel="StyleSheet" href="styles.css" type="text/css" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -137,25 +138,42 @@
         </div>  
     </div>
 
-    <label id="delete" class="unselectable">🗑</label>
-    <label for="info">
-        <input type="button" id="info" value="?"/>
-    </label>
+    <div id="ylapalkki">
+        <label id="delete" class="unselectable">🗑</label>
+        <label for="info">
+            <input type="button" id="info" value="?"/>
+        </label>
+        
+        <button class="toggle-button">Hide Search</button>
+        
+        
+        <label for="changeTheme">
+            <input type="button" id="changeTheme" value="☼"/>
+        </label>
+        
+        </div>
 
-    <button class="toggle-button">Hide Search</button>
+
 
     <div id="chooseTheme">
     </div>
 
-    <label for="changeTheme">
-        <input type="button" id="changeTheme" value="☼"/>
-    </label>
 
     <div class="hakupalkki" id="hakupalkki">
         <form id="hakulomike">
             <h2>Search</h2>
             <input type="search" id="search"/> 
-            <input type="button" id="haku" value="Search"/>
+            <input type= "button" id="haku" value="Search"/>
+            <label>Sort by:</label>
+            <select id="sortOption">
+                <option value="score">Relevance</option>
+                <option value="duration_asc">Duration, shortest first</option>
+                <option value="duration_desc">Duration, longest first</option>
+                <option value="rating_desc">Highest rated first</option>
+                <option value="downloads_desc">Most downloaded first</option>
+            </select>
+            
+            <!-- <input type="button" id="haku" value="Search"/> -->
         </form>
         <div id="hakutulokset">
             <p>Search for sounds</p>
@@ -169,6 +187,8 @@
         </div>
         <input type="file" id="file-input" accept="audio/*" multiple />
     </div>
+
+
 
     <div id="popup">
         <h2>Info</h2>
@@ -187,7 +207,7 @@
         <p>Please delete some sounds if you wish to upload more files.</p>
     </div>
     <div id="adultContentWarning">
-        <p>The sounds found in this website may contain adult conctent.</p>
+        <p>The sounds found in this website may contain adult content.</p>
         <p>Please confirm your age before using this website.</p>
         <button type="button" id="closeWarning2">I am 18+ years old</button>
     </div>

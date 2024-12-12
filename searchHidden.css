@@ -21,3 +21,18 @@
 #preset {
     width: 50%;
 }
+
+@media (max-width: 1600px) {
+    #preset > input, #file-input {
+        font-size: 1em;
+    }
+    #downButtons {
+        width: 97%;
+    }
+    canvas {
+        zoom: 95%;
+    }
+    .label, .label2 {
+        font-size: 1.1em;
+    }
+}

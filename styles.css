@@ -110,6 +110,10 @@ form + #hakutulokset {
     border-radius: 15px;
 }
 
+#hakulomike label {
+    margin-left: 1%;
+}
+
 .hakupalkki{
     display: block;
     float: right; 
@@ -118,21 +122,6 @@ form + #hakutulokset {
     padding: 20px; 
     border-radius: 15px;
     margin-top: 3.8%;
-}
-
-.toggle-button {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    background-color: var(--second-color);
-    color: var(--text-color);
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    position: absolute;
-    left: 80.5%;
-    top: 0.2vh;
 }
 
 #hakulomike input[type="search"] {
@@ -144,13 +133,16 @@ form + #hakutulokset {
 }
 
 #hakulomike input[type="button"] {
-    width: 10%;
     padding: 6px;
     background-color: var(--background-color);
     color: var(--text-color);
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+#hakulomike input[type="button"]:active {
+    background-color: var(--searchresult-color);
 }
 
 .nappiValittuna {
@@ -191,67 +183,103 @@ span {
     margin-top: 5px;
 }
 
+#ylapalkki {
+    position: absolute;
+    top: -1vh;
+    right: 0;
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    padding: 10px;  
+}
+
+.toggle-button {
+    order: 2;
+    background-color: var(--second-color);
+    color: var(--text-color);
+    margin: 20px auto;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
 #info, #changeTheme, .roundButton {
+    width: 3vw; 
+    height: 3vw; 
+    font-size: 3vw; 
+    text-align: center;
+    line-height: 3vw; 
     color: var(--text-color);
     background-color: transparent;
     border: none;
-    font-size: 4em;
     position: relative;
-    bottom: 0.1em;
-}
-
-#changeTheme {
-    bottom: 0.1em;
-    font-size: 3.5em;
-}
-
-.roundButton {
-    bottom: 0.2em;
-    right: 0.01em;
+    bottom: 0.05em;
+    left: -0.15vw;
 }
 
 label[for=info], label[for=changeTheme], .roundButtonLabel {
-    position: absolute;
-    left: 95%;
-    top: 1vh;
-    display: inline-block;
-    height: 4em;
-    width: 4em;
-    border-radius: 35px;
-    text-align: center;
+    display: inline-block; 
+    height: 3vw; 
+    width: 3vw;  
+    line-height: 3vw;
+    font-size: 3vw;
+    border-radius: 50%; 
     background-color: var(--second-color);
     cursor: pointer;
+    text-align: center;
 }
 
 .roundButtonLabel {
-    margin: 1%;
-    position: static;
+    margin: 1.8%;
+}
+
+label[for=info] {
+    order: 4;
 }
 
 label[for=changeTheme] {
-    left: 91%;
+    order: 3;
+}
+
+#changeTheme {
+    position: relative; 
 }
 
 #chooseTheme {
-    position: absolute;
+    position: absolute; 
     background-color: var(--searchresult-color);
-    width: 20vw;
-    height: 15vh;
-    top: 40vh;
-    left: 50vw;
+    width: 14.3vw;
+    height: 14vh;
+    top: 10vh;
+    left: 80vw;
     border-radius: 35px;
-    display: none;
+    display: none; 
+    padding: 0.5em;
 }
 
 #delete {
-    font-size: 4em;
-    position: absolute;
-    left: 88%;
-    top: -0.5vh;
+    order: 1;
+    font-size: 3em;
 }
 
 #search {
+    background-color: white;
     border-radius: 5px;
+}
+
+#sortOption {
+    padding: 6px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+} 
+
+#sortOption:focus {
+    outline: none;
 }
 
 #popup, #noSpace {
@@ -354,7 +382,7 @@ label[for=changeTheme] {
     #aanet {
         width: 46vw;
     }
-    .aanirivi {
+    .aanirivi, .aanirivi2 {
         zoom: 70%;
         width: 45%;
     } 
@@ -367,13 +395,6 @@ label[for=changeTheme] {
     #downButtons {
         width: 47%;
     }
-    label[for=darkmodeToggle] {
-        left: 90%;
-    }
-    #delete {
-        left: 86.5%;
-        top: 0vh;
-    }
     #popup {
         width: 36vw;
         height: 50vh;
@@ -382,23 +403,46 @@ label[for=changeTheme] {
     }
 }
 
-@media (max-width: 1366px) {
+@media (max-width: 1536px) {
     #aanet {
+        width: 49vw;
+    }
+    .aanirivi, .aanirivi2 {
+        zoom: 72%;
+        width: 47%;
+    } 
+    .hakupalkki {
         width: 47vw;
     }
-    .aanirivi {
-        zoom: 66%;
-        width: 42%;
+    #preset {
+        width: 30%;
+    }
+    #downButtons {
+        width: 48%;
+    }
+    #ylapalkki {
+        top: -2vh;
+    }
+    h2 {
+        margin-top: 0.2em;
+        margin-bottom: 1em;
+    }
+    #chooseTheme {
+        top: 60px;
+        height: 100px;
+    }
+}
+
+@media (max-width: 1366px) {
+    #aanet {
+        width: 48vw;
+    }
+    .aanirivi, .aanirivi2 {
+        zoom: 71%;
+        width: 47%;
     } 
     .hakupalkki {
         width: 48vw;
-    }
-    label[for=darkmodeToggle] {
-        left: 89.5%;
-    }
-    #delete {
-        left: 85.5%;
-        top: 0.3vh;
     }
     .searchresult > label {
         max-width: 50%;
@@ -408,82 +452,130 @@ label[for=changeTheme] {
         margin-bottom: 0.5em;
     }
     #popup {
+        top: 10vh;
         width: 40vw;
-        height: 52vh;
-        left: calc(30vw - 2%);
-        bottom: 20vh;
+        height: 40vh;
+    }
+    #ylapalkki {
+        top: -2vh;
+    }
+    #chooseTheme {
+        top: 60px;
+        height: 90px;
     }
 }
 
 @media (max-width: 1280px) {
     #aanet {
-        width: 46vw;
+        width: 48vw;
     }
-    .aanirivi {
-        zoom: 60%;
-        width: 45%;
+    .aanirivi, .aanirivi2 {
+        zoom: 67%;
+        width: 48%;
     } 
     .hakupalkki {
         width: 47vw;
     }
-    #downButtons {
-        width: 47%;
-    }
-    label[for=info] {
-        left: 94%;
-    }
-    label[for=darkmodeToggle] {
-        left: 88%;
-    }
-    #delete {
-        left: 84%;
-        top: 0.3vh;
-    }
-    h2 {
-        margin-top: 0;
-    }
     #popup {
-        height: 56vh;
+        top: 10vh;
+        height: 42vh;
+    }
+    #downButtons {
+        width: 49%;
+    }
+    #ylapalkki {
+        top: -2vh;
+    }
+    #chooseTheme {
+        top: 60px;
+        height: 80px;
+    }
+    #preset{
+        width: 35%
     }
 }
 
 
-@media (max-width: 1024px) {
+@media (max-width: 1060px) {
     #aanet {
-        width: 46vw;
+        width: 47vw;
     }
-    .aanirivi {
-        zoom: 55%;
+    .aanirivi, .aanirivi2 {
+        zoom: 61%;
     } 
     .hakupalkki {
         margin-top: 4.2%;
-        zoom: 88%;
-    }
-    #delete {
-        zoom: 65%;
-        left: 85%;
-        margin-top: -0.7vh;
-    }
-    label[for=darkmodeToggle] {
-        zoom: 65%;
-        left: 89%;
-    }
-    label[for=info] {
-        zoom: 65%;
-        left: 94%;
-    }
-    #info {
-        font-size: 2.5em;
-    }
-    .toggle-button {
-        zoom: 75%;
-        left: 74%;
-        margin-top: 0.6vh;
-    }
+    } 
     #popup {
-        height: 60vh;
+        top: 10vh;
+        height: 42vh;
     }
     .hakupalkki{
         width: 46vw;
+    }
+    #chooseTheme {
+        top: 60px;
+        height: 70px;
+    }
+    #preset{
+        width: 40%
+    }
+} 
+
+@media (max-width: 1000px) {
+    #aanet {
+        width: 48vw;
+    }
+    .aanirivi, .aanirivi2 {
+        zoom: 49%;
+    } 
+    #popup {
+        top: 10vh;
+        height: 47vh;
+    }
+    .hakupalkki{
+        width: 44vw;
+    }
+    #chooseTheme {
+        top: 6vh;
+        height: 70px;
+    }
+    #ylapalkki {
+        top: -3vh;
+    }
+    #preset{
+        width: 40%
+    }
+    #downButtons {
+        width: 49%;
+    }
+} 
+
+@media (max-width: 766px) {
+    #aanet {
+        width: 48vw;
+    }
+    .aanirivi, .aanirivi2 {
+        zoom: 47%;
+    } 
+    #popup {
+        top: 10vh;
+        height: 45vh;
+    }
+    .hakupalkki{
+        width: 44vw;
+    }
+    #chooseTheme {
+        height: 6.5vh;
+        top: 4vh;
+    }
+    #ylapalkki {
+        top: -3vh;
+    }
+    #downButtons {
+        width: 50%;
+    }
+    #preset{
+        width: 40%
     }
 } 

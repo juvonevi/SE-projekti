@@ -1,9 +1,9 @@
 :root {
-    --background-color: #26292e;
-    --second-color: #3d414a;
-    --searchresult-color: #1b1d22;
-    --popup-color: #0e0f12;
-    --text-color: white;
+    --background-color:#8f6f57;
+    --second-color: #b89a81;
+    --searchresult-color: #6e5746;
+    --popup-color: #4b3c31;
+    --text-color: rgb(43, 29, 24);
 }  
 
 body {
@@ -26,42 +26,23 @@ form + #hakutulokset {
     background-color: var(--second-color); 
 }
 
-label[for=info], label[for=changeTheme] {
+label[for=info] {
     background-color: var(--second-color);
-    color: var(--text-color);
+    color: black;
 }
-
-#changeTheme {
-    font-size: 3vw;
-}
-
-#darkmodeToggle:checked ~ span {
-    color: var(--text-color);
-}
-
-#darkmodeToggle:checked + label[for=darkmodeToggle] {
-    background-color: var(--second-color);
-}
-
-label[for=darkmodeToggle]:has(input[type="checkbox"]:checked){
-    background-color: var(--second-color);
-}  
 
 #info {
-    color: var(--text-color);
+    color: black;
 }
 
 #popup, #noSpace {
     background-color: var(--popup-color);
     box-shadow: 0px 0px 15px 5px var(--popup-color);
-}
-
-#noSpace {
-    box-shadow: 0px 0px 15px 5px black;
+    color: black;
 }
 
 #closePopup, #closeWarning {
-    color: var(--text-color);
+    color: black;
 }
 
 .searchresult {

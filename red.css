@@ -1,8 +1,8 @@
 :root {
-    --background-color: #26292e;
-    --second-color: #3d414a;
-    --searchresult-color: #1b1d22;
-    --popup-color: #0e0f12;
+    --background-color: #ff4d4d;
+    --second-color:  #b22222;
+    --searchresult-color: #741919;
+    --popup-color: #551313;
     --text-color: white;
 }  
 
@@ -26,13 +26,16 @@ form + #hakutulokset {
     background-color: var(--second-color); 
 }
 
-label[for=info], label[for=changeTheme] {
+label[for=info], label[for=darkmodeToggle] {
     background-color: var(--second-color);
     color: var(--text-color);
 }
 
-#changeTheme {
-    font-size: 3vw;
+label[for=darkmodeToggle] > span {
+    bottom: 0;
+    top: -0.3em;
+    right: 0.2em;
+    font-size: 4.5em;
 }
 
 #darkmodeToggle:checked ~ span {
