@@ -24,24 +24,10 @@ window.addEventListener("load", function() {
     let myKeys = Array.from(defaultKeys);
     let myKeys2 = Array.from(defaultKeys2);
     
-    /**
-     * Näyttää varoituksen mahdollisesti aikuissisältöä sisältävistä äänistä,
-     * jos sitä ei ole näytetty vielä
-     */
+    
+    //Näyttää varoituksen, jos ei vielä näytetty
     showAdultContentWarning();
-    function showAdultContentWarning() {
-        if (localStorage.getItem("warningShown")) {
-            return;
-        }
-        document.getElementById("adultContentWarning").style.display = "initial";
-        document.getElementById("aanet").style.display = "none";
-        document.getElementById("closeWarning2").addEventListener("click", function() {
-            document.getElementById("adultContentWarning").style.display = "none";
-            document.getElementById("aanet").style.display = "initial";
-            localStorage.setItem("warningShown", "true");
-        });
-    }
-
+    
     /**
      * Luo sivumäärälle tarvittavat napit
      */
@@ -169,40 +155,12 @@ window.addEventListener("load", function() {
     //Lisää kuuntelijan teemanvaihtonappiin
     document.getElementById("changeTheme").addEventListener("click", chooseTheme);
 
-    let infoVisible = false;
+    //Lisää kuuntelijat infolle
     document.getElementById("info").addEventListener("click", openOrCloseInfo);
     document.getElementById("closePopup").addEventListener("click", openOrCloseInfo);
-
-    /**
-     * Avaa tai sulkee info-popupin
-     */
-    function openOrCloseInfo() {
-        if (infoVisible) {
-            document.getElementById("popup").style.display = "none";
-            infoVisible = false;
-        }
-        else {
-            document.getElementById("popup").style.display = "initial";
-            infoVisible = true;
-        }
-    }
-
-    let warningVisible = false;
+    
+    //Lisää kuuntelijan varoituksen sulkemiseen
     document.getElementById("closeWarning").addEventListener("click", openOrCloseWarning);
-
-    /**
-     * Avaa tai sulkee varoituksen tilan puutteesta
-     */
-    function openOrCloseWarning() {
-        if (warningVisible) {
-            document.getElementById("noSpace").style.display = "none";
-            warningVisible = false;
-        }
-        else {
-            document.getElementById("noSpace").style.display = "initial";
-            warningVisible = true;
-        }
-    }
 
     let firefox = true;
     if (navigator.userAgent.indexOf("Firefox") <= 0) {
