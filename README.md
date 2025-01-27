@@ -1,4 +1,4 @@
-# My sounds Soundboard -backend
+# My sounds Soundboard
 *(Previously called SE-projekti)*
 
 MsSb is a soundboard that uses CC0 soundeffects
